@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faux Fire Gaming - News</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-red: #ff0808;
+            --neon-orange: #ff6600;
+            --dark-bg: #0d0d0d;
+            --darker-bg: #050505;
+            --text-glow-red: 0 0 10px var(--neon-red), 0 0 20px rgba(255, 42, 42, 0.5);
+            --text-glow-orange: 0 0 10px var(--neon-orange), 0 0 20px rgba(255, 102, 0, 0.5);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: white;
+            font-family: 'Rajdhani', 'Arial', sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: var(--darker-bg) !important;
+            border-bottom: 1px solid var(--neon-red);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-size: 2rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--neon-red) !important;
+            text-shadow: var(--text-glow-red);
+            animation: pulse 2s infinite;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand img {
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        /* Navigation Menu Items */
+        .nav-link {
+            position: relative;
+            display: inline-block;
+            padding: 12px 25px;
+            color: white !important;
+            text-transform: uppercase;
+            font-weight: 600;
+            background: #0d0d0d;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
+            transition: var(--transition);
+            border: 1px solid #ff080833;
+            box-shadow: 0 0 8px #ff080844;
+            letter-spacing: 1px;
+            font-size: 1rem;
+            margin: 0 5px;
+        }
+
+        .nav-link:hover {
+            background: var(--neon-red);
+            color: black !important;
+            box-shadow: 0 0 20px var(--neon-orange);
+            font-weight: bold;
+        }
+
+        .nav-link.active {
+            background: var(--neon-red);
+            color: black !important;
+            box-shadow: 0 0 20px var(--neon-red);
+        }
+
+        /* Auth Button */
+        .btn-auth {
+            position: relative;
+            display: inline-block;
+            padding: 12px 30px;
+            color: black !important;
+            text-transform: uppercase;
+            font-weight: 600;
+            background: var(--neon-red);
+            clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+            transition: var(--transition);
+            border: none;
+            box-shadow: 0 0 15px rgba(255, 8, 8, 0.5);
+            letter-spacing: 1px;
+            font-size: 1rem;
+            margin-left: 15px;
+        }
+
+        .btn-auth:hover {
+            background: var(--neon-orange);
+            color: black !important;
+            box-shadow: 0 0 25px var(--neon-orange);
+            transform: translateY(-2px);
+        }
+
+        /* User Icon */
+        .user-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--neon-red);
+            color: black;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+            margin-left: 15px;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .user-icon:hover {
+            background-color: var(--neon-orange);
+            transform: scale(1.1);
+        }
+
+        /* User Dropdown */
+        .user-dropdown {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            width: 280px;
+            background-color: var(--darker-bg);
+            border: 2px solid var(--neon-red);
+            border-radius: 8px;
+            box-shadow: 0 5px 25px rgba(255, 8, 8, 0.4);
+            padding: 20px;
+            z-index: 1000;
+            display: none;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 50% 100%, 0 90%);
+        }
+
+        .user-dropdown.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .user-info {
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 102, 0, 0.2);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid var(--neon-orange);
+            object-fit: cover;
+        }
+
+        .user-info-content h4 {
+            color: var(--neon-orange);
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+            text-shadow: 0 0 8px rgba(255, 102, 0, 0.3);
+        }
+
+        .user-info-content p {
+            color: #aaa;
+            font-size: 0.85rem;
+            margin: 0;
+        }
+
+        .user-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .user-menu li {
+            margin-bottom: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .user-menu li::before {
+            content: '';
+            position: absolute;
+            left: -100%;
+            bottom: 0;
+            width: 100%;
+            height: 1px;
+            background: var(--neon-orange);
+            transition: all 0.3s ease;
+        }
+
+        .user-menu li:hover::before {
+            left: 0;
+        }
+
+        .user-menu a {
+            color: #ddd;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 8px 10px;
+            border-radius: 4px;
+            background: rgba(255, 8, 8, 0.05);
+        }
+
+        .user-menu a:hover {
+            color: white;
+            background: rgba(255, 8, 8, 0.15);
+            transform: translateX(5px);
+        }
+
+        .user-menu i {
+            width: 25px;
+            text-align: center;
+            margin-right: 10px;
+            color: var(--neon-orange);
+        }
+
+        .btn-logout {
+            background: linear-gradient(90deg, #ff0808 0%, #ff6600 100%);
+            color: black;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-logout:hover {
+            box-shadow: 0 0 15px rgba(255, 8, 8, 0.5);
+        }
+
+        /* Search Box */
+        .search-container {
+            max-width: 800px;
+            margin: 40px auto;
+        }
+
+        .search-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            background-color: #111;
+            border: 2px solid var(--neon-red);
+            color: white;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            box-shadow: 0 0 15px rgba(255, 8, 8, 0.3);
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--neon-orange);
+            box-shadow: 0 0 25px var(--neon-orange);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 5px;
+            background: var(--neon-red);
+            color: black;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .search-btn:hover {
+            background: var(--neon-orange);
+            transform: scale(1.1);
+        }
+
+        /* News Section */
+        .news-section {
+            padding: 80px 0;
+            background-color: var(--darker-bg);
+            border-top: 2px solid var(--neon-orange);
+            border-bottom: 2px solid var(--neon-red);
+        }
+
+        .news-card-container {
+            padding: 15px;
+        }
+
+        .news-card {
+            background-color: var(--dark-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: var(--transition);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            height: 100%;
+            border: 1px solid #333;
+        }
+
+        .news-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(255, 8, 8, 0.3);
+            border-color: var(--neon-red);
+        }
+
+        .news-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 2px solid var(--neon-red);
+        }
+
+        .news-content {
+            padding: 20px;
+        }
+
+        .news-date {
+            color: var(--neon-orange);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .news-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: white;
+            min-height: 60px;
+        }
+
+        .news-excerpt {
+            color: #aaa;
+            margin-bottom: 15px;
+        }
+
+        .read-more {
+            display: inline-block;
+            padding: 8px 20px;
+            background-color: var(--neon-red);
+            color: black;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .read-more:hover {
+            background-color: var(--neon-orange);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 102, 0, 0.3);
+        }
+
+        /* Section Titles */
+        .section-title {
+            color: var(--neon-red);
+            text-transform: uppercase;
+            font-size: 2.5rem;
+            margin: 60px 0 40px;
+            text-align: center;
+            text-shadow: var(--text-glow-red);
+            letter-spacing: 3px;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-red), var(--neon-orange));
+            margin: 15px auto 0;
+        }
+
+        .section-subtitle {
+            color: #aaa;
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            font-size: 1.1rem;
+        }
+
+        /* No results message */
+        .no-results {
+            text-align: center;
+            color: var(--neon-orange);
+            font-size: 1.5rem;
+            margin: 50px 0;
+            display: none;
+        }
+
+        /* Footer Section */
+        .footer {
+            background-color: var(--darker-bg);
+            padding: 50px 0 20px;
+            border-top: 2px solid var(--neon-red);
+            position: relative;
+        }
+
+        .footer::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('ULTRA BG.jpeg') center/cover;
+            opacity: 0.05;
+            z-index: 0;
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--neon-red);
+            text-shadow: var(--text-glow-red);
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .footer-links h4 {
+            color: var(--neon-orange);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+
+        .footer-links ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--neon-red);
+            text-shadow: var(--text-glow-red);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            color: white;
+            font-size: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .social-icons a:hover {
+            color: var(--neon-red);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #333;
+            padding-top: 20px;
+            margin-top: 30px;
+            text-align: center;
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0% {
+                text-shadow: 0 0 10px var(--neon-red);
+            }
+            50% {
+                text-shadow: 0 0 20px var(--neon-red);
+            }
+            100% {
+                text-shadow: 0 0 10px var(--neon-red);
+            }
+        }
+
+        /* Notification */
+        .cart-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--darker-bg);
+            border: 1px solid var(--neon-red);
+            border-radius: 8px;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(255, 8, 8, 0.3);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 9999;
+        }
+
+        .cart-notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .cart-notification i {
+            color: var(--neon-red);
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .navbar-nav {
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 15px;
+                align-items: flex-start;
+            }
+            
+            .nav-link {
+                width: 100%;
+                clip-path: none;
+                border-radius: 4px;
+            }
+            
+            .btn-auth {
+                margin-left: 0;
+                margin-top: 10px;
+                width: 100%;
+                clip-path: none;
+                border-radius: 4px;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .news-card-container {
+                padding: 10px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .news-title {
+                min-height: auto;
+            }
+        }
+         /* Dropdown menu styling */
+        .navbar .dropdown-menu {
+            background-color: var(--darker-bg);
+            border: 1px solid var(--neon-red);
+        }
+
+        .navbar .dropdown-item {
+            color: white;
+            transition: var(--transition);
+        }
+
+        .navbar .dropdown-item:hover {
+            background-color: var(--neon-red);
+            color: black;
+        }
+
+        .navbar .nav-link.dropdown-toggle {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="FF Gaming Final.html">
+                <img src="Faux Fire.png" alt="Faux Fire Logo">
+               FAUX FIRE
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                 <li class="nav-item">
+                        <a class="nav-link active" href="FF Gaming Final.html">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Game Zone
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="Games.html">Games</a></li>
+                            <li><a class="dropdown-item" href="Earn Page.html">Earn</a></li>
+
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Arena
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="Streams.html">Streams</a></li>
+                            <li><a class="dropdown-item" href="Tournaments.html">Tournament</a></li>
+
+                        </ul>
+                    </li>
+
+
+                    <!-- Add this to your navbar, after the existing navigation items -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Gaming Gear
+                        </a>
+                         <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="pcgear.html">PC Gaming Gear</a></li>
+                            <li><a class="dropdown-item" href="Games Iteam.html">Games Iteam</a></li>
+                            <li><a class="dropdown-item " href="mobilegear.html">Mobile Gaming Gear</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Explore
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="News.html">News</a></li>
+                            <li><a class="dropdown-item" href="Comunity Page.html">Comunity</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn-auth" id="authButton" onclick="openAuthModal()">SIGN IN</button>
+                        <div class="user-icon" id="userIcon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="user-dropdown" id="userDropdown">
+                            <div class="user-info">
+                                <img src="Anonymus avatar 3.png" class="user-avatar" alt="User Avatar">
+                                <div class="user-info-content">
+                                    <h4 id="userName">Username</h4>
+                                    <p id="userEmail">user@example.com</p>
+                                </div>
+                            </div>
+                            <ul class="user-menu">
+                                <li><a href="Profile Page.html"><i class="fas fa-user-circle"></i> My Profile</a></li>
+                                <li><a href="UGC.html"><i class="fas fa-gamepad"></i>UGC</a></li>
+                                 <li><a href="Wallet.html"><i class="fas fa-wallet"></i> My Wallet</a></li>
+                            </ul>
+                            <button class="btn-logout" onclick="logoutUser()">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Search Section -->
+    <div class="container search-container">
+        <div class="search-box">
+            <input type="text" class="search-input" id="searchInput" placeholder="Search for news...">
+            <button class="search-btn" onclick="searchNews()">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- News Section -->
+    <section class="news-section">
+        <div class="container">
+            <h2 class="section-title">Gaming News</h2>
+            <p class="section-subtitle">Stay updated with the latest gaming news and announcements</p>
+
+            <div class="row" id="newsGrid">
+                <!-- News Item 1 -->
+                <div class="col-lg-3 col-md-6 news-card-container" data-news-title="gta vi release date" data-news-category="announcements">
+                    <div class="news-card">
+                        <img src="Gta 6.png" alt="GTA VI Announcement" class="news-image">
+                        <div class="news-content">
+                            <div class="news-date">June 10, 2023</div>
+                            <h3 class="news-title">GTA VI Release Date Officially Announced</h3>
+                            <p class="news-excerpt">Rockstar Games has finally revealed the official release date for the highly anticipated Grand Theft Auto VI...</p>
+                            <a href="#" class="read-more">Read More</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- News Item 2 -->
+                <div class="col-lg-3 col-md-6 news-card-container" data-news-title="next-gen console unveiled" data-news-category="hardware">
+                    <div class="news-card">
+                        <img src="newxbox.jpg" alt="New Console" class="news-image">
+                        <div class="news-content">
+                            <div class="news-date">June 8, 2023</div>
+                            <h3 class="news-title">Next-Gen Console Unveiled at E3 2023</h3>
+                            <p class="news-excerpt">The gaming world was shocked today as a major manufacturer revealed their next-generation console with revolutionary features...</p>
+                            <a href="#" class="read-more">Read More</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- News Item 3 -->
+                <div class="col-lg-3 col-md-6 news-card-container" data-news-title="record-breaking prize pool" data-news-category="esports">
+                    <div class="news-card">
+                        <img src="CR_7.png" alt="Esports Tournament" class="news-image">
+                        <div class="news-content">
+                            <div class="news-date">June 5, 2023</div>
+                            <h3 class="news-title">Record-Breaking Prize Pool for International Tournament</h3>
+                            <p class="news-excerpt">The upcoming world championship tournament has set a new record with a $10 million prize pool, the largest in esports history...</p>
+                            <a href="#" class="read-more">Read More</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- News Item 4 -->
+                <div class="col-lg-3 col-md-6 news-card-container" data-news-title="new dlc announced" data-news-category="updates">
+                    <div class="news-card">
+                        <img src="CYBER1.jpeg" alt="Cyberpunk DLC" class="news-image">
+                        <div class="news-content">
+                            <div class="news-date">June 3, 2023</div>
+                            <h3 class="news-title">Cyberpunk 2077: Phantom Liberty DLC Announced</h3>
+                            <p class="news-excerpt">CD Projekt Red has announced a massive new expansion for Cyberpunk 2077 featuring Idris Elba in a starring role...</p>
+                            <a href="#" class="read-more">Read More</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- News Item 5 -->
+                <div class="col-lg-3 col-md-6 news-card-container" data-news-title="game studio acquisition" data-news-category="business">
+                    <div class="news-card">
+                        <img src="major.jpg" alt="Game Studio" class="news-image">
+                        <div class="news-content">
+                            <div class="news-date">May 28, 2023</div>
+                            <h3 class="news-title">Major Game Studio Acquired for $2 Billion</h3>
+                            <p class="news-excerpt">In a surprise move, one of the industry's largest publishers has acquired a prominent independent game developer...</p>
+                            <a href="#" class="read-more">Read More</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- News Item 6 -->
+                <div class="col-lg-3 col-md-6 news-card-container" data-news-title="new game engine" data-news-category="technology">
+                    <div class="news-card">
+                        <img src="nextvr.jpg" alt="Game Engine" class="news-image">
+                        <div class="news-content">
+                            <div class="news-date">May 25, 2023</div>
+                            <h3 class="news-title">Revolutionary New Game Engine Revealed</h3>
+                            <p class="news-excerpt">A tech startup has unveiled a groundbreaking new game engine that promises to revolutionize real-time rendering...</p>
+                            <a href="#" class="read-more">Read More</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- News Item 7 -->
+                <div class="col-lg-3 col-md-6 news-card-container" data-news-title="vr headset update" data-news-category="hardware">
+                    <div class="news-card">
+                        <img src="mob.jpg" alt="VR Headset" class="news-image">
+                        <div class="news-content">
+                            <div class="news-date">May 20, 2023</div>
+                            <h3 class="news-title">Next-Gen VR Headset Specs Leaked</h3>
+                            <p class="news-excerpt">Detailed specifications for an upcoming high-end VR headset have surfaced online, revealing impressive specs...</p>
+                            <a href="#" class="read-more">Read More</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- News Item 8 -->
+                <div class="col-lg-3 col-md-6 news-card-container" data-news-title="indie game awards" data-news-category="events">
+                    <div class="news-card">
+                        <img src="ubisoft.png" alt="Indie Game" class="news-image">
+                        <div class="news-content">
+                            <div class="news-date">May 18, 2023</div>
+                            <h3 class="news-title">Indie Game Awards 2023 Winners Announced</h3>
+                            <p class="news-excerpt">The annual celebration of independent games has concluded with several surprise winners taking home awards...</p>
+                            <a href="#" class="read-more">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- No results message -->
+            <div class="no-results" id="noResults">
+                <i class="fas fa-newspaper"></i>
+                <p>No news articles found matching your search</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row footer-content">
+                <div class="col-lg-4 mb-5 mb-lg-0">
+                    <a href="FF Gaming Final.html" class="footer-logo">Faux Fire Gaming</a>
+                    <p style="color: #aaa; margin-bottom: 20px;">The ultimate destination for gamers worldwide. Join our community and experience gaming like never before.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-twitch"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-5 mb-md-0">
+                    <div class="footer-links">
+                        <h4>Quick Links</h4>
+                        <ul>
+                            <li><a href="FF Gaming Final.html">Home</a></li>
+                            <li><a href="games.html">Games</a></li>
+                            <li><a href="tournaments.html">Tournaments</a></li>
+                            <li><a href="streams.html">Streams</a></li>
+                            <li><a href="news.html">News</a></li>
+                            <li><a href="#">Support</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-5 mb-md-0">
+                    <div class="footer-links">
+                        <h4>Games</h4>
+                        <ul>
+                            <li><a href="#">New Releases</a></li>
+                            <li><a href="#">Popular</a></li>
+                            <li><a href="#">Free to Play</a></li>
+                            <li><a href="#">Pre-Orders</a></li>
+                            <li><a href="#">On Sale</a></li>
+                            <li><a href="#">Coming Soon</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4">
+                    <div class="footer-links">
+                        <h4>Support</h4>
+                        <ul>
+                            <li><a href="#">Contact Us</a></li>
+                            <li><a href="#">FAQs</a></li>
+                            <li><a href="#">Refund Policy</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Cookie Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="footer-links">
+                        <h4>Account</h4>
+                        <ul>
+                            <li><a href="#">My Profile</a></li>
+                            <li><a href="#">My Library</a></li>
+                            <li><a href="#">Wishlist</a></li>
+                            <li><a href="#">Friends</a></li>
+                            <li><a href="#">Settings</a></li>
+                            <li><a href="#">Log Out</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Faux Fire Gaming. All rights reserved. All trademarks are property of their respective owners.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Application state
+        let currentUser = null;
+        
+        // Check if user is logged in from localStorage
+        function checkLoggedInUser() {
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                updateUserUI();
+            }
+        }
+        
+        // Initialize the application
+        function init() {
+            checkLoggedInUser();
+            setupEventListeners();
+        }
+        
+        // Setup event listeners
+        function setupEventListeners() {
+            // Search when pressing Enter
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchNews();
+                }
+            });
+
+            // User dropdown
+            const userIcon = document.getElementById('userIcon');
+            if (userIcon) {
+                userIcon.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (currentUser) {
+                        toggleUserDropdown();
+                    } else {
+                        openAuthModal();
+                    }
+                });
+            }
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', () => {
+                const dropdown = document.getElementById('userDropdown');
+                if (dropdown) dropdown.classList.remove('show');
+            });
+        }
+        
+        // Toggle user dropdown
+        function toggleUserDropdown() {
+            const dropdown = document.getElementById('userDropdown');
+            if (dropdown) dropdown.classList.toggle('show');
+        }
+
+        // Update UI based on auth state
+        function updateUserUI() {
+            const authBtn = document.getElementById('authButton');
+            const userIcon = document.getElementById('userIcon');
+            const userName = document.getElementById('userName');
+            const userEmail = document.getElementById('userEmail');
+
+            if (currentUser) {
+                // User is logged in
+                if (authBtn) authBtn.style.display = 'none';
+                if (userIcon) {
+                    userIcon.style.display = 'flex';
+                    // Update user info in dropdown
+                    if (userName) userName.textContent = currentUser.displayName || currentUser.username || 'Player';
+                    if (userEmail) userEmail.textContent = currentUser.email || '';
+                }
+            } else {
+                // User is logged out
+                if (authBtn) authBtn.style.display = 'inline-block';
+                if (userIcon) userIcon.style.display = 'none';
+                // Hide dropdown if visible
+                const dropdown = document.getElementById('userDropdown');
+                if (dropdown) dropdown.classList.remove('show');
+            }
+        }
+        
+        // ========== AUTHENTICATION FUNCTIONS ==========
+        function openAuthModal() {
+            // In a real implementation, this would show the auth modal
+            alert('Authentication modal would open here');
+        }
+
+        function logoutUser() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            updateUserUI();
+            showNotification('You have been logged out');
+        }
+        
+        // ========== NEWS SEARCH FUNCTIONALITY ==========
+        function searchNews() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const newsCards = document.querySelectorAll('.news-card-container');
+            let hasResults = false;
+            
+            newsCards.forEach(card => {
+                const newsTitle = card.getAttribute('data-news-title');
+                const newsCategory = card.getAttribute('data-news-category');
+                
+                if (newsTitle.includes(input) || newsCategory.includes(input)) {
+                    card.style.display = '';
+                    hasResults = true;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Show/hide no results message
+            document.getElementById('noResults').style.display = hasResults ? 'none' : 'block';
+        }
+        
+        // Show notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'cart-notification';
+            notification.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 10);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+        
+        // Initialize the application when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

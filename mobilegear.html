@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Gaming Gear - Faux Fire</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-red: #ff0808;
+            --neon-orange: #ff6600;
+            --dark-bg: #0d0d0d;
+            --darker-bg: #050505;
+            --text-glow-red: 0 0 10px var(--neon-red), 0 0 20px rgba(255, 42, 42, 0.5);
+            --text-glow-orange: 0 0 10px var(--neon-orange), 0 0 20px rgba(255, 102, 0, 0.5);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: white;
+            font-family: 'Rajdhani', 'Arial', sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: var(--darker-bg) !important;
+            border-bottom: 1px solid var(--neon-red);
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            font-size: 2rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--neon-red) !important;
+            text-shadow: var(--text-glow-red);
+            animation: pulse 2s infinite;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand img {
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .nav-link {
+            position: relative;
+            display: inline-block;
+            padding: 12px 25px;
+            color: white !important;
+            text-transform: uppercase;
+            font-weight: 600;
+            background: #0d0d0d;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
+            transition: var(--transition);
+            border: 1px solid #ff080833;
+            box-shadow: 0 0 8px #ff080844;
+            letter-spacing: 1px;
+            font-size: 1rem;
+            margin: 0 5px;
+        }
+
+        .nav-link:hover {
+            background: var(--neon-red);
+            color: black !important;
+            box-shadow: 0 0 20px var(--neon-orange);
+            font-weight: bold;
+        }
+
+        .dropdown-menu {
+            background-color: var(--darker-bg);
+            border: 1px solid var(--neon-red);
+        }
+
+        .dropdown-item {
+            color: white;
+            transition: var(--transition);
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--neon-red);
+            color: black;
+        }
+
+        .page-header {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            padding: 100px 0;
+            text-align: center;
+            border-bottom: 2px solid var(--neon-red);
+        }
+
+        .page-title {
+            color: var(--neon-red);
+            text-transform: uppercase;
+            font-size: 3.5rem;
+            text-shadow: var(--text-glow-red);
+            margin-bottom: 20px;
+        }
+
+        .page-subtitle {
+            color: #ccc;
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .filter-section {
+            padding: 40px 0;
+            background-color: var(--darker-bg);
+            border-bottom: 1px solid #333;
+        }
+
+        .filter-btn {
+            background-color: transparent;
+            border: 1px solid var(--neon-orange);
+            color: var(--neon-orange);
+            padding: 10px 25px;
+            margin: 0 8px 15px;
+            border-radius: 4px;
+            transition: var(--transition);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background-color: var(--neon-orange);
+            color: black;
+            box-shadow: 0 0 15px rgba(255, 102, 0, 0.5);
+        }
+
+        .products-section {
+            padding: 60px 0;
+        }
+
+        /* Unique Product Card Design for Mobile */
+        .product-card {
+            background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
+            border: 1px solid #333;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: var(--transition);
+            margin-bottom: 30px;
+            height: 100%;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            clip-path: polygon(0 0, 100% 0, 100% 95%, 50% 100%, 0 95%);
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px) rotate(1deg);
+            border-color: var(--neon-red);
+            box-shadow: 0 15px 30px rgba(255, 8, 8, 0.3);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--neon-red);
+            color: black;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            z-index: 10;
+        }
+
+        .product-image-container {
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.1);
+        }
+
+        .product-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+            padding: 20px;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .product-card:hover .product-overlay {
+            opacity: 1;
+        }
+
+        .quick-view-btn {
+            background: var(--neon-orange);
+            color: black;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .quick-view-btn:hover {
+            background: var(--neon-red);
+            transform: scale(1.05);
+        }
+
+        .product-content {
+            padding: 20px;
+        }
+
+        .product-category {
+            color: var(--neon-orange);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .product-title {
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            color: white;
+            font-weight: 700;
+            min-height: 68px;
+        }
+
+        .product-description {
+            color: #aaa;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            min-height: 80px;
+        }
+
+        .product-price {
+            color: var(--neon-red);
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 8, 8, 0.3);
+        }
+
+        .product-rating {
+            color: #ffc107;
+            margin-bottom: 20px;
+        }
+
+        .btn-add-to-cart {
+            background: linear-gradient(90deg, #ff0808 0%, #ff6600 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: var(--transition);
+            width: 100%;
+            letter-spacing: 1px;
+            clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+        }
+
+        .btn-add-to-cart:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 8, 8, 0.4);
+        }
+
+        /* Cart Styles */
+        .cart-container {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .cart-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff0808 0%, #ff6600 100%);
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 8, 8, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--neon-orange);
+            color: black;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .cart-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(255, 8, 8, 0.8);
+        }
+
+        .cart-window {
+            position: absolute;
+            top: 70px;
+            right: 0;
+            width: 350px;
+            background-color: var(--darker-bg);
+            border: 2px solid var(--neon-red);
+            border-radius: 8px;
+            padding: 20px;
+            display: none;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+            clip-path: polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%);
+            z-index: 1001;
+        }
+
+        .cart-window.active {
+            display: block;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #333;
+        }
+
+        .cart-item-img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-right: 15px;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-title {
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            color: var(--neon-orange);
+            font-weight: bold;
+        }
+
+        .remove-from-cart {
+            background: transparent;
+            border: none;
+            color: #aaa;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .remove-from-cart:hover {
+            color: var(--neon-red);
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 20px 0;
+            padding-top: 15px;
+            border-top: 2px solid var(--neon-red);
+        }
+
+        .checkout-btn {
+            background: linear-gradient(90deg, #ff0808 0%, #ff6600 100%);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: var(--transition);
+            width: 100%;
+            clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+        }
+
+        .checkout-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 8, 8, 0.4);
+        }
+
+        /* Checkout Modal */
+        .checkout-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 9998;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .checkout-modal-content {
+            background-color: var(--darker-bg);
+            max-width: 600px;
+            margin: 50px auto;
+            border: 2px solid var(--neon-red);
+            box-shadow: 0 0 30px rgba(255, 8, 8, 0.5);
+            position: relative;
+            clip-path: polygon(0 0, 95% 0, 100% 5%, 100% 95%, 95% 100%, 5% 100%, 0 95%, 0 5%);
+        }
+
+        .checkout-modal-header {
+            padding: 20px;
+            background: linear-gradient(90deg, #ff0808 0%, #ff6600 100%);
+            color: black;
+            text-transform: uppercase;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-checkout {
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-checkout:hover {
+            transform: rotate(90deg);
+        }
+
+        .checkout-modal-body {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--neon-orange);
+            font-weight: 600;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 12px;
+            background-color: #111;
+            border: 1px solid #333;
+            color: white;
+            font-size: 1rem;
+            transition: var(--transition);
+            border-radius: 4px;
+        }
+
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--neon-orange);
+            box-shadow: 0 0 10px rgba(255, 102, 0, 0.3);
+        }
+
+        .checkout-summary {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #333;
+            color: var(--neon-red);
+        }
+
+        .btn-pay-now {
+            background: linear-gradient(90deg, #ff0808 0%, #ff6600 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            font-size: 1.1rem;
+            clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+            margin-top: 20px;
+        }
+
+        .btn-pay-now:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 8, 8, 0.5);
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0% {
+                text-shadow: 0 0 10px var(--neon-red);
+            }
+            50% {
+                text-shadow: 0 0 20px var(--neon-red);
+            }
+            100% {
+                text-shadow: 0 0 10px var(--neon-red);
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .page-title {
+                font-size: 2.5rem;
+            }
+            
+            .filter-btn {
+                padding: 8px 15px;
+                margin: 0 5px 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-link {
+                width: 100%;
+                clip-path: none;
+                border-radius: 4px;
+                margin: 5px 0;
+            }
+            
+            .cart-window {
+                width: 300px;
+                right: -50px;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .page-title {
+                font-size: 1.8rem;
+            }
+            
+            .page-subtitle {
+                font-size: 1rem;
+            }
+            
+            .cart-window {
+                width: 280px;
+                right: -70px;
+            }
+        }
+        /* Auth Button */
+.btn-auth {
+    position: relative;
+    display: inline-block;
+    padding: 12px 30px;
+    color: black !important;
+    text-transform: uppercase;
+    font-weight: 600;
+    background: var(--neon-red);
+    clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+    transition: var(--transition);
+    border: none;
+    box-shadow: 0 0 15px rgba(255, 8, 8, 0.5);
+    letter-spacing: 1px;
+    font-size: 1rem;
+    margin-left: 15px;
+}
+
+.btn-auth:hover {
+    background: var(--neon-orange);
+    color: black !important;
+    box-shadow: 0 0 25px var(--neon-orange);
+    transform: translateY(-2px);
+}
+
+/* User Icon */
+.user-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--neon-red);
+    color: black;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 15px;
+    position: relative;
+    transition: var(--transition);
+}
+
+.user-icon:hover {
+    background-color: var(--neon-orange);
+    transform: scale(1.1);
+}
+
+/* User Dropdown */
+.user-dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: 280px;
+    background-color: var(--darker-bg);
+    border: 2px solid var(--neon-red);
+    border-radius: 8px;
+    box-shadow: 0 5px 25px rgba(255, 8, 8, 0.4);
+    padding: 20px;
+    z-index: 1000;
+    display: none;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    clip-path: polygon(0 0, 100% 0, 100% 90%, 50% 100%, 0 90%);
+}
+
+.user-dropdown.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.user-info {
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 102, 0, 0.2);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid var(--neon-orange);
+    object-fit: cover;
+}
+
+.user-info-content h4 {
+    color: var(--neon-orange);
+    margin-bottom: 5px;
+    font-size: 1.1rem;
+    text-shadow: 0 0 8px rgba(255, 102, 0, 0.3);
+}
+
+.user-info-content p {
+    color: #aaa;
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.user-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.user-menu li {
+    margin-bottom: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.user-menu li::before {
+    content: '';
+    position: absolute;
+    left: -100%;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--neon-orange);
+    transition: all 0.3s ease;
+}
+
+.user-menu li:hover::before {
+    left: 0;
+}
+
+.user-menu a {
+    color: #ddd;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    padding: 8px 10px;
+    border-radius: 4px;
+    background: rgba(255, 8, 8, 0.05);
+}
+
+.user-menu a:hover {
+    color: white;
+    background: rgba(255, 8, 8, 0.15);
+    transform: translateX(5px);
+}
+
+.user-menu i {
+    width: 25px;
+    text-align: center;
+    margin-right: 10px;
+    color: var(--neon-orange);
+}
+
+.btn-logout {
+    background: linear-gradient(90deg, #ff0808 0%, #ff6600 100%);
+    color: black;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: var(--transition);
+    width: 100%;
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-logout:hover {
+    box-shadow: 0 0 15px rgba(255, 8, 8, 0.5);
+}
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="Faux Fire.png" alt="Faux Fire Logo">
+                FAUX FIRE
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                   <li class="nav-item">
+                        <a class="nav-link active" href="FF Gaming Final.html">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Game Zone
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="Games.html">Games</a></li>
+                            <li><a class="dropdown-item" href="Earn Page.html">Earn</a></li>
+
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Arena
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="Streams.html">Streams</a></li>
+                            <li><a class="dropdown-item" href="Tournaments.html">Tournament</a></li>
+
+                        </ul>
+                    </li>
+
+
+                    <!-- Add this to your navbar, after the existing navigation items -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Gaming Gear
+                        </a>
+                         <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="pcgear.html">PC Gaming Gear</a></li>
+                            <li><a class="dropdown-item" href="Games Iteam.html">Games Iteam</a></li>
+                            <li><a class="dropdown-item " href="mobilegear.html">Mobile Gaming Gear</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Explore
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="News.html">News</a></li>
+                            <li><a class="dropdown-item" href="Comunity Page.html">Comunity</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+    <button class="btn-auth" id="authButton" onclick="openAuthModal()">SIGN IN</button>
+    <div class="user-icon" id="userIcon">
+        <i class="fas fa-user"></i>
+    </div>
+    <div class="user-dropdown" id="userDropdown">
+        <div class="user-info">
+            <img src="Anonymus avatar 3.png" class="user-avatar" alt="User Avatar">
+            <div class="user-info-content">
+                <h4 id="userName">Username</h4>
+                <p id="userEmail">user@example.com</p>
+            </div>
+        </div>
+        <ul class="user-menu">
+            <li><a href="Profile Page.html"><i class="fas fa-user-circle"></i> My Profile</a></li>
+            <li><a href="UGC.html"><i class="fas fa-gamepad"></i>UGC</a></li>
+            <li><a href="Wallet.html"><i class="fas fa-wallet"></i> My Wallet</a></li>
+        </ul>
+        <button class="btn-logout" onclick="logoutUser()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </div>
+</li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">Mobile Gaming Gear</h1>
+            <p class="page-subtitle">Enhance your mobile gaming experience with our premium selection of controllers, accessories, and gaming-focused mobile devices.</p>
+        </div>
+    </section>
+
+    <!-- Filter Section -->
+    <section class="filter-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <div class="text-center">
+                        <button class="filter-btn active" data-filter="all">All Products</button>
+                        <button class="filter-btn" data-filter="controller">Controllers</button>
+                        <button class="filter-btn" data-filter="cooling">Cooling Systems</button>
+                        <button class="filter-btn" data-filter="grip">Phone Grips</button>
+                        <button class="filter-btn" data-filter="charger">Fast Chargers</button>
+                        <button class="filter-btn" data-filter="headphone">Mobile Headphones</button>
+                        <button class="filter-btn" data-filter="device">Gaming Phones</button>
+                        <button class="filter-btn" data-filter="accessory">Accessories</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products-section">
+        <div class="container">
+            <div class="row" id="productsContainer">
+                <!-- Product cards will be dynamically generated here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Container -->
+    <div class="cart-container">
+        <button class="cart-btn" id="cartButton">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count" id="cartCount">0</span>
+        </button>
+        <div class="cart-window" id="cartWindow">
+            <h4>Your Cart</h4>
+            <div id="cartItems">
+                <p class="text-center">Your cart is empty</p>
+            </div>
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cartTotal">$0.00</span>
+            </div>
+            <button class="checkout-btn" id="checkoutBtn">Checkout</button>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkoutModal" class="checkout-modal">
+        <div class="checkout-modal-content">
+            <div class="checkout-modal-header">
+                <h3>Complete Your Purchase</h3>
+                <span class="close-checkout" onclick="closeCheckoutModal()">&times;</span>
+            </div>
+            <div class="checkout-modal-body">
+                <form id="checkoutForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="fullName">Full Name</label>
+                                <input type="text" id="fullName" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="city">City</label>
+                                <input type="text" id="city" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Shipping Address</label>
+                        <textarea id="address" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="paymentMethod">Payment Method</label>
+                        <select id="paymentMethod" required>
+                            <option value="">Select Payment Method</option>
+                            <option value="credit-card">Credit Card</option>
+                            <option value="paypal">PayPal</option>
+                            <option value="bank-transfer">Bank Transfer</option>
+                        </select>
+                    </div>
+                    
+                    <div class="checkout-summary">
+                        <h5>Order Summary</h5>
+                        <div id="checkoutSummary">
+                            <!-- Order items will be inserted here -->
+                        </div>
+                        <div class="summary-total">
+                            <span>Total:</span>
+                            <span id="checkoutTotal">$0.00</span>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-pay-now">Pay Now</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Application state
+let currentUser = null;
+
+// Check if user is logged in from localStorage
+function checkLoggedInUser() {
+    const savedUser = localStorage.getItem('currentUser');
+    if (savedUser) {
+        currentUser = JSON.parse(savedUser);
+        updateUserUI();
+    }
+}
+
+// Initialize the application
+function init() {
+    checkLoggedInUser();
+    setupEventListeners();
+}
+
+// Setup event listeners
+function setupEventListeners() {
+    // User dropdown
+    const userIcon = document.getElementById('userIcon');
+    if (userIcon) {
+        userIcon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (currentUser) {
+                toggleUserDropdown();
+            } else {
+                openAuthModal();
+            }
+        });
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', () => {
+        const dropdown = document.getElementById('userDropdown');
+        if (dropdown) dropdown.classList.remove('show');
+    });
+}
+
+// Toggle user dropdown
+function toggleUserDropdown() {
+    const dropdown = document.getElementById('userDropdown');
+    if (dropdown) dropdown.classList.toggle('show');
+}
+
+// Update UI based on auth state
+function updateUserUI() {
+    const authBtn = document.getElementById('authButton');
+    const userIcon = document.getElementById('userIcon');
+    const userName = document.getElementById('userName');
+    const userEmail = document.getElementById('userEmail');
+
+    if (currentUser) {
+        // User is logged in
+        if (authBtn) authBtn.style.display = 'none';
+        if (userIcon) {
+            userIcon.style.display = 'flex';
+            // Update user info in dropdown
+            if (userName) userName.textContent = currentUser.displayName || currentUser.username || 'Player';
+            if (userEmail) userEmail.textContent = currentUser.email || '';
+        }
+    } else {
+        // User is logged out
+        if (authBtn) authBtn.style.display = 'inline-block';
+        if (userIcon) userIcon.style.display = 'none';
+        // Hide dropdown if visible
+        const dropdown = document.getElementById('userDropdown');
+        if (dropdown) dropdown.classList.remove('show');
+    }
+}
+
+// ========== AUTHENTICATION FUNCTIONS ==========
+function openAuthModal() {
+    // In a real implementation, this would show the auth modal
+    alert('Authentication modal would open here');
+}
+
+function logoutUser() {
+    currentUser = null;
+    localStorage.removeItem('currentUser');
+    updateUserUI();
+    showNotification('You have been logged out');
+}
+
+// Show notification
+function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.style.position = 'fixed';
+    notification.style.bottom = '20px';
+    notification.style.right = '20px';
+    notification.style.backgroundColor = 'var(--neon-orange)';
+    notification.style.color = 'black';
+    notification.style.padding = '10px 20px';
+    notification.style.borderRadius = '4px';
+    notification.style.zIndex = '1000';
+    notification.style.boxShadow = '0 3px 10px rgba(0, 0, 0, 0.2)';
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        notification.style.transition = 'opacity 0.5s';
+        setTimeout(() => notification.remove(), 500);
+    }, 3000);
+}
+
+// Initialize the application when DOM is loaded
+document.addEventListener('DOMContentLoaded', init);
+        // Sample mobile gaming gear data with 12 items
+        const products = [
+            {
+                id: 1,
+                name: "Wireless Mobile Game Controller",
+                category: "controller",
+                price: 69.99,
+                image: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                description: "Ergonomic wireless controller designed specifically for mobile gaming with customizable buttons.",
+                rating: 4.7,
+                featured: true
+            },
+            {
+                id: 2,
+                name: "Phone Cooling Fan Pro",
+                category: "cooling",
+                price: 29.99,
+                image: "https://images.unsplash.com/photo-1625842269765-c39112391c31?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                description: "Advanced cooling system that prevents overheating during extended gaming sessions.",
+                rating: 4.5,
+                featured: false
+            },
+            {
+                id: 3,
+                name: "Ergonomic Phone Grip",
+                category: "grip",
+                price: 19.99,
+                image: "https://images.unsplash.com/photo-1572314493769-03a6b2672354?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                description: "Comfortable grip that reduces hand fatigue during long gaming sessions.",
+                rating: 4.6,
+                featured: false
+            },
+            {
+                id: 4,
+                name: "65W Super Fast Charger",
+                category: "charger",
+                price: 39.99,
+                image: "https://images.unsplash.com/photo-1609091839311-d5365f2e0c5a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                description: "Ultra-fast charger that powers your device while you game without interruption.",
+                rating: 4.8,
+                featured: true
+            },
+            {
+                id: 5,
+                name: "Wireless Gaming Earbuds",
+                category: "headphone",
+                price: 89.99,
+                image: "https://images.unsplash.com/photo-1599669454699-248893623464?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                description: "Low-latency wireless earbuds with immersive sound quality for mobile gaming.",
+                rating: 4.7,
+                featured: true
+            },
+            {
+                id: 6,
+                name: "Gaming Phone X Pro",
+                category: "device",
+                price: 899.99,
+                image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                description: "High-performance gaming phone with 144Hz display and advanced cooling system.",
+                rating: 4.9,
+                featured: true
+            },
+            {
+                id: 7,
+                name: "Mobile Gaming Trigger Buttons",
+                category: "accessory",
+                price: 24.99,
+                image: "https://images.unsplash.com/photo-1541140532154-b024d705b90a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                description: "Clip-on trigger buttons for enhanced control in shooting and action games.",
+                rating: 4.4,
+                featured: false
+            },
+            {
+                id: 8,
+                name: "Portable Power Bank 20000mAh",
+                category: "charger",
+                price: 49.99,
+                image: "https://images.unsplash.com/photo-1592417817096-5bf9c6c79b2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                description: "High-capacity power bank to keep your device charged during long gaming sessions.",
+                rating: 4.7,
+                featured: false
+            },
+            {
+                id: 9,
+                name: "Mobile Gamepad with Phone Clip",
+                category: "controller",
+                price: 59.99,
+                image: "https://images.unsplash.com/photo-1600080972464-8e5f35f63d08?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                description: "Compact gamepad with adjustable phone clip for comfortable mobile gaming.",
+                rating: 4.6,
+                featured: false
+            },
+            {
+                id: 10,
+                name: "BlueTooth Gaming Headset",
+                category: "headphone",
+                price: 79.99,
+                image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                description: "Over-ear Bluetooth headset with surround sound and noise cancellation.",
+                rating: 4.5,
+                featured: false
+            },
+            {
+                id: 11,
+                name: "Phone Stand with Cooling",
+                category: "accessory",
+                price: 34.99,
+                image: "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                description: "Adjustable phone stand with built-in cooling fan for optimal gaming posture.",
+                rating: 4.3,
+                featured: false
+            },
+            {
+                id: 12,
+                name: "Mobile Gaming Phone Grip",
+                category: "grip",
+                price: 22.99,
+                image: "https://images.unsplash.com/photo-1572314493769-03a6b2672354?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                description: "Specialized grip with textured surface for better control during intense gameplay.",
+                rating: 4.6,
+                featured: false
+            }
+        ];
+
+        // Cart functionality
+        let cart = [];
+        const cartCount = document.getElementById('cartCount');
+        const cartItems = document.getElementById('cartItems');
+        const cartTotal = document.getElementById('cartTotal');
+        const cartWindow = document.getElementById('cartWindow');
+        const cartButton = document.getElementById('cartButton');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        const checkoutModal = document.getElementById('checkoutModal');
+        const checkoutSummary = document.getElementById('checkoutSummary');
+        const checkoutTotal = document.getElementById('checkoutTotal');
+        const checkoutForm = document.getElementById('checkoutForm');
+
+        // Function to render products
+        function renderProducts(filter = 'all') {
+            const container = document.getElementById('productsContainer');
+            container.innerHTML = '';
+            
+            const filteredProducts = filter === 'all' 
+                ? products 
+                : products.filter(product => product.category === filter);
+            
+            filteredProducts.forEach(product => {
+                const col = document.createElement('div');
+                col.className = 'col-md-4 col-lg-3 mb-4';
+                
+                col.innerHTML = `
+                    <div class="product-card" data-category="${product.category}">
+                        ${product.featured ? '<div class="product-badge">FEATURED</div>' : ''}
+                        <div class="product-image-container">
+                            <img src="${product.image}" alt="${product.name}" class="product-image">
+                            <div class="product-overlay">
+                                <button class="quick-view-btn" onclick="quickView(${product.id})">
+                                    <i class="fas fa-eye"></i> Quick View
+                                </button>
+                            </div>
+                        </div>
+                        <div class="product-content">
+                            <div class="product-category">${product.category}</div>
+                            <h3 class="product-title">${product.name}</h3>
+                            <p class="product-description">${product.description}</p>
+                            <div class="product-rating">
+                                ${getRatingStars(product.rating)}
+                            </div>
+                            <div class="product-price">$${product.price.toFixed(2)}</div>
+                            <button class="btn-add-to-cart" onclick="addToCart(${product.id})">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(col);
+            });
+        }
+
+        // Function to generate rating stars
+        function getRatingStars(rating) {
+            let stars = '';
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 >= 0.5;
+            
+            for (let i = 0; i < fullStars; i++) {
+                stars += '<i class="fas fa-star"></i>';
+            }
+            
+            if (hasHalfStar) {
+                stars += '<i class="fas fa-star-half-alt"></i>';
+            }
+            
+            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+            for (let i = 0; i < emptyStars; i++) {
+                stars += '<i class="far fa-star"></i>';
+            }
+            
+            return stars;
+        }
+
+        // Function to add product to cart
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                cart.push(product);
+                updateCart();
+                showNotification(`${product.name} added to cart!`);
+            }
+        }
+
+        // Function to remove product from cart
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCart();
+        }
+
+        // Function to update cart UI
+        function updateCart() {
+            cartCount.textContent = cart.length;
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p class="text-center">Your cart is empty</p>';
+                cartTotal.textContent = '$0.00';
+                checkoutBtn.disabled = true;
+            } else {
+                cartItems.innerHTML = '';
+                let total = 0;
+                
+                cart.forEach((item, index) => {
+                    total += item.price;
+                    
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'cart-item';
+                    cartItem.innerHTML = `
+                        <img src="${item.image}" alt="${item.name}" class="cart-item-img">
+                        <div class="cart-item-details">
+                            <div class="cart-item-title">${item.name}</div>
+                            <div class="cart-item-price">$${item.price.toFixed(2)}</div>
+                        </div>
+                        <button class="remove-from-cart" onclick="removeFromCart(${index})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    `;
+                    
+                    cartItems.appendChild(cartItem);
+                });
+                
+                cartTotal.textContent = `$${total.toFixed(2)}`;
+                checkoutBtn.disabled = false;
+            }
+        }
+
+        // Function to show notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.position = 'fixed';
+            notification.style.bottom = '20px';
+            notification.style.right = '20px';
+            notification.style.backgroundColor = 'var(--neon-orange)';
+            notification.style.color = 'black';
+            notification.style.padding = '10px 20px';
+            notification.style.borderRadius = '4px';
+            notification.style.zIndex = '1000';
+            notification.style.boxShadow = '0 3px 10px rgba(0, 0, 0, 0.2)';
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transition = 'opacity 0.5s';
+                setTimeout(() => notification.remove(), 500);
+            }, 3000);
+        }
+
+        // Function to open checkout modal
+        function openCheckoutModal() {
+            checkoutSummary.innerHTML = '';
+            let total = 0;
+            
+            cart.forEach(item => {
+                total += item.price;
+                const summaryItem = document.createElement('div');
+                summaryItem.className = 'summary-item';
+                summaryItem.innerHTML = `
+                    <span>${item.name}</span>
+                    <span>$${item.price.toFixed(2)}</span>
+                `;
+                checkoutSummary.appendChild(summaryItem);
+            });
+            
+            checkoutTotal.textContent = `$${total.toFixed(2)}`;
+            checkoutModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Function to close checkout modal
+        function closeCheckoutModal() {
+            checkoutModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Function for quick view (placeholder)
+        function quickView(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                alert(`Quick view: ${product.name}\nPrice: $${product.price.toFixed(2)}\nRating: ${product.rating}/5`);
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            renderProducts();
+            updateCart();
+            
+            // Add event listeners to filter buttons
+            document.querySelectorAll('.filter-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const filter = this.getAttribute('data-filter');
+                    renderProducts(filter);
+                });
+            });
+            
+            // Cart toggle
+            cartButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                cartWindow.classList.toggle('active');
+            });
+            
+            // Close cart when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!cartWindow.contains(e.target) && e.target !== cartButton) {
+                    cartWindow.classList.remove('active');
+                }
+            });
+            
+            // Checkout button
+            checkoutBtn.addEventListener('click', function() {
+                cartWindow.classList.remove('active');
+                openCheckoutModal();
+            });
+            
+            // Checkout form submission
+            checkoutForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Order placed successfully! You will receive a confirmation email shortly.');
+                cart = [];
+                updateCart();
+                closeCheckoutModal();
+            });
+        });
+    </script>
+</body>
+</html>
