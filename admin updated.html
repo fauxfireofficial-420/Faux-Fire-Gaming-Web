@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Faux Fire Gaming - Admin Dashboard (Updated)</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* same styles as before (kept concise) */
+        :root{--neon-red:#ff0808;--neon-orange:#ff6600;--dark-bg:#0d0d0d;--darker-bg:#050505;--admin-bg:#121212;--admin-card:#1a1a1a;--admin-text:#e0e0e0;--admin-text-light:#f5f5f5;--admin-border:#2a2a2a;--transition:all .3s cubic-bezier(.25,.8,.25,1)}
+        body{background:var(--admin-bg);color:var(--admin-text);font-family:'Rajdhani',Arial,sans-serif;overflow-x:hidden}
+        .admin-sidebar{position:fixed;top:0;left:0;width:250px;height:100vh;background:var(--darker-bg);border-right:1px solid var(--neon-red);z-index:1000;overflow-y:auto}
+        .sidebar-brand{display:flex;align-items:center;justify-content:center;padding:20px 15px;border-bottom:1px solid var(--admin-border)}
+        .sidebar-brand h3{color:var(--neon-red);margin:0;text-transform:uppercase}
+        .sidebar-menu{padding:15px 0}
+        .sidebar-link{display:flex;align-items:center;padding:12px 20px;color:var(--admin-text);text-decoration:none;border-left:3px solid transparent;cursor:pointer}
+        .sidebar-link:hover,.sidebar-link.active{background:rgba(255,8,8,.06);color:var(--neon-orange);border-left-color:var(--neon-red)}
+        .admin-main{margin-left:250px;min-height:100vh}
+        .admin-header{background:var(--darker-bg);padding:15px 25px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--admin-border);position:sticky;top:0}
+        .admin-content{padding:25px;display:none}
+        .page-title{color:var(--neon-orange);font-size:1.6rem;margin-bottom:20px}
+        .admin-card{background:var(--admin-card);border:1px solid var(--admin-border);padding:20px;border-radius:8px;margin-bottom:20px}
+        .admin-table th{background:rgba(255,8,8,.05);color:var(--neon-orange)}
+        .admin-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:9999}
+        .admin-modal.show{display:flex}
+        .modal-inner{background:var(--admin-card);padding:20px;border-radius:8px;width:90%;max-width:700px;border:1px solid var(--neon-orange)}
+        .btn-admin{padding:8px 12px;border-radius:6px}
+        .status-badge{padding:5px 10px;border-radius:20px;font-weight:700}
+    </style>
+</head>
+
+<body>
+    <div class="admin-sidebar" id="adminSidebar">
+        <div class="sidebar-brand">
+            <img src="Faux Fire.png" alt="logo" style="height:40px;margin-right:8px">
+            <h3>Admin</h3>
+        </div>
+        <div class="sidebar-menu">
+            <div class="sidebar-item"><a class="sidebar-link" data-page="dashboard"><i class="fas fa-tachometer-alt me-2"></i><span>Dashboard</span></a></div>
+            <div class="sidebar-item"><a class="sidebar-link" data-page="users"><i class="fas fa-users me-2"></i><span>Users</span></a></div>
+            <div class="sidebar-item"><a class="sidebar-link" data-page="games"><i class="fas fa-tags me-2"></i><span>Games</span></a></div>
+            <div class="sidebar-item"><a class="sidebar-link" data-page="streams"><i class="fas fa-video me-2"></i><span>Streams</span></a></div>
+            <div class="sidebar-item"><a class="sidebar-link" data-page="orders"><i class="fas fa-shopping-cart me-2"></i><span>Orders</span></a></div>
+            <div class="sidebar-item"><a class="sidebar-link" data-page="security"><i class="fas fa-shield-alt me-2"></i><span>Security</span></a></div>
+            <div class="sidebar-item"><a class="sidebar-link" id="goHome"><i class="fas fa-home me-2"></i><span>Go Home</span></a></div>
+        </div>
+    </div>
+
+    <div class="admin-main" id="adminMain">
+        <header class="admin-header">
+            <div class="header-left">
+                <button class="btn btn-link text-white" id="toggleSidebar"><i class="fas fa-bars"></i></button>
+                <span>Faux Fire Admin Panel</span>
+            </div>
+            <div class="header-right d-flex align-items-center">
+                <div class="admin-search me-3"><i class="fas fa-search"></i><input type="text" id="globalSearch" placeholder="Search..." style="background:transparent;border:none;color:var(--admin-text);outline:none"></div>
+                <div class="me-3"><i class="fas fa-bell"></i><span class="badge bg-danger ms-1" id="notifCount">0</span></div>
+                <div class="admin-profile d-flex align-items-center">
+                    <img src="Anonymus avatar 3.png" style="width:36px;height:36px;border-radius:50%" alt="admin">
+                    <div class="ms-2">Admin</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Pages -->
+        <div class="admin-content" id="dashboardPage">
+            <h1 class="page-title"><i class="fas fa-tachometer-alt"></i> Dashboard</h1>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="admin-card">
+                        <h5>Total Users</h5>
+                        <div id="statUsers">-</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="admin-card">
+                        <h5>Total Games</h5>
+                        <div id="statGames">-</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="admin-card">
+                        <h5>Live Streams</h5>
+                        <div id="statStreams">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="admin-content" id="usersPage">
+            <h1 class="page-title"><i class="fas fa-users"></i> Manage Users</h1>
+            <div class="admin-card">
+                <div class="table-responsive">
+                    <table class="table table-dark table-striped" id="usersTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>City</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="admin-content" id="gamesPage">
+            <h1 class="page-title"><i class="fas fa-tags"></i> Manage Games</h1>
+            <div class="admin-card">
+                <table class="table table-dark table-striped" id="gamesTable">
+                    <thead>
+                        <tr><th>Title</th><th>Developer</th><th>Price</th><th>Hidden</th><th>Action</th></tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="admin-content" id="streamsPage">
+            <h1 class="page-title"><i class="fas fa-video"></i> Manage Streams</h1>
+            <div class="admin-card">
+                <table class="table table-dark table-striped" id="streamsTable"><thead><tr><th>Title</th><th>Streamer</th><th>Viewers</th><th>Hidden</th><th>Action</th></tr></thead><tbody></tbody></table>
+            </div>
+        </div>
+
+        <div class="admin-content" id="ordersPage">
+            <h1 class="page-title"><i class="fas fa-shopping-cart"></i> Orders</h1>
+            <div class="admin-card"><p>No orders integrated yet.</p></div>
+        </div>
+
+        <div class="admin-content" id="securityPage">
+            <h1 class="page-title"><i class="fas fa-shield-alt"></i> Security</h1>
+            <div class="admin-card"><p>Security settings & logs will be here.</p></div>
+        </div>
+
+    </div>
+
+    <!-- Modals -->
+    <div class="admin-modal" id="editUserModal">
+        <div class="modal-inner">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+                <h4>Edit User</h4>
+                <button class="btn btn-sm btn-light" onclick="closeModal('editUserModal')">Close</button>
+            </div>
+            <div>
+                <div class="mb-2"><strong>Name:</strong> <span id="modalUserName"></span></div>
+                <div class="mb-2"><strong>Email:</strong> <span id="modalUserEmail"></span></div>
+                <div class="mb-2"><strong>City:</strong> <input id="modalUserCity" class="form-control form-control-sm"/></div>
+                <div class="mb-2"><strong>Role:</strong>
+                    <select id="modalUserRole" class="form-select form-select-sm"><option value="user">User</option><option value="moderator">Moderator</option><option value="admin">Admin</option></select>
+                </div>
+                <div class="d-flex gap-2 mt-3">
+                    <button class="btn btn-warning btn-admin" onclick="applyBan('temp')">Temporary Ban</button>
+                    <button class="btn btn-danger btn-admin" onclick="applyBan('perm')">Permanent Ban</button>
+                    <button class="btn btn-secondary btn-admin" onclick="saveUserEdits()">Save Edits</button>
+                    <button class="btn btn-danger btn-admin" onclick="deleteUserConfirm()">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-modal" id="confirmModal">
+        <div class="modal-inner">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><h4 id="confirmTitle">Confirm</h4><button class="btn btn-sm btn-light" onclick="closeModal('confirmModal')">Close</button></div>
+            <div id="confirmBody"></div>
+            <div class="mt-3 text-end"><button class="btn btn-secondary" onclick="closeModal('confirmModal')">Cancel</button> <button class="btn btn-danger" id="confirmOk">OK</button></div>
+        </div>
+    </div>
+
+    <!-- Firebase + App Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc, query, orderBy, where } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDM9zOfVMfqFFaODd7OZ-N2qC4ZuZhe10o",
+            authDomain: "fauxfireotp.firebaseapp.com",
+            projectId: "fauxfireotp",
+            storageBucket: "fauxfireotp.firebasestorage.app",
+            messagingSenderId: "254203897427",
+            appId: "1:254203897427:web:a786eb9cf8d7c3514208a6"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        window.db = db; // for debugging in console
+
+        // --- Helpers ---
+        function openModal(id){document.getElementById(id).classList.add('show')}
+        function closeModal(id){document.getElementById(id).classList.remove('show')}
+
+        // Admin access guard
+        document.addEventListener('DOMContentLoaded', async ()=>{
+            const cu = JSON.parse(localStorage.getItem('currentUser')||'null');
+            if(!(cu && cu.role==='admin')){alert('Access Denied! Admins only.'); window.location.href='FF Gaming Final.html'; return}
+            initApp();
+        });
+
+        // --- Load data ---
+        async function loadStats(){
+            const uSnap = await getDocs(collection(db,'users'));
+            const gSnap = await getDocs(collection(db,'games'));
+            const sSnap = await getDocs(collection(db,'streams'));
+            document.getElementById('statUsers').textContent = uSnap.size;
+            document.getElementById('statGames').textContent = gSnap.size;
+            document.getElementById('statStreams').textContent = sSnap.size;
+        }
+
+        // --- Users ---
+        async function loadUsers(){
+            const tbody = document.querySelector('#usersTable tbody'); tbody.innerHTML='';
+            const q = query(collection(db,'users'), orderBy('name'));
+            const snap = await getDocs(q);
+            snap.forEach(docSnap=>{
+                const u = docSnap.data();
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${u.name||'-'}</td>
+                    <td>${u.email||'-'}</td>
+                    <td>${u.city||'-'}</td>
+                    <td>${u.role||'user'}</td>
+                    <td><span class="badge bg-${(u.status==='perm_ban')?'danger':(u.status==='temp_ban')?'warning':'success'}">${u.status||'active'}</span></td>
+                    <td>
+                      <button class="btn btn-sm btn-primary" onclick="window.openEditUser('${docSnap.id}')">Edit</button>
+                    </td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Expose edit opener
+        window.openEditUser = async function(id){
+            const dref = doc(db,'users',id);
+            const d = await (await getDocs(query(collection(db,'users'), where('__name__','==',id)))).docs[0];
+            // fallback read single doc
+            let data;
+            try{ const dd = await (await fetch('/')).ok; }catch(e){}
+            // simpler: get doc via getDocs isn't ideal; use getDoc normally but to avoid importing getDoc, we reuse getDocs with filter above
+            const docSnap = await getDocs(query(collection(db,'users'), where('__name__','==',id)));
+            if(docSnap.size){ data = docSnap.docs[0].data(); } else { alert('User not found'); return }
+
+            window.editingUserId = id;
+            document.getElementById('modalUserName').textContent = data.name||'';
+            document.getElementById('modalUserEmail').textContent = data.email||'';
+            document.getElementById('modalUserCity').value = data.city||'';
+            document.getElementById('modalUserRole').value = data.role||'user';
+            openModal('editUserModal');
+        }
+
+        async function applyBan(type){
+            if(!window.editingUserId) return; const ref = doc(db,'users',window.editingUserId);
+            await updateDoc(ref,{status: type==='temp' ? 'temp_ban' : 'perm_ban'});
+            closeModal('editUserModal'); loadUsers();
+        }
+
+        async function saveUserEdits(){
+            if(!window.editingUserId) return; const ref = doc(db,'users',window.editingUserId);
+            const city = document.getElementById('modalUserCity').value;
+            const role = document.getElementById('modalUserRole').value;
+            await updateDoc(ref,{city,role}); closeModal('editUserModal'); loadUsers();
+        }
+
+        function deleteUserConfirm(){
+            document.getElementById('confirmTitle').textContent='Delete User';
+            document.getElementById('confirmBody').textContent='Are you sure you want to delete this user? This action cannot be undone.';
+            openModal('confirmModal');
+            document.getElementById('confirmOk').onclick = async ()=>{ await deleteDoc(doc(db,'users',window.editingUserId)); closeModal('confirmModal'); closeModal('editUserModal'); loadUsers(); };
+        }
+
+        // --- Games ---
+        async function loadGames(){
+            const tbody = document.querySelector('#gamesTable tbody'); tbody.innerHTML='';
+            const snap = await getDocs(collection(db,'games'));
+            snap.forEach(snapDoc=>{
+                const g = snapDoc.data(); const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${g.title||'-'}</td>
+                    <td>${g.developer||'-'}</td>
+                    <td>${g.price!=null? g.price : '-'}</td>
+                    <td>${g.hidden? 'Yes' : 'No'}</td>
+                    <td>
+                      <button class="btn btn-sm btn-${g.hidden? 'success':'warning'}" onclick="toggleGameHidden('${snapDoc.id}',${g.hidden? 'false':'true'})">${g.hidden? 'Unhide':'Hide'}</button>
+                    </td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function toggleGameHidden(id, setHidden){
+            await updateDoc(doc(db,'games',id),{hidden: setHidden}); loadGames();
+        }
+
+        // --- Streams ---
+        async function loadStreams(){
+            const tbody = document.querySelector('#streamsTable tbody'); tbody.innerHTML='';
+            const snap = await getDocs(collection(db,'streams'));
+            snap.forEach(snapDoc=>{
+                const g = snapDoc.data(); const tr = document.createElement('tr');
+                tr.innerHTML = `
+                  <td>${g.title||'-'}</td>
+                  <td>${g.streamer||'-'}</td>
+                  <td>${g.viewers||0}</td>
+                  <td>${g.hidden? 'Yes' : 'No'}</td>
+                  <td><button class="btn btn-sm btn-${g.hidden? 'success':'warning'}" onclick="toggleStreamHidden('${snapDoc.id}',${g.hidden? 'false':'true'})">${g.hidden? 'Unhide':'Hide'}</button></td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function toggleStreamHidden(id, setHidden){ await updateDoc(doc(db,'streams',id),{hidden:setHidden}); loadStreams(); }
+
+        // --- Init app ---
+        async function initApp(){
+            // show dashboard by default
+            document.querySelectorAll('.admin-content').forEach(s=>s.style.display='none'); document.getElementById('dashboardPage').style.display='block';
+            await loadStats(); await loadUsers(); await loadGames(); await loadStreams();
+
+            // sidebar click handlers
+            document.querySelectorAll('.sidebar-link').forEach(link=>{
+                link.addEventListener('click', (e)=>{
+                    const page = link.dataset.page; if(!page) return;
+                    document.querySelectorAll('.admin-content').forEach(s=>s.style.display='none');
+                    document.getElementById(page+'Page').style.display='block';
+                });
+            });
+
+            document.getElementById('goHome').addEventListener('click', ()=>{window.location.href='FF Gaming Final.html'});
+
+            // global search simple filter
+            document.getElementById('globalSearch').addEventListener('input', (e)=>{
+                const q = e.target.value.toLowerCase(); document.querySelectorAll('#usersTable tbody tr').forEach(tr=>{
+                    tr.style.display = tr.textContent.toLowerCase().includes(q) ? '' : 'none';
+                });
+                document.querySelectorAll('#gamesTable tbody tr').forEach(tr=>{ tr.style.display = tr.textContent.toLowerCase().includes(q) ? '' : 'none'; });
+            });
+        }
+
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
