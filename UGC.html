@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Generated Content</title>
+  <!-- Bootstrap + Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --neon-red: #ff0808;
+        --neon-orange: #ff6600;
+        --dark-bg: #0d0d0d;
+        --darker-bg: #050505;
+        --text-glow-red: 0 0 10px var(--neon-red), 0 0 20px rgba(255, 42, 42, 0.5);
+        --text-glow-orange: 0 0 10px var(--neon-orange), 0 0 20px rgba(255, 102, 0, 0.5);
+        --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    body {
+        background-color: var(--dark-bg);
+        color: white;
+        font-family: 'Rajdhani', 'Arial', sans-serif;
+        overflow-x: hidden;
+        scroll-behavior: smooth;
+    }
+
+    .brand {
+        color: var(--neon-red);
+        font-weight: 800;
+        letter-spacing: 1px;
+        text-shadow: var(--text-glow-red);
+        font-size: 2rem;
+        text-transform: uppercase;
+        animation: pulse 2s infinite;
+        display: flex;
+        align-items: center;
+        margin-bottom: 0;
+    }
+
+    .brand img {
+        height: 50px;
+        margin-right: 10px;
+    }
+
+    .page-wrap {
+        min-height: 100vh;
+        padding-top: 20px;
+    }
+
+    /* Navbar */
+    .main-nav {
+        background-color: var(--darker-bg) !important;
+        border-bottom: 1px solid var(--neon-red);
+        padding: 15px 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        margin-bottom: 30px;
+    }
+
+    .nav-link {
+        position: relative;
+        display: inline-block;
+        padding: 12px 25px;
+        color: white !important;
+        text-transform: uppercase;
+        font-weight: 600;
+        background: #0d0d0d;
+        clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
+        transition: var(--transition);
+        border: 1px solid #ff080833;
+        box-shadow: 0 0 8px #ff080844;
+        letter-spacing: 1px;
+        font-size: 1rem;
+        margin: 0 5px;
+    }
+
+    .nav-link:hover {
+        background: var(--neon-red);
+        color: #000 !important;
+        box-shadow: 0 0 20px var(--neon-orange);
+        font-weight: bold;
+        transform: translateY(-2px);
+    }
+
+    .nav-link.active {
+        background: var(--neon-red);
+        color: black !important;
+        box-shadow: 0 0 20px var(--neon-red);
+    }
+
+    .user-icon {
+        width: 44px; 
+        height: 44px; 
+        border-radius: 50%; 
+        overflow: hidden; 
+        display:inline-flex; 
+        align-items: center;
+        justify-content: center;
+        border: 2px solid var(--neon-red);
+        background-color: var(--neon-red);
+        color: black;
+        font-weight: bold;
+        transition: var(--transition);
+        margin-left: 15px;
+    }
+
+    .user-icon img{ 
+        width:100%; 
+        height:100%; 
+        object-fit:cover; 
+    }
+    
+    .user-icon:hover { 
+        background-color: var(--neon-orange); 
+        transform: scale(1.03); 
+        box-shadow: 0 0 15px var(--neon-orange);
+    }
+
+    /* Buttons */
+    .btn-neon {
+        background: linear-gradient(90deg, var(--neon-red), var(--neon-orange));
+        border: none; 
+        color: #060606; 
+        font-weight: 800; 
+        padding: 12px 30px; 
+        border-radius: 0;
+        box-shadow: 0 6px 20px rgba(255,8,8,0.12);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: var(--transition);
+        clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+    }
+
+    .btn-neon:hover{ 
+        filter:brightness(1.05); 
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(255, 8, 8, 0.5);
+    }
+
+    /* Cards */
+    .card-dark { 
+        background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%); 
+        border: 1px solid rgba(255,8,8,0.2); 
+        box-shadow: 0 10px 30px rgba(0,0,0,0.6); 
+        border-radius: 8px;
+        transition: var(--transition);
+        overflow: hidden;
+    }
+    
+    .card-dark:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(255, 8, 8, 0.3);
+        border-color: var(--neon-red);
+    }
+
+    .chip { 
+        border: 1px solid rgba(255,102,0,0.3); 
+        padding: .25rem .5rem; 
+        border-radius: .4rem; 
+        font-size: .85rem; 
+        background: rgba(255,102,0,.1);
+        color: var(--neon-orange);
+        transition: var(--transition);
+    }
+    
+    .chip:hover {
+        background: rgba(255,102,0,.2);
+        transform: translateY(-2px);
+    }
+
+    /* Composer tweaks */
+    .type-pane { 
+        transition: var(--transition);
+        padding: 15px;
+        background: rgba(0,0,0,0.2);
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
+    
+    .form-label { 
+        color: var(--neon-orange);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    .form-label small { 
+        color: #aaa;
+        text-transform: none;
+        font-weight: normal;
+    }
+    
+    .form-control {
+        background-color: #111;
+        border: 1px solid #333;
+        color: white;
+        padding: 10px 12px;
+        transition: var(--transition);
+    }
+    
+    .form-control:focus {
+        background-color: #111;
+        border-color: var(--neon-orange);
+        color: white;
+        box-shadow: 0 0 10px rgba(255, 102, 0, 0.3);
+    }
+
+    /* Feed */
+    .post-media { 
+        border-radius: 8px; 
+        overflow: hidden; 
+        background: #000;
+        margin: 15px 0;
+        border: 1px solid rgba(255,8,8,0.1);
+    }
+    
+    .post-media img, .post-media video { 
+        width: 100%; 
+        display: block; 
+        transition: var(--transition);
+    }
+    
+    .post-media:hover img, .post-media:hover video {
+        transform: scale(1.02);
+    }
+
+    .rating .fa-star { 
+        cursor: pointer;
+        transition: var(--transition);
+    }
+    
+    .rating .fa-star:hover {
+        transform: scale(1.2);
+        color: #ffcd39 !important;
+    }
+    
+    .liked { 
+        color: #ffcd39;
+        text-shadow: 0 0 10px rgba(255, 205, 57, 0.7);
+    }
+
+    /* Footer / badges */
+    .badge-dark-custom { 
+        background: #0b0b0b; 
+        border: 1px solid rgba(255,8,8,0.2); 
+        color: #fff;
+        text-transform: uppercase;
+        font-weight: 600;
+        letter-spacing: 1px;
+    }
+
+    /* Section Titles */
+    .section-title {
+        color: var(--neon-red);
+        text-transform: uppercase;
+        font-size: 2.5rem;
+        margin: 30px 0;
+        text-align: center;
+        text-shadow: var(--text-glow-red);
+        letter-spacing: 3px;
+        position: relative;
+        display: inline-block;
+        width: 100%;
+    }
+
+    .section-title::after {
+        content: '';
+        display: block;
+        width: 100px;
+        height: 3px;
+        background: linear-gradient(90deg, var(--neon-red), var(--neon-orange));
+        margin: 15px auto 0;
+    }
+
+    /* Filter buttons */
+    .filter-btn {
+        background: transparent;
+        color: white;
+        border: 1px solid rgba(255,8,8,0.3);
+        padding: 8px 15px;
+        text-transform: uppercase;
+        font-weight: 600;
+        letter-spacing: 1px;
+        transition: var(--transition);
+        margin: 0 5px 15px;
+    }
+    
+    .filter-btn:hover, .filter-btn.active {
+        background: var(--neon-red);
+        color: black;
+        border-color: var(--neon-red);
+        box-shadow: 0 0 15px rgba(255, 8, 8, 0.4);
+    }
+
+    /* Search box */
+    #search {
+        background-color: #111;
+        border: 1px solid #333;
+        color: white;
+        padding: 8px 15px;
+        border-radius: 4px;
+        transition: var(--transition);
+    }
+    
+    #search:focus {
+        border-color: var(--neon-orange);
+        box-shadow: 0 0 10px rgba(255, 102, 0, 0.3);
+        outline: none;
+    }
+
+    /* Animations */
+    @keyframes pulse {
+        0% {
+            text-shadow: 0 0 10px var(--neon-red);
+        }
+        50% {
+            text-shadow: 0 0 20px var(--neon-red);
+        }
+        100% {
+            text-shadow: 0 0 10px var(--neon-red);
+        }
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Responsive tweaks */
+    @media (max-width: 768px){
+        .nav-link { 
+            padding: 10px 15px;
+            font-size: 0.9rem;
+            margin: 0 2px;
+        }
+        
+        .user-icon { 
+            width: 36px; 
+            height: 36px;
+            margin-left: 10px;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+        }
+        
+        .btn-neon {
+            padding: 10px 20px;
+            font-size: 0.9rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .brand {
+            font-size: 1.5rem;
+        }
+        
+        .brand img {
+            height: 40px;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+        }
+    }
+
+    /* Extra FF Gaming touches */
+    .hero-badge {
+        display: inline-block; 
+        padding: .6rem 1rem; 
+        border-radius: 10px; 
+        color: #000; 
+        background: linear-gradient(90deg,var(--neon-red),var(--neon-orange)); 
+        box-shadow: 0 6px 18px rgba(255,8,8,0.12); 
+        text-transform: uppercase; 
+        font-weight: 700; 
+        letter-spacing: 1px;
+    }
+
+    .section-clip {
+        background: var(--dark-bg); 
+        padding: 2rem; 
+        border-radius: 18px; 
+        border: 1px solid rgba(255,8,8,0.1); 
+        clip-path: polygon(0 0, 100% 0, 100% 92%, 50% 100%, 0 92%);
+        margin-bottom: 30px;
+        animation: fadeIn 0.5s ease-out;
+    }
+    
+    /* Post animation */
+    #feed > .card {
+        animation: fadeIn 0.5s ease-out;
+    }
+    
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: #111;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: var(--neon-red);
+        border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--neon-orange);
+    }
+    /* Fix text color for headings, labels, filter buttons */
+h1, h2, h3, h4, h5, h6,
+.section-title,
+h2.h4, 
+label.form-label,
+.filter-btn,
+.card-body,
+.card-footer {
+    color: #fff !important;
+}
+
+/* File input (Choose File button) styling */
+input[type="file"]::file-selector-button {
+    background: linear-gradient(90deg, var(--neon-red), var(--neon-orange));
+    border: none;
+    color: #000;
+    font-weight: 700;
+    padding: 10px 18px;
+    margin-right: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: var(--transition);
+}
+
+input[type="file"]::file-selector-button:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 0 15px rgba(255,8,8,0.6);
+}
+/* Override Bootstrap muted text to show white */
+.text-muted {
+    color: #fff !important;
+    opacity: 0.85; /* thoda halka white effect, pure white chahiye to hata dein */
+}
+
+/* New styles for the plus button and composer toggle */
+.create-post-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(90deg, var(--neon-red), var(--neon-orange));
+    color: black;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 20px rgba(255,8,8,0.3);
+    z-index: 1000;
+    transition: var(--transition);
+    border: none;
+}
+
+.create-post-btn:hover {
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 8px 25px rgba(255,8,8,0.5);
+}
+
+.composer-container {
+    transition: all 0.4s ease-in-out;
+    max-height: 1000px;
+    overflow: hidden;
+}
+
+.composer-container.collapsed {
+    max-height: 0;
+    opacity: 0;
+    margin-bottom: 0;
+    padding: 0;
+}
+
+.filter-container {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 8px;
+}
+
+</style>
+
+  <!-- Firebase SDK (v12 modular) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, updateDoc, doc, increment, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+    import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
+
+    // ---- Firebase Config (use the same project you already use) ----
+    const firebaseConfig = {
+      apiKey: "AIzaSyDM9zOfVMfqFFaODd7OZ-N2qC4ZuZhe10o",
+      authDomain: "fauxfireotp.firebaseapp.com",
+      databaseURL: "https://fauxfireotp-default-rtdb.firebaseio.com",
+      projectId: "fauxfireotp",
+      storageBucket: "fauxfireotp.firebasestorage.app",
+      messagingSenderId: "254203897427",
+      appId: "1:254203897427:web:a786eb9cf8d7c3514208a6"
+    };
+
+    // ---- Init ----
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    // ---- Utilities ----
+    const $ = (q, c=document) => c.querySelector(q);
+    const $$ = (q, c=document) => Array.from(c.querySelectorAll(q));
+    const toast = (msg, type='info') => {
+      const el = document.createElement('div');
+      el.className = `alert alert-${type==='error'?'danger':type} position-fixed top-0 start-50 translate-middle-x mt-3 shadow`;
+      el.style.zIndex = 2000; el.textContent = msg; document.body.appendChild(el);
+      setTimeout(()=> el.remove(), 3000);
+    };
+
+    const getUser = () => {
+      try {
+        const cu = JSON.parse(localStorage.getItem('currentUser')||'null');
+        if (cu && cu.email) return cu; // expecting {name,email,avatar,role}
+      } catch(e){}
+      return {name:'Guest', email:'guest@ismy.app', avatar:'Anonymus avatar 3.png', role:'guest'};
+    };
+
+    // ---- Composer Logic ----
+    let currentType = 'image';
+    let currentFile = null; // File object
+    let currentUploadTask = null;
+    let currentUploadUrl = '';
+
+    const typeRadios = $$('input[name="postType"]');
+    typeRadios.forEach(r => r.addEventListener('change', (e)=> switchType(e.target.value)));
+
+    function switchType(type){
+      currentType = type;
+      $$('.type-pane').forEach(p=> p.classList.add('d-none'));
+      $(`#pane-${type}`).classList.remove('d-none');
+      if(type!=='image' && type!=='video'){
+        currentFile = null; currentUploadUrl=''; updateProgress(0);
+      }
+    }
+
+    // File selects
+    $('#imageInput').addEventListener('change', e=> { currentFile = e.target.files[0]||null; });
+    $('#videoInput').addEventListener('change', e=> { currentFile = e.target.files[0]||null; });
+
+    // Stars rating
+    const stars = $$('#reviewStars .fa-star');
+    let ratingVal = 0;
+    stars.forEach((s,i)=> s.addEventListener('click', ()=> {
+      ratingVal = i+1; stars.forEach((x,idx)=> x.classList.toggle('text-warning', idx<=i));
+      $('#ratingValue').textContent = ratingVal;
+    }));
+
+    // Upload helper
+    function updateProgress(p){
+      $('#uploadProgress').classList.toggle('d-none', p<=0 || p>=100);
+      $('#uploadProgress .progress-bar').style.width = `${p}%`;
+      $('#uploadProgress .progress-bar').setAttribute('aria-valuenow', p);
+    }
+
+    async function uploadSelectedFile(){
+      if(!currentFile) return '';
+      const user = getUser();
+      const ext = currentFile.name.split('.').pop();
+      const path = `ugc/${user.email.replace(/[^a-zA-Z0-9]/g,'_')}/${Date.now()}.${ext}`;
+      const ref = sRef(storage, path);
+      return new Promise((resolve, reject)=>{
+        currentUploadTask = uploadBytesResumable(ref, currentFile);
+        currentUploadTask.on('state_changed', (snap)=>{
+          updateProgress(Math.round((snap.bytesTransferred/snap.totalBytes)*100));
+        }, (err)=>{
+          toast('Upload failed: '+err.message,'error'); reject(err);
+        }, async ()=>{
+          const url = await getDownloadURL(currentUploadTask.snapshot.ref);
+          currentUploadUrl = url; updateProgress(100); toast('Upload complete','success');
+          resolve(url);
+        });
+      });
+    }
+
+    // Submit post
+    $('#publishBtn').addEventListener('click', async ()=>{
+      const user = getUser();
+      const caption = $('#caption').value.trim();
+      const tags = $('#tags').value.split(',').map(t=>t.trim()).filter(Boolean).slice(0,8);
+
+      try{
+        $('#publishBtn').disabled = true; $('#publishBtn').innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Publishing';
+
+        let payload = { type: currentType, caption, tags, createdAt: serverTimestamp(), user: {name:user.name||'Guest', email:user.email||'guest', avatar:user.avatar||'', role:user.role||'guest'}, likes:0, comments:0 };
+
+        if(currentType==='image' || currentType==='video'){
+          const url = currentUploadUrl || await uploadSelectedFile();
+          if(!url) throw new Error('No file/url');
+          payload.mediaUrl = url;
+        }
+        if(currentType==='clip'){
+          const link = $('#clipUrl').value.trim();
+          if(!/^https?:\/\//i.test(link)) throw new Error('Valid clip URL required');
+          payload.clipUrl = link;
+        }
+        if(currentType==='tip'){
+          const text = $('#tipText').value.trim();
+          if(!text) throw new Error('Tip text required');
+          payload.text = text;
+        }
+        if(currentType==='review'){
+          const text = $('#reviewText').value.trim();
+          if(!text) throw new Error('Review text required');
+          payload.text = text; payload.rating = ratingVal || 0;
+        }
+
+        await addDoc(collection(db,'ugc_posts'), payload);
+        toast('Posted!','success');
+        // reset
+        $('#caption').value=''; $('#tags').value=''; $('#clipUrl').value='';
+        $('#tipText').value=''; $('#reviewText').value='';
+        $$('#reviewStars .fa-star').forEach(x=> x.classList.remove('text-warning')); ratingVal=0; $('#ratingValue').textContent='0';
+        ['imageInput','videoInput'].forEach(id=>{ const i=$('#'+id); i.value=''; });
+        currentFile=null; currentUploadUrl=''; updateProgress(0);
+      } catch(err){
+        console.error(err); toast(err.message||'Failed','error');
+      } finally {
+        $('#publishBtn').disabled = false; $('#publishBtn').textContent = 'Publish';
+      }
+    });
+
+    // ---- Feed ----
+    const likedKey = 'likedPosts_v1';
+    const getLiked = ()=> new Set(JSON.parse(localStorage.getItem(likedKey)||'[]'));
+    const setLiked = (s)=> localStorage.setItem(likedKey, JSON.stringify(Array.from(s)));
+
+    function embedFromUrl(url){
+      // youtube / twitch quick embed
+      try{
+        const u = new URL(url);
+        if(u.hostname.includes('youtube.com')||u.hostname.includes('youtu.be')){
+          const id = u.searchParams.get('v') || u.pathname.split('/').pop();
+          return `<div class="ratio ratio-16x9"><iframe src="https://www.youtube.com/embed/${id}" title="YouTube" allowfullscreen loading="lazy"></iframe></div>`;
+        }
+        if(u.hostname.includes('twitch.tv')){
+          const parts = u.pathname.split('/').filter(Boolean);
+          const channel = parts[0];
+          return `<div class="ratio ratio-16x9"><iframe src="https://player.twitch.tv/?channel=${channel}&parent=${location.hostname}" allowfullscreen loading="lazy"></iframe></div>`;
+        }
+      }catch(e){}
+      return `<a href="${url}" target="_blank" class="btn btn-sm btn-outline-warning">Open Clip</a>`;
+    }
+
+    function renderPost(id, data){
+      const tags = (data.tags||[]).map(t=>`<span class="chip me-1">#${t}</span>`).join(' ');
+      const when = data.createdAt?.toDate ? data.createdAt.toDate().toLocaleString() : 'Just now';
+      let media = '';
+      if(data.type==='image' && data.mediaUrl){ media = `<div class="post-media"><img src="${data.mediaUrl}" alt="post" loading="lazy"></div>`; }
+      if(data.type==='video' && data.mediaUrl){ media = `<div class="post-media"><video src="${data.mediaUrl}" controls></video></div>`; }
+      if(data.type==='clip' && data.clipUrl){ media = embedFromUrl(data.clipUrl); }
+      if((data.type==='tip'||data.type==='review') && data.text){ media = `<p class="mb-0">${escapeHtml(data.text)}</p>`; }
+      const rating = data.type==='review' ? `<span class="ms-2 text-warning"><i class="fa-solid fa-star me-1"></i>${data.rating||0}/5</span>` : '';
+
+      return `
+      <div class="card card-dark mb-3" data-id="${id}">
+        <div class="card-body">
+          <div class="d-flex align-items-center mb-3">
+            <img src="${data.user?.avatar||'Anonymus avatar 3.png'}" class="rounded-circle me-2" width="40" height="40" style="object-fit:cover"/>
+            <div class="flex-grow-1">
+              <div class="fw-bold">${escapeHtml(data.user?.name||'Player')}</div>
+              <div class="text-muted small">${when} • <span class="badge text-bg-dark text-uppercase">${data.type}</span> ${rating}</div>
+            </div>
+            <button class="btn btn-sm btn-outline-light" data-action="copyLink"><i class="fa-link"></i></button>
+          </div>
+          <h5 class="mb-2">${escapeHtml(data.caption||'')}</h5>
+          ${media}
+          <div class="mt-3 d-flex align-items-center gap-2 flex-wrap">
+            ${tags}
+          </div>
+        </div>
+        <div class="card-footer d-flex justify-content-between align-items-center">
+          <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-sm btn-outline-warning" data-action="like"><i class="fa-regular fa-star me-1"></i><span class="like-count">${data.likes||0}</span></button>
+            <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="collapse" data-bs-target="#c-${id}"><i class="fa-regular fa-comment-dots me-1"></i><span class="comment-count">${data.comments||0}</span></button>
+          </div>
+          <div class="small text-muted">${data.user?.email?escapeHtml(data.user.email):''}</div>
+        </div>
+        <div class="collapse" id="c-${id}">
+          <div class="p-3 border-top">
+            <div class="d-flex mb-2 gap-2">
+              <input type="text" class="form-control form-control-sm" placeholder="Write a comment..." />
+              <button class="btn btn-sm btn-neon" data-action="addComment">Post</button>
+            </div>
+            <div class="comments small vstack gap-2"></div>
+          </div>
+        </div>
+      </div>`;
+    }
+
+    function escapeHtml(s){
+      return (s||'').replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]));
+    }
+
+    // Feed subscription
+    const feed = $('#feed');
+    const qFeed = query(collection(db,'ugc_posts'), orderBy('createdAt','desc'));
+    onSnapshot(qFeed, async (snap)=>{
+      feed.innerHTML = '';
+      const liked = getLiked();
+      for(const d of snap.docs){
+        const el = document.createElement('div');
+        el.innerHTML = renderPost(d.id, d.data());
+        const card = el.firstElementChild; feed.appendChild(card);
+
+        // like handler
+        const likeBtn = card.querySelector('[data-action="like"]');
+        const likeCount = card.querySelector('.like-count');
+        if(liked.has(d.id)) likeBtn.classList.add('liked');
+        likeBtn.addEventListener('click', async ()=>{
+          try{
+            if(liked.has(d.id)) return; // naive client-side lock
+            await updateDoc(doc(db,'ugc_posts',d.id), { likes: increment(1) });
+            liked.add(d.id); setLiked(liked); likeBtn.classList.add('liked');
+            likeCount.textContent = Number(likeCount.textContent||0)+1;
+          }catch(e){ toast('Failed to like','error'); }
+        });
+
+        // copy link
+        card.querySelector('[data-action="copyLink"]').addEventListener('click', ()=>{
+          const url = `${location.origin}${location.pathname}#${d.id}`;
+          navigator.clipboard.writeText(url).then(()=> toast('Link copied','success'));
+        });
+
+        // comments
+        const commentsWrap = card.querySelector('.comments');
+        const commentCountEl = card.querySelector('.comment-count');
+        const input = card.querySelector('input');
+        card.querySelector('[data-action="addComment"]').addEventListener('click', async ()=>{
+          const txt = input.value.trim(); if(!txt) return;
+          const u = getUser();
+          await addDoc(collection(db,'ugc_posts', d.id, 'comments'), { text: txt, user: {name:u.name, email:u.email}, createdAt: serverTimestamp() });
+          await updateDoc(doc(db,'ugc_posts', d.id), { comments: increment(1) });
+          input.value='';
+        });
+        // live comments list (latest 5)
+        onSnapshot(query(collection(db,'ugc_posts', d.id, 'comments'), orderBy('createdAt','desc')), (cs)=>{
+          commentsWrap.innerHTML = '';
+          cs.docs.slice(0,5).forEach(c=>{
+            const cd = c.data();
+            const when = cd.createdAt?.toDate ? cd.createdAt.toDate().toLocaleString() : '';
+            const row = document.createElement('div');
+            row.innerHTML = `<div><span class="fw-bold">${escapeHtml(cd.user?.name||'User')}</span> <span class="text-muted">${when}</span><br>${escapeHtml(cd.text||'')}</div>`;
+            commentsWrap.appendChild(row);
+          });
+        });
+      }
+    });
+
+    // Filters
+    $$('#filters [data-type]').forEach(b=> b.addEventListener('click', ()=>{
+      $$('#filters .filter-btn').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      const t = b.getAttribute('data-type');
+      $$('#feed > .card').forEach(card=>{
+        const badge = card.querySelector('.badge');
+        const type = badge ? badge.textContent.trim() : '';
+        card.style.display = (t==='all'|| type===t) ? '' : 'none';
+      });
+    }));
+
+    // Search
+    $('#search').addEventListener('input', (e)=>{
+      const q = e.target.value.trim().toLowerCase();
+      $$('#feed > .card').forEach(card=>{
+        const txt = card.textContent.toLowerCase();
+        card.style.display = txt.includes(q) ? '' : 'none';
+      });
+    });
+
+    // Toggle composer visibility
+    $('#toggleComposer').addEventListener('click', () => {
+      const composer = $('#composer');
+      composer.classList.toggle('collapsed');
+      const icon = $('#toggleComposer i');
+      if (composer.classList.contains('collapsed')) {
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-plus');
+      } else {
+        icon.classList.remove('fa-plus');
+        icon.classList.add('fa-times');
+      }
+    });
+  </script>
+</head>
+<body>
+  <!-- Navbar -->
+<nav class="main-nav navbar navbar-expand-lg">
+  <div class="container d-flex justify-content-between align-items-center">
+    <a class="brand navbar-brand d-flex align-items-center" href="FF Gaming Final.html">
+      <img src="Faux Fire.png" alt="logo"> Faux Fire Gaming
+    </a>
+    <div>
+      <a href="FF Gaming Final.html" class="nav-link active">Home</a>
+    </div>
+  </div>
+</nav>
+
+  <div class="page-wrap container py-4">
+    <header class="d-flex align-items-center justify-content-between mb-4">
+      <h1 class="h3 brand m-0">Community — UGC</h1>
+      <div class="d-flex gap-2 align-items-center">
+        <input class="form-control w-auto" id="search" placeholder="Search posts"/>
+      </div>
+    </header>
+
+    <!-- Filter Buttons -->
+    <div class="filter-container mb-4">
+      <div class="d-flex flex-wrap justify-content-center" id="filters">
+        <button class="btn btn-sm filter-btn active" data-type="all">All</button>
+        <button class="btn btn-sm filter-btn" data-type="image">Screenshots/Memes</button>
+        <button class="btn btn-sm filter-btn" data-type="video">Clips (Video)</button>
+        <button class="btn btn-sm filter-btn" data-type="clip">Clips (Link)</button>
+        <button class="btn btn-sm filter-btn" data-type="tip">Tips</button>
+        <button class="btn btn-sm filter-btn" data-type="review">Reviews</button>
+      </div>
+    </div>
+
+    <!-- Composer -->
+    <div class="composer-container collapsed" id="composer">
+      <div class="card card-dark mb-4">
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-12 col-lg-3">
+              <label class="form-label">Post Type</label>
+              <div class="vstack gap-2">
+                <label class="form-check"><input class="form-check-input me-2" type="radio" name="postType" value="image" checked> Screenshot / Meme (Image Upload)</label>
+                <label class="form-check"><input class="form-check-input me-2" type="radio" name="postType" value="video"> Clip (Upload mp4)</label>
+                <label class="form-check"><input class="form-check-input me-2" type="radio" name="postType" value="clip"> Clip (YouTube/Twitch URL)</label>
+                <label class="form-check"><input class="form-check-input me-2" type="radio" name="postType" value="tip"> Tip (Text)</label>
+                <label class="form-check"><input class="form-check-input me-2" type="radio" name="postType" value="review"> Review (Text + Rating)</label>
+              </div>
+            </div>
+            <div class="col-12 col-lg-9">
+              <!-- Image Upload Pane -->
+              <div class="type-pane" id="pane-image">
+                <div class="mb-3">
+                  <label class="form-label">Upload Image (jpg/png/webp)</label>
+                  <input type="file" class="form-control" id="imageInput" accept="image/*" />
+                </div>
+              </div>
+              <!-- Video Upload Pane -->
+              <div class="type-pane d-none" id="pane-video">
+                <div class="mb-3">
+                  <label class="form-label">Upload Video (mp4)</label>
+                  <input type="file" class="form-control" id="videoInput" accept="video/mp4" />
+                </div>
+              </div>
+              <!-- Clip URL Pane -->
+              <div class="type-pane d-none" id="pane-clip">
+                <div class="mb-3">
+                  <label class="form-label">Clip URL (YouTube/Twitch)</label>
+                  <input type="url" class="form-control" id="clipUrl" placeholder="https://youtube.com/watch?v=..." />
+                </div>
+              </div>
+              <!-- Tip Text Pane -->
+              <div class="type-pane d-none" id="pane-tip">
+                <div class="mb-3">
+                  <label class="form-label">Tip Text</label>
+                  <textarea class="form-control" id="tipText" rows="4" placeholder="Share your gaming tip..."></textarea>
+                </div>
+              </div>
+              <!-- Review Pane -->
+              <div class="type-pane d-none" id="pane-review">
+                <div class="mb-3">
+                  <label class="form-label">Review Text</label>
+                  <textarea class="form-control" id="reviewText" rows="4" placeholder="Write your review..."></textarea>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Rating</label>
+                  <div id="reviewStars" class="rating">
+                    <i class="fa-regular fa-star text-warning"></i>
+                    <i class="fa-regular fa-star text-warning"></i>
+                    <i class="fa-regular fa-star text-warning"></i>
+                    <i class="fa-regular fa-star text-warning"></i>
+                    <i class="fa-regular fa-star text-warning"></i>
+                    <span class="ms-2"><span id="ratingValue">0</span>/5</span>
+                  </div>
+                </div>
+              </div>
+              <!-- Common Fields -->
+              <div class="mb-3">
+                <label class="form-label">Caption</label>
+                <input type="text" class="form-control" id="caption" placeholder="Write a caption..." />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">TAGS (comma separated, e.g. ff,gta,headshot)</label>
+                <input type="text" class="form-control" id="tags" placeholder="ff,gta,headshot" />
+              </div>
+              <!-- Upload Progress -->
+              <div class="alert alert-info d-none" id="uploadProgress">
+                <div class="d-flex align-items-center">
+                  <div class="progress flex-grow-1 me-2" style="height: 6px;">
+                    <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <span class="small">Uploading...</span>
+                </div>
+              </div>
+              <!-- Publish Button -->
+              <div class="d-flex justify-content-end">
+                <button class="btn btn-neon" id="publishBtn">Publish</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feed -->
+    <div id="feed" class="row g-4"></div>
+  </div>
+
+  <!-- Plus Button to Toggle Composer -->
+  <button class="create-post-btn" id="toggleComposer">
+    <i class="fas fa-plus"></i>
+  </button>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

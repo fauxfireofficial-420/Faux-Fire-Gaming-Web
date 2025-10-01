@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FF Gaming - Premium Subscription & Rewards</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --neon-red: #ff0808;
+      --neon-orange: #ff6600;
+      --neon-blue: #ff0000;
+      --dark-bg: #0d0d0d;
+      --darker-bg: #050505;
+      --card-bg: #1a1a1a;
+      --text-glow-red: 0 0 10px var(--neon-red), 0 0 20px rgba(255, 42, 42, 0.5);
+      --text-glow-orange: 0 0 10px var(--neon-orange), 0 0 20px rgba(255, 102, 0, 0.5);
+      --text-glow-blue: 0 0 10px var(--neon-blue), 0 0 20px rgb(255, 115, 0);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    body {
+      background-color: var(--dark-bg);
+      color: white;
+      font-family: 'Rajdhani', sans-serif;
+      padding: 0;
+      margin: 0;
+    }
+
+    /* Navigation - FF Gaming Style */
+    .navbar {
+      background-color: var(--darker-bg) !important;
+      border-bottom: 1px solid var(--neon-red);
+      padding: 15px 0;
+    }
+
+    .navbar-brand {
+      font-size: 2rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--neon-red) !important;
+      text-shadow: var(--text-glow-red);
+      animation: pulse 2s infinite;
+      display: flex;
+      align-items: center;
+    }
+
+    .navbar-brand img {
+      height: 50px;
+      margin-right: 10px;
+    }
+
+    .nav-link {
+      position: relative;
+      display: inline-block;
+      padding: 12px 25px;
+      color: white !important;
+      text-transform: uppercase;
+      font-weight: 600;
+      background: #0d0d0d;
+      clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
+      transition: var(--transition);
+      border: 1px solid #ff080833;
+      box-shadow: 0 0 8px #ff080844;
+      letter-spacing: 1px;
+      font-size: 1rem;
+      margin: 0 5px;
+    }
+
+    .nav-link:hover {
+      background: var(--neon-red);
+      color: black !important;
+      box-shadow: 0 0 20px var(--neon-orange);
+      font-weight: bold;
+    }
+
+    .nav-link.active {
+      background: var(--neon-red);
+      color: black !important;
+      box-shadow: 0 0 20px var(--neon-red);
+    }
+
+    /* Auth Button */
+    .btn-auth {
+      position: relative;
+      display: inline-block;
+      padding: 12px 30px;
+      color: black !important;
+      text-transform: uppercase;
+      font-weight: 600;
+      background: var(--neon-red);
+      clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+      transition: var(--transition);
+      border: none;
+      box-shadow: 0 0 15px rgba(255, 8, 8, 0.5);
+      letter-spacing: 1px;
+      font-size: 1rem;
+      margin-left: 15px;
+    }
+
+    .btn-auth:hover {
+      background: var(--neon-orange);
+      color: black !important;
+      box-shadow: 0 0 25px var(--neon-orange);
+      transform: translateY(-2px);
+    }
+
+    /* User Icon */
+    .user-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--neon-red);
+      color: black;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-weight: bold;
+      margin-left: 15px;
+      position: relative;
+      transition: var(--transition);
+    }
+
+    .user-icon:hover {
+      background-color: var(--neon-orange);
+      transform: scale(1.1);
+    }
+
+   /* User Dropdown Styles */
+.user-dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: 280px;
+    background-color: var(--darker-bg);
+    border: 2px solid var(--neon-red);
+    border-radius: 8px;
+    box-shadow: 0 5px 25px rgba(255, 8, 8, 0.4);
+    padding: 20px;
+    z-index: 1000;
+    display: none;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    clip-path: polygon(0 0, 100% 0, 100% 90%, 50% 100%, 0 90%);
+}
+
+.user-dropdown.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 102, 0, 0.2);
+    margin-bottom: 15px;
+}
+
+.user-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid var(--neon-orange);
+    object-fit: cover;
+    box-shadow: 0 0 10px rgba(255, 102, 0, 0.3);
+}
+
+.user-info-content {
+    flex: 1;
+}
+
+.user-info-content h4 {
+    color: var(--neon-orange);
+    margin: 0 0 5px 0;
+    font-size: 1.1rem;
+    text-shadow: 0 0 8px rgba(255, 102, 0, 0.3);
+}
+
+.user-info-content p {
+    color: #aaa;
+    font-size: 0.85rem;
+    margin: 0 0 5px 0;
+}
+
+.user-info-content small {
+    color: #777;
+    font-size: 0.75rem;
+    display: block;
+    margin-top: 5px;
+}
+
+.user-info-content #dropdownReferralCode {
+    color: var(--neon-orange);
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.user-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 15px 0;
+}
+
+.user-menu li {
+    margin-bottom: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.user-menu li::before {
+    content: '';
+    position: absolute;
+    left: -100%;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--neon-orange);
+    transition: all 0.3s ease;
+}
+
+.user-menu li:hover::before {
+    left: 0;
+}
+
+.user-menu a {
+    color: #ddd;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    padding: 8px 10px;
+    border-radius: 4px;
+    background: rgba(255, 8, 8, 0.05);
+}
+
+.user-menu a:hover {
+    color: white;
+    background: rgba(255, 8, 8, 0.15);
+    transform: translateX(5px);
+}
+
+.user-menu i {
+    width: 25px;
+    text-align: center;
+    margin-right: 10px;
+    color: var(--neon-orange);
+}
+
+.btn-logout {
+    background: rgba(255, 8, 8, 0.2);
+    color: var(--neon-orange);
+    border: 1px solid var(--neon-red);
+    padding: 10px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: var(--transition);
+    width: 100%;
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-logout:hover {
+    background: linear-gradient(90deg, #ff0808 0%, #ff6600 100%);
+    color: black;
+    box-shadow: 0 0 15px rgba(255, 8, 8, 0.5);
+}
+
+    .section-title {
+      color: var(--neon-red);
+      text-transform: uppercase;
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      text-align: center;
+      text-shadow: var(--text-glow-red);
+      letter-spacing: 3px;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 100px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--neon-red), var(--neon-orange));
+      margin: 15px auto 0;
+    }
+
+    .section-subtitle {
+      color: #aaa;
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: 1.1rem;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Plans Section */
+    .plan-container {
+      padding: 60px 0;
+    }
+
+    .plan-card {
+      background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 30px;
+      text-align: center;
+      transition: var(--transition);
+      height: 100%;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .plan-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(255, 8, 8, 0.3);
+      border-color: var(--neon-red);
+    }
+
+    .plan-card.featured {
+      border: 2px solid var(--neon-orange);
+      box-shadow: 0 0 25px rgba(255, 102, 0, 0.3);
+    }
+
+    .plan-card.featured::before {
+      content: 'POPULAR';
+      position: absolute;
+      top: 15px;
+      right: -30px;
+      background: var(--neon-orange);
+      color: black;
+      padding: 5px 30px;
+      font-weight: bold;
+      transform: rotate(45deg);
+      font-size: 0.8rem;
+    }
+
+    .plan-name {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: white;
+      text-transform: uppercase;
+    }
+
+    .plan-price {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin: 20px 0;
+      color: var(--neon-red);
+      text-shadow: var(--text-glow-red);
+    }
+
+    .plan-price .period {
+      font-size: 1rem;
+      color: #aaa;
+    }
+
+    .plan-features {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0;
+      text-align: left;
+    }
+
+    .plan-features li {
+      padding: 8px 0;
+      position: relative;
+      padding-left: 25px;
+    }
+
+    .plan-features li::before {
+      content: '\f00c';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      left: 0;
+      color: var(--neon-orange);
+    }
+
+    .plan-features li.disabled {
+      color: #666;
+    }
+
+    .plan-features li.disabled::before {
+      content: '\f00d';
+      color: #666;
+    }
+
+    .btn-plan {
+      background: linear-gradient(90deg, var(--neon-red) 0%, var(--neon-orange) 100%);
+      color: black;
+      border: none;
+      padding: 12px 30px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-radius: 6px;
+      transition: var(--transition);
+      width: 100%;
+      margin-top: 20px;
+      clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+    }
+
+    .btn-plan:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(255, 8, 8, 0.5);
+    }
+
+    /* Payment Section */
+    .payment-section {
+      background-color: var(--darker-bg);
+      padding: 60px 0;
+      border-top: 2px solid var(--neon-red);
+      border-bottom: 2px solid var(--neon-orange);
+      display: none;
+    }
+
+    .payment-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .payment-card {
+      background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+      border: 2px solid var(--neon-red);
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 0 30px rgba(255, 8, 8, 0.2);
+    }
+
+    .payment-method {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      border: 1px solid #333;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .payment-method:hover {
+      border-color: var(--neon-orange);
+    }
+
+    .payment-method.active {
+      border-color: var(--neon-red);
+      background-color: rgba(255, 8, 8, 0.1);
+    }
+
+    .payment-method-icon {
+      width: 50px;
+      height: 30px;
+      margin-right: 15px;
+      object-fit: contain;
+    }
+
+    .payment-method-info {
+      flex: 1;
+    }
+
+    .payment-method-name {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .payment-method-desc {
+      font-size: 0.8rem;
+      color: #aaa;
+    }
+
+    .form-label {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #ddd;
+    }
+
+    .form-control {
+      background-color: #111;
+      color: white;
+      border: 1px solid #333;
+      padding: 12px;
+      transition: var(--transition);
+    }
+
+    .form-control:focus {
+      border-color: var(--neon-orange);
+      box-shadow: 0 0 10px rgba(255, 102, 0, 0.3);
+      background-color: #111;
+      color: white;
+    }
+    
+    /* Custom file input styling */
+    .custom-file-input {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      width: 100%;
+    }
+    
+    .custom-file-input input[type="file"] {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+    
+    .custom-file-label {
+      background: linear-gradient(90deg, #ff0808 0%, #ff6600 100%);
+      color: black;
+      padding: 12px;
+      border-radius: 6px;
+      text-align: center;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 5px 15px rgba(255, 8, 8, 0.4);
+      border: none;
+      width: 100%;
+      display: block;
+    }
+    
+    .custom-file-label:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(255, 8, 8, 0.6);
+    }
+    
+    .custom-file-label i {
+      margin-right: 8px;
+    }
+
+    .btn-submit {
+      background: linear-gradient(90deg, var(--neon-red) 0%, var(--neon-orange) 100%);
+      color: black;
+      border: none;
+      padding: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      width: 100%;
+      margin-top: 20px;
+      border-radius: 6px;
+      transition: var(--transition);
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(255, 8, 8, 0.5);
+    }
+
+    .payment-number {
+      background-color: rgba(255, 8, 8, 0.2);
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      text-align: center;
+      border: 1px dashed var(--neon-red);
+    }
+
+    .payment-number-label {
+      font-size: 0.9rem;
+      color: #aaa;
+      margin-bottom: 5px;
+    }
+
+    .payment-number-value {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: white;
+      word-break: break-all;
+    }
+
+    .payment-instructions {
+      margin-top: 30px;
+      padding: 15px;
+      background-color: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      border-left: 3px solid var(--neon-orange);
+    }
+
+    .payment-instructions h5 {
+      color: var(--neon-orange);
+      margin-bottom: 10px;
+    }
+
+    .payment-instructions ol {
+      padding-left: 20px;
+      margin-bottom: 0;
+    }
+
+    .payment-instructions li {
+      margin-bottom: 8px;
+    }
+
+    /* Coins to Cash Section */
+    .coins-section {
+      background-color: var(--dark-bg);
+      padding: 60px 0;
+      border-top: 2px solid var(--neon-blue);
+      border-bottom: 2px solid var(--neon-blue);
+    }
+
+    .coins-card {
+      background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+      border: 2px solid var(--neon-blue);
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 0 30px rgba(0, 168, 255, 0.2);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .coins-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .coins-title {
+      color: var(--neon-blue);
+      text-transform: uppercase;
+      font-size: 2rem;
+      margin-bottom: 10px;
+      text-shadow: var(--text-glow-blue);
+    }
+
+    .coins-subtitle {
+      color: #aaa;
+      font-size: 1.1rem;
+    }
+
+    .coins-balance {
+      display: flex;
+      justify-content: space-between;
+      background-color: rgba(0, 168, 255, 0.1);
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border: 1px solid var(--neon-blue);
+    }
+
+    .balance-item {
+      text-align: center;
+      flex: 1;
+    }
+
+    .balance-label {
+      font-size: 0.9rem;
+      color: #aaa;
+      margin-bottom: 5px;
+    }
+
+    .balance-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .coins-value {
+      color: var(--neon-blue);
+    }
+
+    .points-value {
+      color: var(--neon-orange);
+    }
+
+    .cash-value {
+      color: #4CAF50;
+    }
+
+    .conversion-rate {
+      text-align: center;
+      margin: 20px 0;
+      font-size: 1.2rem;
+      color: #aaa;
+    }
+
+    .conversion-rate span {
+      color: var(--neon-orange);
+      font-weight: 700;
+    }
+
+    .convert-form .form-group {
+      margin-bottom: 15px;
+    }
+
+    .convert-btn {
+      background: linear-gradient(90deg, var(--neon-blue) 0%, #ff8902 100%);
+      color: white;
+      border: none;
+      padding: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      width: 100%;
+      margin-top: 20px;
+      border-radius: 6px;
+      transition: var(--transition);
+    }
+
+    .convert-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 168, 255, 0.5);
+    }
+
+    /* Footer - FF Gaming Style */
+    .footer {
+      background-color: var(--darker-bg);
+      padding: 50px 0 20px;
+      border-top: 2px solid var(--neon-red);
+      position: relative;
+    }
+
+    .footer::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('ULTRA BG.jpeg') center/cover;
+      opacity: 0.05;
+      z-index: 0;
+    }
+
+    .footer-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-logo {
+      font-size: 2rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--neon-red);
+      text-shadow: var(--text-glow-red);
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+
+    .footer-links h4 {
+      color: var(--neon-orange);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+      letter-spacing: 1px;
+    }
+
+    .footer-links ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer-links li {
+      margin-bottom: 10px;
+    }
+
+    .footer-links a {
+      color: #ccc;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .footer-links a:hover {
+      color: var(--neon-red);
+      text-shadow: var(--text-glow-red);
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .social-icons a {
+      color: white;
+      font-size: 1.5rem;
+      transition: var(--transition);
+    }
+
+    .social-icons a:hover {
+      color: var(--neon-red);
+      transform: translateY(-3px);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid #333;
+      padding-top: 20px;
+      margin-top: 30px;
+      text-align: center;
+      color: #777;
+      font-size: 0.9rem;
+    }
+
+    /* Animations */
+    @keyframes pulse {
+      0% { text-shadow: 0 0 10px var(--neon-red); }
+      50% { text-shadow: 0 0 20px var(--neon-red); }
+      100% { text-shadow: 0 0 10px var(--neon-red); }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .section-title {
+        font-size: 2rem;
+      }
+      
+      .plan-card {
+        margin-bottom: 30px;
+      }
+      
+      .plan-card.featured::before {
+        right: -25px;
+        font-size: 0.7rem;
+      }
+
+      .nav-link {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+        margin: 0 3px;
+      }
+
+      .btn-auth {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+        margin-left: 0;
+      }
+
+      .coins-balance {
+        flex-direction: column;
+        gap: 15px;
+      }
+    }
+     /* Dropdown menu styling */
+        .navbar .dropdown-menu {
+            background-color: var(--darker-bg);
+            border: 1px solid var(--neon-red);
+        }
+
+        .navbar .dropdown-item {
+            color: white;
+            transition: var(--transition);
+        }
+
+        .navbar .dropdown-item:hover {
+            background-color: var(--neon-red);
+            color: black;
+        }
+
+        .navbar .nav-link.dropdown-toggle {
+            cursor: pointer;
+        }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <img src="Faux Fire.png" alt="FF Gaming Logo">
+        FF GAMING
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+                        <a class="nav-link active" href="FF Gaming Final.html">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Game Zone
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="Games.html">Games</a></li>
+                            <li><a class="dropdown-item" href="Earn Page.html">Earn</a></li>
+
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Arena
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="Streams.html">Streams</a></li>
+                            <li><a class="dropdown-item" href="Tournaments.html">Tournament</a></li>
+
+                        </ul>
+                    </li>
+
+
+                    <!-- Add this to your navbar, after the existing navigation items -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Gaming Gear
+                        </a>
+                          <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="pcgear.html">PC Gaming Gear</a></li>
+                            <li><a class="dropdown-item" href="Games Iteam.html">Games Iteam</a></li>
+                            <li><a class="dropdown-item active" href="mobilegear.html">Mobile Gaming Gear</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Explore
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="News.html">News</a></li>
+                            <li><a class="dropdown-item" href="Comunity Page.html">Comunity</a></li>
+                        </ul>
+                    </li>
+          <li class="nav-item">
+            <button class="btn-auth" id="authButton">SIGN IN</button>
+            <div class="user-icon" id="userIcon">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="user-dropdown" id="userDropdown">
+              <div class="user-info">
+                <img src="Anonymus avatar 3.png" class="user-avatar" id="dropdownAvatar">
+                <div class="user-info-content">
+                  <h4 id="userName">Username</h4>
+                  <p id="userEmail">user@example.com</p>
+                </div>
+              </div>
+              <ul class="user-menu">
+                <li><a href="Profile Page.html"><i class="fas fa-user-circle"></i> My Profile</a></li>
+                <li><a href="UGC.html"><i class="fas fa-gamepad"></i>UGC</a></li>
+                <li><a href="Wallet.html" class="active"><i class="fas fa-wallet"></i> My Wallet</a></li>
+              </ul>
+              <button class="btn-logout" onclick="logoutUser()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+              </button>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Plans Section -->
+  <section class="plan-container">
+    <div class="container">
+      <h2 class="section-title">PREMIUM SUBSCRIPTIONS</h2>
+      <p class="section-subtitle">Unlock exclusive features and enhance your gaming experience with our premium plans</p>
+
+      <div class="row">
+        <!-- Noob Plan -->
+        <div class="col-md-4">
+          <div class="plan-card">
+            <h3 class="plan-name">NOOB</h3>
+            <div class="plan-price">
+              FREE <span class="period">/ 14 days trial</span>
+            </div>
+            <ul class="plan-features">
+              <li>Access to free games</li>
+              <li>Basic game features</li>
+              <li>Limited multiplayer access</li>
+              <li>Standard customer support</li>
+              <li class="disabled">No ads</li>
+              <li class="disabled">Weekly drops</li>
+              <li class="disabled">VIP features</li>
+            </ul>
+            <button class="btn-plan" onclick="showPayment('Noob')">START FREE TRIAL</button>
+          </div>
+        </div>
+
+        <!-- Pro Plan -->
+        <div class="col-md-4">
+          <div class="plan-card featured">
+            <h3 class="plan-name">PRO</h3>
+            <div class="plan-price">
+              Rs. 4,200 <span class="period">/ month</span>
+            </div>
+            <ul class="plan-features">
+              <li>All Noob features</li>
+              <li>Full multiplayer access</li>
+              <li>Ad-free experience</li>
+              <li>Weekly exclusive drops</li>
+              <li>Priority customer support</li>
+              <li>Early access to sales</li>
+              <li class="disabled">VIP features</li>
+            </ul>
+            <button class="btn-plan" onclick="showPayment('Pro')">SUBSCRIBE NOW</button>
+          </div>
+        </div>
+
+        <!-- Hacker Plan -->
+        <div class="col-md-4">
+          <div class="plan-card">
+            <h3 class="plan-name">HACKER</h3>
+            <div class="plan-price">
+              Rs. 8,000 <span class="period">/ month</span>
+            </div>
+            <ul class="plan-features">
+              <li>All Pro features</li>
+              <li>VIP status</li>
+              <li>Exclusive beta access</li>
+              <li>Premium weekly drops</li>
+              <li>24/7 dedicated support</li>
+              <li>Special events access</li>
+              <li>Custom profile features</li>
+            </ul>
+            <button class="btn-plan" onclick="showPayment('Hacker')">GO PREMIUM</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Payment Section (Initially Hidden) -->
+  <section class="payment-section" id="paymentSection">
+    <div class="container">
+      <h2 class="section-title">PAYMENT DETAILS</h2>
+      <p class="section-subtitle" id="paymentSubtitle">Complete your subscription by providing payment information</p>
+
+      <div class="payment-container">
+        <div class="payment-card">
+          <form id="paymentForm">
+            <div class="mb-4">
+              <label for="plan" class="form-label">SELECTED PLAN</label>
+              <select class="form-control form-select" id="plan" name="plan" required>
+                <option value="Noob">Noob (Free Trial)</option>
+                <option value="Pro">Pro - Rs. 4,200/month</option>
+                <option value="Hacker">Hacker - Rs. 8,000/month</option>
+              </select>
+            </div>
+
+            <div class="mb-4">
+              <label for="name" class="form-label">FULL NAME</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="e.g. Ali Khan" required>
+            </div>
+
+            <div class="mb-4">
+              <label for="email" class="form-label">EMAIL ADDRESS</label>
+              <input type="email" class="form-control" id="email" name="email" placeholder="your@email.com" required>
+            </div>
+
+            <div class="mb-4">
+              <label for="mobile" class="form-label">MOBILE NUMBER</label>
+             <input type="tel" class="form-control" id="mobile" name="mobile" placeholder="03XX-XXXXXXX" required>
+
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label">PAYMENT METHOD</label>
+              
+              <div class="payment-method active">
+                <img src="Easypaisa.png" alt="EasyPaisa" class="payment-method-icon">
+                <div class="payment-method-info">
+                  <div class="payment-method-name">EasyPaisa</div>
+                  <div class="payment-method-desc">Mobile Wallet & Bank Transfer</div>
+                </div>
+                <i class="fas fa-check-circle" style="color: var(--neon-red);"></i>
+              </div>
+
+              <div class="payment-method">
+                <img src="Jazzcash.png" alt="JazzCash" class="payment-method-icon">
+                <div class="payment-method-info">
+                  <div class="payment-method-name">JazzCash</div>
+                  <div class="payment-method-desc">Mobile Wallet & Bank Transfer</div>
+                </div>
+                <i class="far fa-circle"></i>
+              </div>
+
+              <div class="payment-number">
+                <div class="payment-number-label">Send payment to:</div>
+                <div class="payment-number-value">0316-2115711</div>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label for="txn" class="form-label">TRANSACTION ID / REFERENCE NO.</label>
+              <input type="text" class="form-control" id="txn" name="txn" placeholder="e.g. TXN123456" required>
+            </div>
+
+            <div class="mb-4">
+              <label for="screenshot" class="form-label">PAYMENT SCREENSHOT</label>
+              <div class="custom-file-input">
+              <input type="file" class="form-control" id="screenshot" name="screenshot" accept="image/*">
+                <label for="screenshot" class="custom-file-label">
+                  <i class="fas fa-upload"></i> CHOOSE FILE
+                </label>
+              </div>
+            </div>
+
+            <div class="payment-instructions">
+              <h5>Payment Instructions:</h5>
+              <ol>
+                <li>Send the exact amount to the provided number (0316-2115711)</li>
+                <li>Keep the transaction ID/reference number</li>
+                <li>Fill the form and submit your payment details</li>
+                <li>Your subscription will be activated within 1-2 hours</li>
+              </ol>
+            </div>
+
+            <div class="form-check mb-4">
+              <input class="form-check-input" type="checkbox" id="terms" required>
+              <label class="form-check-label" for="terms">
+                I agree to the <a href="#" style="color: var(--neon-orange);">Terms of Service</a> and <a href="#" style="color: var(--neon-orange;">Privacy Policy</a>
+              </label>
+            </div>
+
+            <button type="submit" class="btn-submit">CONFIRM PAYMENT</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Coins to Cash Section -->
+  <section class="coins-section">
+    <div class="container">
+      <div class="coins-card">
+        <div class="coins-header">
+          <h3 class="coins-title">COINS TO CASH</h3>
+          <p class="coins-subtitle">Convert your earned coins to real money or use them for subscriptions</p>
+        </div>
+
+        <div class="coins-balance">
+          <div class="balance-item">
+            <div class="balance-label">COINS BALANCE</div>
+            <div class="balance-value coins-value">12,500</div>
+          </div>
+          <div class="balance-item">
+            <div class="balance-label">POINTS</div>
+            <div class="balance-value points-value">8,750</div>
+          </div>
+          <div class="balance-item">
+            <div class="balance-label">CASH VALUE</div>
+            <div class="balance-value cash-value">Rs. 1,250</div>
+          </div>
+        </div>
+
+        <div class="conversion-rate">
+          <i class="fas fa-exchange-alt"></i> Conversion Rate: <span>100 Coins = Rs. 10</span>
+        </div>
+
+        <form class="convert-form">
+          <div class="form-group">
+            <label for="convertAmount" class="form-label">AMOUNT TO CONVERT</label>
+            <input type="number" class="form-control" id="convertAmount" placeholder="Enter coin amount">
+          </div>
+          <div class="form-group">
+            <label for="convertMethod" class="form-label">CONVERSION METHOD</label>
+            <select class="form-control form-select" id="convertMethod">
+              <option value="easypaisa">EasyPaisa</option>
+              <option value="jazzcash">JazzCash</option>
+              <option value="bank">Bank Transfer</option>
+              <option value="subscription">Subscription Payment</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="convertAccount" class="form-label">ACCOUNT NUMBER</label>
+            <input type="text" class="form-control" id="convertAccount" placeholder="Enter your account number">
+          </div>
+          <button type="button" class="convert-btn">CONVERT TO CASH</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="row">
+        <div class="col-lg-4 mb-4">
+          <div class="footer-logo">FF GAMING</div>
+          <p style="color: #aaa;">Experience gaming like never before with our premium platform. Join millions of gamers worldwide.</p>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-discord"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-4 mb-4 footer-links">
+          <h4>QUICK LINKS</h4>
+          <ul>
+            <li><a href="FF Gaming Final.html">Home</a></li>
+            <li><a href="Games.html">Games</a></li>
+            <li><a href="Earn Page.html">Earn</a></li>
+            <li><a href="Tournaments.html">Tournaments</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-2 col-md-4 mb-4 footer-links">
+          <h4>SUPPORT</h4>
+          <ul>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-4 col-md-4 mb-4 footer-links">
+          <h4>CONTACT INFO</h4>
+          <ul>
+            <li><i class="fas fa-envelope me-2"></i> support@ffgaming.com</li>
+            <li><i class="fas fa-phone me-2"></i> +92 316 2115711</li>
+            <li><i class="fas fa-map-marker-alt me-2"></i> Gaming Hub, Karachi, Pakistan</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2023 FF Gaming. All Rights Reserved. Designed with <i class="fas fa-heart" style="color: var(--neon-red);"></i> for Gamers</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- EmailJS Integration -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script>
+    // Initialize EmailJS with your public key
+    (function() {
+      emailjs.init("Kq0gzzcFVdQ1Hq1IU"); // Replace with your actual EmailJS public key
+    })();
+
+    // Show payment section when a plan is selected
+    function showPayment(plan) {
+      const paymentSection = document.getElementById('paymentSection');
+      const paymentSubtitle = document.getElementById('paymentSubtitle');
+      const planSelect = document.getElementById('plan');
+      
+      // Set the selected plan
+      planSelect.value = plan;
+      
+      // Update subtitle based on plan
+      if (plan === 'Noob') {
+        paymentSubtitle.textContent = 'Complete your free trial registration';
+      } else {
+        paymentSubtitle.textContent = `Complete your ${plan} subscription by providing payment information`;
+      }
+      
+      // Show the payment section
+      paymentSection.style.display = 'block';
+      
+      // Scroll to the payment section
+      paymentSection.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Handle form submission
+    document.getElementById('paymentForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Get form data
+      const formData = {
+        plan: document.getElementById('plan').value,
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        mobile: document.getElementById('mobile').value,
+        txn: document.getElementById('txn').value
+      };
+      
+      // Send email using EmailJS
+      emailjs.send('service_s4bbg4n', 'template_j6xg34k', formData) // Replace with your actual Service ID and Template ID
+        .then(function(response) {
+          alert('Payment details submitted successfully! Your subscription will be activated shortly.');
+          document.getElementById('paymentForm').reset();
+        }, function(error) {
+          alert('Failed to submit payment details. Please try again or contact support.');
+          console.error('EmailJS Error:', error);
+        });
+    });
+
+    // Toggle user dropdown
+    document.getElementById('userIcon').addEventListener('click', function() {
+      const dropdown = document.getElementById('userDropdown');
+      dropdown.classList.toggle('show');
+    });
+
+    // Close dropdown when clicking outside
+    window.addEventListener('click', function(e) {
+      const dropdown = document.getElementById('userDropdown');
+      const userIcon = document.getElementById('userIcon');
+      
+      if (!userIcon.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.classList.remove('show');
+      }
+    });
+// Check auth status on page load
+document.addEventListener('DOMContentLoaded', function () {
+  const authButton = document.getElementById('authButton');
+  const userIcon   = document.getElementById('userIcon');
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
+  if (currentUser) {
+    if (authButton) authButton.style.display = 'none';
+    if (userIcon)   userIcon.style.display   = 'flex';
+
+    const nameEl  = document.getElementById('userName');
+    const emailEl = document.getElementById('userEmail');
+
+    if (nameEl)  nameEl.textContent  = currentUser.displayName || currentUser.username || 'Player';
+    if (emailEl) emailEl.textContent = currentUser.email || '';
+  } else {
+    if (authButton) authButton.style.display = 'inline-block';
+    if (userIcon)   userIcon.style.display   = 'none';
+  }
+});
+
+// Logout function (same as Wallet12.html)
+function logoutUser() {
+  localStorage.removeItem('currentUser');
+  alert('You have been logged out');
+  window.location.href = 'FF Gaming Final.html';
+}
+
+
+  </script>
+</body>
+</html>
