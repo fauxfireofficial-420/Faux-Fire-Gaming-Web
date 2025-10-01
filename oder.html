@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faux Fire Gaming - Orders Management</title>
+    <!-- Same CSS links as Admin.html -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-red: #ff0808;
+            --neon-orange: #ff6600;
+            --dark-bg: #0d0d0d;
+            --darker-bg: #050505;
+            --admin-bg: #121212;
+            --admin-card: #1a1a1a;
+            --admin-text: #e0e0e0;
+            --admin-text-light: #f5f5f5;
+            --admin-primary: #4a6bff;
+            --admin-success: #28a745;
+            --admin-warning: #ffc107;
+            --admin-danger: #dc3545;
+            --admin-border: #2a2a2a;
+            --text-glow-red: 0 0 10px var(--neon-red), 0 0 20px rgba(255, 42, 42, 0.5);
+            --text-glow-orange: 0 0 10px var(--neon-orange), 0 0 20px rgba(255, 102, 0, 0.5);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        body {
+            background-color: var(--admin-bg);
+            color: var(--admin-text);
+            font-family: 'Rajdhani', 'Arial', sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Admin Sidebar */
+        .admin-sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 100vh;
+            background-color: var(--darker-bg);
+            border-right: 1px solid var(--neon-red);
+            z-index: 1000;
+            transition: var(--transition);
+            overflow-y: auto;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 15px;
+            border-bottom: 1px solid var(--admin-border);
+        }
+
+        .sidebar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .sidebar-brand h3 {
+            color: var(--neon-red);
+            font-weight: 700;
+            margin: 0;
+            text-transform: uppercase;
+            font-size: 1.2rem;
+        }
+
+        .sidebar-menu {
+            padding: 15px 0;
+        }
+
+        .sidebar-title {
+            color: #777;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            padding: 10px 20px;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .sidebar-item {
+            position: relative;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--admin-text);
+            text-decoration: none;
+            transition: var(--transition);
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-link:hover,
+        .sidebar-link.active {
+            background-color: rgba(255, 8, 8, 0.1);
+            color: var(--neon-orange);
+            border-left-color: var(--neon-red);
+        }
+
+        .sidebar-link i {
+            width: 25px;
+            text-align: center;
+            margin-right: 10px;
+            font-size: 1rem;
+        }
+
+        .sidebar-link .bi-chevron-down {
+            margin-left: auto;
+            transition: var(--transition);
+        }
+
+        .sidebar-dropdown {
+            padding-left: 40px;
+            background-color: rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+
+        .sidebar-dropdown.show {
+            display: block;
+        }
+
+        .sidebar-dropdown .sidebar-link {
+            padding: 10px 20px;
+            font-size: 0.9rem;
+        }
+
+        .sidebar-dropdown .sidebar-link::before {
+            content: '';
+            position: absolute;
+            left: 25px;
+            width: 10px;
+            height: 10px;
+            border: 2px solid var(--neon-orange);
+            border-radius: 50%;
+        }
+
+        /* Admin Main Content */
+        .admin-main {
+            margin-left: 250px;
+            min-height: 100vh;
+            transition: var(--transition);
+        }
+
+        /* Admin Header */
+        .admin-header {
+            background-color: var(--darker-bg);
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--admin-border);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .header-left .toggle-sidebar {
+            background: none;
+            border: none;
+            color: var(--admin-text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-right: 15px;
+        }
+
+        .toggle-sidebar:hover {
+            color: var(--neon-orange);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .admin-search {
+            position: relative;
+            margin-right: 20px;
+        }
+
+        .admin-search input {
+            background-color: var(--admin-card);
+            border: 1px solid var(--admin-border);
+            color: var(--admin-text);
+            padding: 8px 15px 8px 35px;
+            border-radius: 4px;
+            width: 200px;
+            transition: var(--transition);
+        }
+
+        .admin-search input:focus {
+            outline: none;
+            border-color: var(--neon-orange);
+            box-shadow: 0 0 10px rgba(255, 102, 0, 0.3);
+            width: 250px;
+        }
+
+        .admin-search i {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+        }
+
+        .admin-notification {
+            position: relative;
+            margin-right: 20px;
+        }
+
+        .admin-notification i {
+            font-size: 1.2rem;
+            color: var(--admin-text);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .admin-notification i:hover {
+            color: var(--neon-orange);
+        }
+
+        .notification-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--neon-red);
+            color: black;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .admin-profile img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid var(--neon-orange);
+            margin-right: 10px;
+        }
+
+        .admin-profile .profile-name {
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .admin-profile .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 200px;
+            background-color: var(--darker-bg);
+            border: 1px solid var(--admin-border);
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            padding: 10px 0;
+            display: none;
+            z-index: 1000;
+        }
+
+        .admin-profile:hover .profile-dropdown {
+            display: block;
+        }
+
+        .profile-dropdown a {
+            display: block;
+            padding: 8px 15px;
+            color: var(--admin-text);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .profile-dropdown a:hover {
+            background-color: rgba(255, 8, 8, 0.1);
+            color: var(--neon-orange);
+        }
+
+        .profile-dropdown a i {
+            width: 20px;
+            text-align: center;
+            margin-right: 8px;
+        }
+
+        /* Admin Content */
+        .admin-content {
+            padding: 25px;
+        }
+
+        .page-title {
+            color: var(--neon-orange);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+        }
+
+        .page-title i {
+            margin-right: 10px;
+        }
+
+        .breadcrumb {
+            background-color: transparent;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+
+        .breadcrumb-item a {
+            color: var(--neon-orange);
+            text-decoration: none;
+        }
+
+        .breadcrumb-item.active {
+            color: #777;
+        }
+
+        /* Admin Cards */
+        .admin-card {
+            background-color: var(--admin-card);
+            border-radius: 8px;
+            border: 1px solid var(--admin-border);
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+
+        .admin-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 8, 8, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--admin-border);
+        }
+
+        .card-title {
+            color: var(--admin-text-light);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .card-actions button {
+            background: none;
+            border: none;
+            color: #777;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+
+        .card-actions button:hover {
+            color: var(--neon-orange);
+        }
+
+        /* Stats Cards */
+        .stats-card {
+            text-align: center;
+        }
+
+        .stats-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 1.5rem;
+        }
+
+        .stats-icon.users {
+            background-color: rgba(74, 107, 255, 0.2);
+            color: var(--admin-primary);
+        }
+
+        .stats-icon.games {
+            background-color: rgba(40, 167, 69, 0.2);
+            color: var(--admin-success);
+        }
+
+        .stats-icon.revenue {
+            background-color: rgba(255, 193, 7, 0.2);
+            color: var(--admin-warning);
+        }
+
+        .stats-icon.streams {
+            background-color: rgba(220, 53, 69, 0.2);
+            color: var(--admin-danger);
+        }
+
+        .stats-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stats-title {
+            color: #777;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stats-change {
+            margin-top: 10px;
+            font-size: 0.8rem;
+        }
+
+        .stats-change.positive {
+            color: var(--admin-success);
+        }
+
+        .stats-change.negative {
+            color: var(--admin-danger);
+        }
+
+        /* Charts */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        /* Tables */
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .admin-table th,
+        .admin-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--admin-border);
+        }
+
+        .admin-table th {
+            background-color: rgba(255, 8, 8, 0.05);
+            color: var(--neon-orange);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        .admin-table tr:hover {
+            background-color: rgba(255, 8, 8, 0.03);
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-badge.active {
+            background-color: rgba(40, 167, 69, 0.2);
+            color: var(--admin-success);
+        }
+
+        .status-badge.pending {
+            background-color: rgba(255, 193, 7, 0.2);
+            color: var(--admin-warning);
+        }
+
+        .status-badge.banned {
+            background-color: rgba(220, 53, 69, 0.2);
+            color: var(--admin-danger);
+        }
+
+        .status-badge.offline {
+            background-color: rgba(108, 117, 125, 0.2);
+            color: #6c757d;
+        }
+
+        /* Buttons */
+        .btn-admin {
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-admin-primary {
+            background-color: var(--admin-primary);
+            color: white;
+        }
+
+        .btn-admin-primary:hover {
+            background-color: #3a5bef;
+            box-shadow: 0 0 15px rgba(74, 107, 255, 0.3);
+        }
+
+        .btn-admin-success {
+            background-color: var(--admin-success);
+            color: white;
+        }
+
+        .btn-admin-success:hover {
+            background-color: #218838;
+            box-shadow: 0 0 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn-admin-danger {
+            background-color: var(--admin-danger);
+            color: white;
+        }
+
+        .btn-admin-danger:hover {
+            background-color: #c82333;
+            box-shadow: 0 0 15px rgba(220, 53, 69, 0.3);
+        }
+
+        .btn-admin-warning {
+            background-color: var(--admin-warning);
+            color: black;
+        }
+
+        .btn-admin-warning:hover {
+            background-color: #e0a800;
+            box-shadow: 0 0 15px rgba(255, 193, 7, 0.3);
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--admin-text-light);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            background-color: var(--admin-card);
+            border: 1px solid var(--admin-border);
+            color: var(--admin-text);
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--neon-orange);
+            box-shadow: 0 0 10px rgba(255, 102, 0, 0.3);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 10px 12px;
+            background-color: var(--admin-card);
+            border: 1px solid var(--admin-border);
+            color: var(--admin-text);
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        /* Tabs */
+        .admin-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--admin-border);
+            margin-bottom: 20px;
+        }
+
+        .admin-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            color: #777;
+            font-weight: 600;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .admin-tab.active {
+            color: var(--neon-orange);
+        }
+
+        .admin-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--neon-orange);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Pagination */
+        .admin-pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .page-item {
+            margin: 0 5px;
+        }
+
+        .page-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 35px;
+            height: 35px;
+            border-radius: 4px;
+            background-color: var(--admin-card);
+            color: var(--admin-text);
+            text-decoration: none;
+            transition: var(--transition);
+            border: 1px solid var(--admin-border);
+        }
+
+        .page-link:hover,
+        .page-item.active .page-link {
+            background-color: var(--neon-orange);
+            color: black;
+            border-color: var(--neon-orange);
+        }
+
+        /* Modals */
+        .admin-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .admin-modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--admin-card);
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid var(--neon-orange);
+            box-shadow: 0 0 30px rgba(255, 102, 0, 0.3);
+        }
+
+        .modal-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--admin-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            color: var(--neon-orange);
+            margin: 0;
+            font-size: 1.3rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #777;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            color: var(--neon-orange);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid var(--admin-border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* Game Cards in Admin */
+        .admin-game-card {
+            background-color: var(--admin-card);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--admin-border);
+            transition: var(--transition);
+            margin-bottom: 20px;
+        }
+
+        .admin-game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .game-card-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .game-card-body {
+            padding: 15px;
+        }
+
+        .game-card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--admin-text-light);
+        }
+
+        .game-card-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #777;
+            margin-bottom: 10px;
+        }
+
+        .game-card-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .admin-sidebar {
+                left: -250px;
+            }
+
+            .admin-sidebar.show {
+                left: 0;
+            }
+
+            .admin-main {
+                margin-left: 0;
+            }
+
+            .admin-search input {
+                width: 150px;
+            }
+
+            .admin-search input:focus {
+                width: 180px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .admin-header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px;
+            }
+
+            .header-left {
+                margin-bottom: 15px;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .admin-search {
+                margin-right: 0;
+                flex-grow: 1;
+            }
+
+            .admin-search input {
+                width: 100%;
+            }
+
+            .admin-search input:focus {
+                width: 100%;
+            }
+
+            .stats-card {
+                margin-bottom: 15px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .admin-content {
+                padding: 15px;
+            }
+
+            .page-title {
+                font-size: 1.5rem;
+            }
+
+            .card-actions {
+                display: none;
+            }
+
+            .admin-table th,
+            .admin-table td {
+                padding: 8px 10px;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 8, 8, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(255, 8, 8, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 8, 8, 0);
+            }
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--neon-red);
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .order-product-img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        .order-badge {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .badge-processing {
+            background-color: rgba(255, 193, 7, 0.2);
+            color: var(--admin-warning);
+        }
+        .badge-completed {
+            background-color: rgba(40, 167, 69, 0.2);
+            color: var(--admin-success);
+        }
+        .badge-cancelled {
+            background-color: rgba(220, 53, 69, 0.2);
+            color: var(--admin-danger);
+        }
+        .badge-shipped {
+            background-color: rgba(23, 162, 184, 0.2);
+            color: #17a2b8;
+        }
+    </style>
+</head>
+<body>
+    <!-- Admin Sidebar -->
+    <div class="admin-sidebar" id="adminSidebar">
+        <div class="sidebar-brand">
+            <img src="Faux Fire.png" alt="Faux Fire Logo">
+            <h3>Admin</h3>
+        </div>
+
+        <div class="sidebar-menu">
+            <div class="sidebar-title">Store</div>
+            <div class="sidebar-item">
+                <a href="orders.html" class="sidebar-link active">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Orders</span>
+                </a>
+            </div>
+            <div class="sidebar-item">
+                <a href="products.html" class="sidebar-link">
+                    <i class="fas fa-tags"></i>
+                    <span>Products</span>
+                </a>
+            </div>
+            <!-- Other sidebar items -->
+        </div>
+    </div>
+
+    <!-- Admin Main Content -->
+    <div class="admin-main" id="adminMain">
+        <header class="admin-header">
+            <div class="header-left">
+                <button class="toggle-sidebar" id="toggleSidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <span class="d-none d-md-inline">Orders Management</span>
+            </div>
+            <!-- Header right content same as Admin.html -->
+        </header>
+
+        <div class="admin-content">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="Admin.html">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Orders</li>
+                </ol>
+            </nav>
+
+            <h1 class="page-title">
+                <i class="fas fa-shopping-cart"></i> Orders Management
+            </h1>
+
+            <!-- Orders Filter Bar -->
+            <div class="admin-card mb-4">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <label class="form-label mb-1">Status</label>
+                                <select class="form-select form-select-sm">
+                                    <option>All Orders</option>
+                                    <option>Processing</option>
+                                    <option>Completed</option>
+                                    <option>Cancelled</option>
+                                </select>
+                            </div>
+                            <div class="me-3">
+                                <label class="form-label mb-1">Date Range</label>
+                                <select class="form-select form-select-sm">
+                                    <option>Last 30 days</option>
+                                    <option>This Month</option>
+                                    <option>Last Month</option>
+                                    <option>Custom Range</option>
+                                </select>
+                            </div>
+                            <div class="admin-search">
+                                <i class="fas fa-search"></i>
+                                <input type="text" placeholder="Search orders...">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex justify-content-end">
+                            <button class="btn-admin btn-admin-primary me-2">
+                                <i class="fas fa-download me-1"></i> Export
+                            </button>
+                            <button class="btn-admin btn-admin-success">
+                                <i class="fas fa-filter me-1"></i> Apply Filters
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orders Table -->
+            <div class="admin-card">
+                <div class="card-header">
+                    <h3 class="card-title">Recent Orders</h3>
+                    <div class="card-actions">
+                        <button onclick="refreshOrders()"><i class="fas fa-sync-alt"></i></button>
+                        <button><i class="fas fa-ellipsis-v"></i></button>
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Products</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#ORD-2023-1001</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="Anonymus avatar 3.png" alt="User" width="30" height="30" class="rounded-circle me-2">
+                                        <span>ProGamer123</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="Gta 6.png" alt="Product" class="order-product-img">
+                                        <span>GTA VI</span>
+                                    </div>
+                                </td>
+                                <td>Jun 15, 2023</td>
+                                <td>$59.99</td>
+                                <td><span class="order-badge badge-completed">Completed</span></td>
+                                <td>
+                                    <button class="btn-admin btn-admin-primary btn-sm" onclick="viewOrderDetails('ORD-2023-1001')">View</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#ORD-2023-1002</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="Gir Avatar 1.webp" alt="User" width="30" height="30" class="rounded-circle me-2">
+                                        <span>GameLover42</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="ASC3.jpeg" alt="Product" class="order-product-img">
+                                        <span>Assassin's Creed Valhalla</span>
+                                    </div>
+                                </td>
+                                <td>Jun 14, 2023</td>
+                                <td>$49.99</td>
+                                <td><span class="order-badge badge-shipped">Shipped</span></td>
+                                <td>
+                                    <button class="btn-admin btn-admin-primary btn-sm" onclick="viewOrderDetails('ORD-2023-1002')">View</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#ORD-2023-1003</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="Boy avatar 2.webp" alt="User" width="30" height="30" class="rounded-circle me-2">
+                                        <span>SpeedQueen</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="NFS1.jpeg" alt="Product" class="order-product-img">
+                                        <span>Need For Speed Unbound</span>
+                                    </div>
+                                </td>
+                                <td>Jun 12, 2023</td>
+                                <td>$39.99</td>
+                                <td><span class="order-badge badge-processing">Processing</span></td>
+                                <td>
+                                    <button class="btn-admin btn-admin-primary btn-sm" onclick="viewOrderDetails('ORD-2023-1003')">View</button>
+                                </td>
+                            </tr>
+                            <!-- More order rows... -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="admin-pagination">
+                    <div class="page-item">
+                        <a href="#" class="page-link">1</a>
+                    </div>
+                    <div class="page-item active">
+                        <a href="#" class="page-link">2</a>
+                    </div>
+                    <div class="page-item">
+                        <a href="#" class="page-link">3</a>
+                    </div>
+                    <div class="page-item">
+                        <a href="#" class="page-link">Next</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Details Modal -->
+    <div class="admin-modal" id="orderDetailsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Order Details <span id="orderDetailId" class="text-muted ms-2">#ORD-2023-1001</span></h3>
+                <button class="modal-close" onclick="closeModal('orderDetailsModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="admin-card">
+                            <div class="card-header">
+                                <h5 class="card-title">Order Information</h5>
+                            </div>
+                            <div class="p-3">
+                                <div class="row mb-2">
+                                    <div class="col-6">
+                                        <label class="form-label">Order Date</label>
+                                        <p id="orderDetailDate">Jun 15, 2023 14:32</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Status</label>
+                                        <p><span class="order-badge badge-completed">Completed</span></p>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-6">
+                                        <label class="form-label">Payment Method</label>
+                                        <p id="orderDetailPayment">Credit Card (VISA ****4242)</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Transaction ID</label>
+                                        <p id="orderDetailTransaction">txn_1N4jZt2eZvKYlo2C</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="admin-card mt-3">
+                            <div class="card-header">
+                                <h5 class="card-title">Customer Information</h5>
+                            </div>
+                            <div class="p-3">
+                                <div class="d-flex align-items-center mb-3">
+                                    <img src="Anonymus avatar 3.png" alt="User" width="50" height="50" class="rounded-circle me-3">
+                                    <div>
+                                        <h6 id="orderDetailCustomer">ProGamer123</h6>
+                                        <p class="text-muted mb-0" id="orderDetailEmail">progamer@example.com</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label class="form-label">Customer Since</label>
+                                        <p>Jan 15, 2023</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Total Orders</label>
+                                        <p>7</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="admin-card">
+                            <div class="card-header">
+                                <h5 class="card-title">Order Items</h5>
+                            </div>
+                            <div class="p-3">
+                                <div class="d-flex align-items-center mb-3 pb-2 border-bottom">
+                                    <img src="Gta 6.png" alt="Product" width="60" height="60" class="rounded me-3">
+                                    <div class="flex-grow-1">
+                                        <h6>Grand Theft Auto VI</h6>
+                                        <p class="text-muted mb-0">Digital Download</p>
+                                    </div>
+                                    <div class="text-end">
+                                        <p class="mb-0">$59.99</p>
+                                        <small class="text-muted">Qty: 1</small>
+                                    </div>
+                                </div>
+                                <!-- More order items... -->
+
+                                <div class="mt-3 pt-2 border-top">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Subtotal:</span>
+                                        <span>$59.99</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Discount:</span>
+                                        <span class="text-danger">-$5.00</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Tax:</span>
+                                        <span>$3.60</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between fw-bold">
+                                        <span>Total:</span>
+                                        <span>$58.59</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="admin-card mt-3">
+                            <div class="card-header">
+                                <h5 class="card-title">Order Actions</h5>
+                            </div>
+                            <div class="p-3">
+                                <div class="d-grid gap-2">
+                                    <button class="btn-admin btn-admin-success">Mark as Completed</button>
+                                    <button class="btn-admin btn-admin-warning">Update Status</button>
+                                    <button class="btn-admin btn-admin-danger">Cancel Order</button>
+                                    <button class="btn-admin btn-admin-primary">Print Invoice</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-admin btn-admin-primary" onclick="closeModal('orderDetailsModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript functions for orders management
+        function viewOrderDetails(orderId) {
+            // In a real app, you would fetch order details from your backend
+            // For this example, we'll use mock data
+            
+            // Update modal with order details
+            document.getElementById('orderDetailId').textContent = '#' + orderId;
+            
+            // Show modal
+            openModal('orderDetailsModal');
+        }
+        
+        function refreshOrders() {
+            // Refresh orders list
+            console.log('Refreshing orders...');
+        }
+        
+        // Modal functions (same as in Admin.html)
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+        
+        // Initialize sidebar toggle
+        document.getElementById('toggleSidebar').addEventListener('click', function() {
+            document.getElementById('adminSidebar').classList.toggle('show');
+            document.getElementById('adminMain').classList.toggle('show');
+        });
+    </script>
+</body>
+</html>

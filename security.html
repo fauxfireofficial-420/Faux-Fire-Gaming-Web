@@ -1,0 +1,1288 @@
+html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faux Fire Gaming - Security Settings</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-red: #ff0808;
+            --neon-orange: #ff6600;
+            --dark-bg: #0d0d0d;
+            --darker-bg: #050505;
+            --admin-bg: #121212;
+            --admin-card: #1a1a1a;
+            --admin-text: #e0e0e0;
+            --admin-text-light: #f5f5f5;
+            --admin-primary: #4a6bff;
+            --admin-success: #28a745;
+            --admin-warning: #ffc107;
+            --admin-danger: #dc3545;
+            --admin-border: #2a2a2a;
+            --text-glow-red: 0 0 10px var(--neon-red), 0 0 20px rgba(255, 42, 42, 0.5);
+            --text-glow-orange: 0 0 10px var(--neon-orange), 0 0 20px rgba(255, 102, 0, 0.5);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        body {
+            background-color: var(--admin-bg);
+            color: var(--admin-text);
+            font-family: 'Rajdhani', 'Arial', sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Admin Sidebar */
+        .admin-sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 100vh;
+            background-color: var(--darker-bg);
+            border-right: 1px solid var(--neon-red);
+            z-index: 1000;
+            transition: var(--transition);
+            overflow-y: auto;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 15px;
+            border-bottom: 1px solid var(--admin-border);
+        }
+
+        .sidebar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .sidebar-brand h3 {
+            color: var(--neon-red);
+            font-weight: 700;
+            margin: 0;
+            text-transform: uppercase;
+            font-size: 1.2rem;
+        }
+
+        .sidebar-menu {
+            padding: 15px 0;
+        }
+
+        .sidebar-title {
+            color: #777;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            padding: 10px 20px;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .sidebar-item {
+            position: relative;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--admin-text);
+            text-decoration: none;
+            transition: var(--transition);
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-link:hover,
+        .sidebar-link.active {
+            background-color: rgba(255, 8, 8, 0.1);
+            color: var(--neon-orange);
+            border-left-color: var(--neon-red);
+        }
+
+        .sidebar-link i {
+            width: 25px;
+            text-align: center;
+            margin-right: 10px;
+            font-size: 1rem;
+        }
+
+        .sidebar-link .bi-chevron-down {
+            margin-left: auto;
+            transition: var(--transition);
+        }
+
+        .sidebar-dropdown {
+            padding-left: 40px;
+            background-color: rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+
+        .sidebar-dropdown.show {
+            display: block;
+        }
+
+        .sidebar-dropdown .sidebar-link {
+            padding: 10px 20px;
+            font-size: 0.9rem;
+        }
+
+        .sidebar-dropdown .sidebar-link::before {
+            content: '';
+            position: absolute;
+            left: 25px;
+            width: 10px;
+            height: 10px;
+            border: 2px solid var(--neon-orange);
+            border-radius: 50%;
+        }
+
+        /* Admin Main Content */
+        .admin-main {
+            margin-left: 250px;
+            min-height: 100vh;
+            transition: var(--transition);
+        }
+
+        /* Admin Header */
+        .admin-header {
+            background-color: var(--darker-bg);
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--admin-border);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .header-left .toggle-sidebar {
+            background: none;
+            border: none;
+            color: var(--admin-text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-right: 15px;
+        }
+
+        .toggle-sidebar:hover {
+            color: var(--neon-orange);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .admin-search {
+            position: relative;
+            margin-right: 20px;
+        }
+
+        .admin-search input {
+            background-color: var(--admin-card);
+            border: 1px solid var(--admin-border);
+            color: var(--admin-text);
+            padding: 8px 15px 8px 35px;
+            border-radius: 4px;
+            width: 200px;
+            transition: var(--transition);
+        }
+
+        .admin-search input:focus {
+            outline: none;
+            border-color: var(--neon-orange);
+            box-shadow: 0 0 10px rgba(255, 102, 0, 0.3);
+            width: 250px;
+        }
+
+        .admin-search i {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+        }
+
+        .admin-notification {
+            position: relative;
+            margin-right: 20px;
+        }
+
+        .admin-notification i {
+            font-size: 1.2rem;
+            color: var(--admin-text);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .admin-notification i:hover {
+            color: var(--neon-orange);
+        }
+
+        .notification-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--neon-red);
+            color: black;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .admin-profile img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid var(--neon-orange);
+            margin-right: 10px;
+        }
+
+        .admin-profile .profile-name {
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .admin-profile .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 200px;
+            background-color: var(--darker-bg);
+            border: 1px solid var(--admin-border);
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            padding: 10px 0;
+            display: none;
+            z-index: 1000;
+        }
+
+        .admin-profile:hover .profile-dropdown {
+            display: block;
+        }
+
+        .profile-dropdown a {
+            display: block;
+            padding: 8px 15px;
+            color: var(--admin-text);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .profile-dropdown a:hover {
+            background-color: rgba(255, 8, 8, 0.1);
+            color: var(--neon-orange);
+        }
+
+        .profile-dropdown a i {
+            width: 20px;
+            text-align: center;
+            margin-right: 8px;
+        }
+
+        /* Admin Content */
+        .admin-content {
+            padding: 25px;
+        }
+
+        .page-title {
+            color: var(--neon-orange);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+        }
+
+        .page-title i {
+            margin-right: 10px;
+        }
+
+        .breadcrumb {
+            background-color: transparent;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+
+        .breadcrumb-item a {
+            color: var(--neon-orange);
+            text-decoration: none;
+        }
+
+        .breadcrumb-item.active {
+            color: #777;
+        }
+
+        /* Admin Cards */
+        .admin-card {
+            background-color: var(--admin-card);
+            border-radius: 8px;
+            border: 1px solid var(--admin-border);
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+
+        .admin-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 8, 8, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--admin-border);
+        }
+
+        .card-title {
+            color: var(--admin-text-light);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .card-actions button {
+            background: none;
+            border: none;
+            color: #777;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+
+        .card-actions button:hover {
+            color: var(--neon-orange);
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--admin-text-light);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            background-color: var(--admin-card);
+            border: 1px solid var(--admin-border);
+            color: var(--admin-text);
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--neon-orange);
+            box-shadow: 0 0 10px rgba(255, 102, 0, 0.3);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 10px 12px;
+            background-color: var(--admin-card);
+            border: 1px solid var(--admin-border);
+            color: var(--admin-text);
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        /* Tabs */
+        .admin-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--admin-border);
+            margin-bottom: 20px;
+        }
+
+        .admin-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            color: #777;
+            font-weight: 600;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .admin-tab.active {
+            color: var(--neon-orange);
+        }
+
+        .admin-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--neon-orange);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Buttons */
+        .btn-admin {
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-admin-primary {
+            background-color: var(--admin-primary);
+            color: white;
+        }
+
+        .btn-admin-primary:hover {
+            background-color: #3a5bef;
+            box-shadow: 0 0 15px rgba(74, 107, 255, 0.3);
+        }
+
+        .btn-admin-success {
+            background-color: var(--admin-success);
+            color: white;
+        }
+
+        .btn-admin-success:hover {
+            background-color: #218838;
+            box-shadow: 0 0 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn-admin-danger {
+            background-color: var(--admin-danger);
+            color: white;
+        }
+
+        .btn-admin-danger:hover {
+            background-color: #c82333;
+            box-shadow: 0 0 15px rgba(220, 53, 69, 0.3);
+        }
+
+        .btn-admin-warning {
+            background-color: var(--admin-warning);
+            color: black;
+        }
+
+        .btn-admin-warning:hover {
+            background-color: #e0a800;
+            box-shadow: 0 0 15px rgba(255, 193, 7, 0.3);
+        }
+
+        /* Security Specific Styles */
+        .security-status {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .security-icon {
+            font-size: 2rem;
+            margin-right: 15px;
+        }
+
+        .security-icon.secure {
+            color: var(--admin-success);
+        }
+
+        .security-icon.warning {
+            color: var(--admin-warning);
+        }
+
+        .security-icon.danger {
+            color: var(--admin-danger);
+        }
+
+        .security-message h4 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .security-message p {
+            margin: 5px 0 0;
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        .security-feature {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .security-feature-info {
+            flex: 1;
+        }
+
+        .security-feature-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .security-feature-desc {
+            color: #777;
+            font-size: 0.85rem;
+        }
+
+        .security-feature-status {
+            margin-left: 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .security-feature-status.enabled {
+            color: var(--admin-success);
+        }
+
+        .security-feature-status.disabled {
+            color: var(--admin-danger);
+        }
+
+        /* Activity Log */
+        .activity-log {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .activity-item {
+            display: flex;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--admin-border);
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        .activity-icon.login {
+            background-color: rgba(74, 107, 255, 0.2);
+            color: var(--admin-primary);
+        }
+
+        .activity-icon.password {
+            background-color: rgba(40, 167, 69, 0.2);
+            color: var(--admin-success);
+        }
+
+        .activity-icon.alert {
+            background-color: rgba(220, 53, 69, 0.2);
+            color: var(--admin-danger);
+        }
+
+        .activity-icon.settings {
+            background-color: rgba(255, 193, 7, 0.2);
+            color: var(--admin-warning);
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .activity-desc {
+            color: #777;
+            font-size: 0.85rem;
+        }
+
+        .activity-time {
+            color: #777;
+            font-size: 0.8rem;
+            text-align: right;
+            min-width: 100px;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .admin-sidebar {
+                left: -250px;
+            }
+
+            .admin-sidebar.show {
+                left: 0;
+            }
+
+            .admin-main {
+                margin-left: 0;
+            }
+
+            .admin-search input {
+                width: 150px;
+            }
+
+            .admin-search input:focus {
+                width: 180px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .admin-header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px;
+            }
+
+            .header-left {
+                margin-bottom: 15px;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .admin-search {
+                margin-right: 0;
+                flex-grow: 1;
+            }
+
+            .admin-search input {
+                width: 100%;
+            }
+
+            .admin-search input:focus {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .admin-content {
+                padding: 15px;
+            }
+
+            .page-title {
+                font-size: 1.5rem;
+            }
+
+            .security-feature {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .security-feature-status {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Admin Sidebar -->
+    <div class="admin-sidebar" id="adminSidebar">
+        <div class="sidebar-brand">
+            <img src="Faux Fire.png" alt="Faux Fire Logo">
+            <h3>Admin</h3>
+        </div>
+
+        <div class="sidebar-menu">
+            <div class="sidebar-title">Main</div>
+            <div class="sidebar-item">
+                <a href="Admin.html" class="sidebar-link">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </div>
+
+            <div class="sidebar-title">Management</div>
+            <div class="sidebar-item">
+                <a href="users.html" class="sidebar-link">
+                    <i class="fas fa-users"></i>
+                    <span>Users</span>
+                </a>
+            </div>
+            <div class="sidebar-item">
+                <a href="games admin.html" class="sidebar-link">
+                    <i class="fas fa-gamepad"></i>
+                    <span>Games</span>
+                </a>
+            </div>
+            <div class="sidebar-item">
+                <a href="#" class="sidebar-link">
+                    <i class="fas fa-trophy"></i>
+                    <span>Tournaments</span>
+                </a>
+            </div>
+            <div class="sidebar-item">
+                <a href="#" class="sidebar-link">
+                    <i class="fas fa-video"></i>
+                    <span>Streams</span>
+                </a>
+            </div>
+            <div class="sidebar-item">
+                <a href="#" class="sidebar-link">
+                    <i class="fas fa-newspaper"></i>
+                    <span>News</span>
+                </a>
+            </div>
+            <div class="sidebar-item">
+                <a href="comunity.html" class="sidebar-link">
+                    <i class="fas fa-comments"></i>
+                    <span>Community</span>
+                </a>
+            </div>
+
+            <div class="sidebar-title">Store</div>
+            <div class="sidebar-item">
+                <a href="oder.html" class="sidebar-link">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Orders</span>
+                </a>
+            </div>
+            <div class="sidebar-item">
+                <a href="products.html" class="sidebar-link">
+                    <i class="fas fa-tags"></i>
+                    <span>Products</span>
+                </a>
+            </div>
+            <div class="sidebar-item">
+                <a href="#" class="sidebar-link">
+                    <i class="fas fa-percentage"></i>
+                    <span>Discounts</span>
+                </a>
+            </div>
+
+            <div class="sidebar-title">System</div>
+            <div class="sidebar-item">
+                <a href="#" class="sidebar-link">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </div>
+            <div class="sidebar-item">
+                <a href="security.html" class="sidebar-link active">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Security</span>
+                </a>
+            </div>
+            <div class="sidebar-item">
+                <a href="#" class="sidebar-link">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Analytics</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Main Content -->
+    <div class="admin-main" id="adminMain">
+        <!-- Admin Header -->
+        <header class="admin-header">
+            <div class="header-left">
+                <button class="toggle-sidebar" id="toggleSidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <span class="d-none d-md-inline">Security Settings</span>
+            </div>
+
+            <div class="header-right">
+                <div class="admin-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search...">
+                </div>
+
+                <div class="admin-notification">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-count">3</span>
+                </div>
+
+                <div class="admin-profile">
+                    <img src="Anonymus avatar 3.png" alt="Admin Profile">
+                    <span class="profile-name d-none d-md-inline">Admin</span>
+                    <i class="fas fa-chevron-down d-none d-md-inline"></i>
+
+                    <div class="profile-dropdown">
+                        <a href="#">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                        <a href="#">
+                            <i class="fas fa-cog"></i> Settings
+                        </a>
+                        <a href="#">
+                            <i class="fas fa-question-circle"></i> Help
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Admin Content -->
+        <div class="admin-content">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="Admin.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">System</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Security</li>
+                </ol>
+            </nav>
+
+            <h1 class="page-title">
+                <i class="fas fa-shield-alt"></i> Security Settings
+            </h1>
+
+            <!-- Security Status -->
+            <div class="admin-card">
+                <div class="security-status">
+                    <div class="security-icon secure">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="security-message">
+                        <h4>Your security status is good</h4>
+                        <p>All critical security features are enabled. Keep your system protected by regularly reviewing these settings.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Features -->
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="admin-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Security Features</h3>
+                        </div>
+                        
+                        <div class="security-feature">
+                            <div class="security-feature-info">
+                                <div class="security-feature-title">Two-Factor Authentication</div>
+                                <div class="security-feature-desc">Require a second form of authentication for admin access</div>
+                            </div>
+                            <div class="security-feature-status enabled">Enabled</div>
+                        </div>
+                        
+                        <div class="security-feature">
+                            <div class="security-feature-info">
+                                <div class="security-feature-title">IP Whitelisting</div>
+                                <div class="security-feature-desc">Restrict admin access to specific IP addresses</div>
+                            </div>
+                            <div class="security-feature-status disabled">Disabled</div>
+                        </div>
+                        
+                        <div class="security-feature">
+                            <div class="security-feature-info">
+                                <div class="security-feature-title">Login Attempts Limit</div>
+                                <div class="security-feature-desc">Block IP after multiple failed login attempts</div>
+                            </div>
+                            <div class="security-feature-status enabled">Enabled (5 attempts)</div>
+                        </div>
+                        
+                        <div class="security-feature">
+                            <div class="security-feature-info">
+                                <div class="security-feature-title">Password Policy</div>
+                                <div class="security-feature-desc">Enforce strong password requirements</div>
+                            </div>
+                            <div class="security-feature-status enabled">Enabled</div>
+                        </div>
+                        
+                        <div class="security-feature">
+                            <div class="security-feature-info">
+                                <div class="security-feature-title">Session Timeout</div>
+                                <div class="security-feature-desc">Automatically log out inactive sessions</div>
+                            </div>
+                            <div class="security-feature-status enabled">30 minutes</div>
+                        </div>
+                        
+                        <div class="security-feature">
+                            <div class="security-feature-info">
+                                <div class="security-feature-title">Activity Logging</div>
+                                <div class="security-feature-desc">Record all admin activities for auditing</div>
+                            </div>
+                            <div class="security-feature-status enabled">Enabled</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="admin-card">
+                        <div class="card-header">
+                            <h3 class="card-title">IP Whitelist</h3>
+                            <div class="card-actions">
+                                <button id="addIpBtn"><i class="fas fa-plus"></i></button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Allowed IP Addresses</label>
+                            <select class="form-select" multiple size="5">
+                                <option>192.168.1.1 (Office Network)</option>
+                                <option>203.0.113.45 (Admin VPN)</option>
+                                <option>198.51.100.22 (Backup Server)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <button class="btn-admin btn-admin-danger">Remove Selected</button>
+                            <button class="btn-admin btn-admin-primary">Save Changes</button>
+                        </div>
+                    </div>
+                    
+                    <div class="admin-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Password Policy</h3>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="requireComplex" checked>
+                                <label class="form-check-label" for="requireComplex">Require complex passwords</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Minimum Password Length</label>
+                            <input type="number" class="form-control" value="12" min="8" max="32">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Password Expiration</label>
+                            <select class="form-select">
+                                <option value="30">30 days</option>
+                                <option value="60" selected>60 days</option>
+                                <option value="90">90 days</option>
+                                <option value="0">Never</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <button class="btn-admin btn-admin-primary">Update Policy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Security Activity Log -->
+            <div class="admin-card">
+                <div class="card-header">
+                    <h3 class="card-title">Recent Security Activity</h3>
+                    <div class="card-actions">
+                        <button><i class="fas fa-sync-alt"></i></button>
+                    </div>
+                </div>
+                
+                <div class="activity-log">
+                    <div class="activity-item">
+                        <div class="activity-icon login">
+                            <i class="fas fa-sign-in-alt"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Admin Login</div>
+                            <div class="activity-desc">Successful login from IP 192.168.1.1</div>
+                        </div>
+                        <div class="activity-time">2 minutes ago</div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon password">
+                            <i class="fas fa-key"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Password Changed</div>
+                            <div class="activity-desc">User password was updated</div>
+                        </div>
+                        <div class="activity-time">1 hour ago</div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon alert">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Failed Login Attempt</div>
+                            <div class="activity-desc">5 failed attempts from IP 203.0.113.78</div>
+                        </div>
+                        <div class="activity-time">3 hours ago</div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon settings">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Security Settings Updated</div>
+                            <div class="activity-desc">Two-factor authentication was enabled</div>
+                        </div>
+                        <div class="activity-time">Yesterday, 4:30 PM</div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon login">
+                            <i class="fas fa-sign-in-alt"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Admin Login</div>
+                            <div class="activity-desc">Successful login from IP 203.0.113.45</div>
+                        </div>
+                        <div class="activity-time">Yesterday, 9:15 AM</div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon alert">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">IP Blocked</div>
+                            <div class="activity-desc">IP 198.51.100.33 blocked after multiple failed attempts</div>
+                        </div>
+                        <div class="activity-time">2 days ago</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add IP Modal -->
+    <div class="admin-modal" id="addIpModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add IP to Whitelist</h3>
+                <button class="modal-close" onclick="closeModal('addIpModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="ipForm">
+                    <div class="form-group">
+                        <label class="form-label">IP Address</label>
+                        <input type="text" class="form-control" placeholder="Enter IP address" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Description (Optional)</label>
+                        <input type="text" class="form-control" placeholder="e.g. Office Network, VPN, etc.">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-admin btn-admin-danger" onclick="closeModal('addIpModal')">Cancel</button>
+                <button class="btn-admin btn-admin-success" onclick="addIpAddress()">Add IP</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Toggle Sidebar
+        document.getElementById('toggleSidebar').addEventListener('click', function() {
+            document.getElementById('adminSidebar').classList.toggle('show');
+            document.getElementById('adminMain').classList.toggle('show');
+        });
+
+        // Open Add IP Modal
+        document.getElementById('addIpBtn').addEventListener('click', function() {
+            document.getElementById('addIpModal').classList.add('show');
+        });
+
+        // Close Modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        // Add IP Address
+        function addIpAddress() {
+            const ipForm = document.getElementById('ipForm');
+            if (ipForm.checkValidity()) {
+                // Here you would typically send the data to your backend
+                alert('IP address added successfully!');
+                closeModal('addIpModal');
+                ipForm.reset();
+            } else {
+                ipForm.reportValidity();
+            }
+        }
+
+        // Logout Functionality
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            // Here you would typically call your logout function
+            alert('You have been logged out successfully!');
+            window.location.href = "FF Gaming Final.html";
+        });
+    </script>
+    <script type="module">
+        // Firebase Authentication and Authorization
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+                const auth = getAuth();
+        const db = getFirestore();
+
+        // Check authentication state
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // User is signed in
+                const userDocRef = doc(db, "users", user.uid);
+                const userDoc = await getDoc(userDocRef);
+                
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    
+                    // Check if user has admin privileges
+                    if (userData.role !== "admin") {
+                        // Redirect non-admin users
+                        alert("You don't have permission to access this page.");
+                        window.location.href = "FF Gaming Final.html";
+                    }
+                } else {
+                    // User document doesn't exist
+                    alert("User data not found. Please contact support.");
+                    signOut(auth);
+                }
+            } else {
+                // No user is signed in
+                window.location.href = "FF Gaming Final.html";
+            }
+        });
+
+        // Enhanced logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            try {
+                await signOut(auth);
+                window.location.href = "FF Gaming Final.html";
+            } catch (error) {
+                console.error("Logout error:", error);
+                alert("Error during logout. Please try again.");
+            }
+        });
+
+        // Security settings form handling
+        document.querySelectorAll('.btn-admin-primary').forEach(button => {
+            button.addEventListener('click', async (e) => {
+                e.preventDefault();
+                const card = e.target.closest('.admin-card');
+                
+                // Show saving indicator
+                const originalText = e.target.textContent;
+                e.target.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+                e.target.disabled = true;
+                
+                // Simulate saving to database (replace with actual Firebase operations)
+                setTimeout(() => {
+                    // Show success message
+                    e.target.innerHTML = '<i class="fas fa-check"></i> Saved!';
+                    
+                    // Reset button after delay
+                    setTimeout(() => {
+                        e.target.textContent = originalText;
+                        e.target.disabled = false;
+                        
+                        // Add visual feedback
+                        card.style.boxShadow = '0 0 15px rgba(40, 167, 69, 0.5)';
+                        setTimeout(() => {
+                            card.style.boxShadow = '';
+                        }, 2000);
+                    }, 1500);
+                }, 1000);
+            });
+        });
+
+        // IP Whitelist functionality
+        const ipWhitelistSelect = document.querySelector('.form-select');
+        document.querySelector('.btn-admin-danger').addEventListener('click', () => {
+            const selectedOptions = Array.from(ipWhitelistSelect.selectedOptions);
+            
+            if (selectedOptions.length === 0) {
+                alert("Please select at least one IP address to remove.");
+                return;
+            }
+            
+            if (confirm(`Are you sure you want to remove ${selectedOptions.length} selected IP address(es)?`)) {
+                // In a real app, you would send this to your backend
+                selectedOptions.forEach(option => option.remove());
+                alert("Selected IP addresses have been removed.");
+            }
+        });
+
+        // Password policy validation
+        document.querySelector('input[type="number"]').addEventListener('change', (e) => {
+            const value = parseInt(e.target.value);
+            if (value < 8) {
+                alert("Minimum password length cannot be less than 8 characters.");
+                e.target.value = 8;
+            } else if (value > 32) {
+                alert("Maximum password length cannot exceed 32 characters.");
+                e.target.value = 32;
+            }
+        });
+
+        // Activity log refresh
+        document.querySelector('.fa-sync-alt').closest('button').addEventListener('click', (e) => {
+            e.preventDefault();
+            const spinner = e.target.querySelector('i') || e.target;
+            spinner.classList.add('fa-spin');
+            
+            // Simulate refreshing data
+            setTimeout(() => {
+                spinner.classList.remove('fa-spin');
+                
+                // In a real app, you would fetch new data here
+                const activityLog = document.querySelector('.activity-log');
+                activityLog.style.opacity = '0.5';
+                setTimeout(() => {
+                    activityLog.style.opacity = '1';
+                }, 300);
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

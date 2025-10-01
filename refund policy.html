@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Refund Policy - Faux Fire Gaming</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --neon-red: #ff0808;
+      --neon-orange: #ff6600;
+      --dark-bg: #0d0d0d;
+      --darker-bg: #050505;
+      --text-glow-red: 0 0 10px var(--neon-red), 0 0 20px rgba(255, 42, 42, 0.5);
+      --text-glow-orange: 0 0 10px var(--neon-orange), 0 0 20px rgba(255, 102, 0, 0.5);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    body {
+      background-color: var(--dark-bg);
+      color: white;
+      font-family: 'Rajdhani', sans-serif;
+      overflow-x: hidden;
+      background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-blend-mode: overlay;
+      background-color: rgba(13, 13, 13, 0.9);
+    
+    }
+
+    /* Navbar Styles */
+    .navbar {
+      background-color: var(--darker-bg) !important;
+      border-bottom: 1px solid var(--neon-red);
+      padding: 15px 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar-brand {
+      font-size: 2rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--neon-red) !important;
+      text-shadow: var(--text-glow-red);
+      animation: pulse 2s infinite;
+      display: flex;
+      align-items: center;
+    }
+
+    .navbar-brand img {
+      height: 50px;
+      margin-right: 10px;
+    }
+
+    .nav-link {
+      position: relative;
+      display: inline-block;
+      padding: 12px 25px;
+      color: white !important;
+      text-transform: uppercase;
+      font-weight: 600;
+      background: #0d0d0d;
+      clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
+      transition: var(--transition);
+      border: 1px solid #ff080833;
+      box-shadow: 0 0 8px #ff080844;
+      letter-spacing: 1px;
+      font-size: 1rem;
+      margin: 0 5px;
+    }
+
+    .nav-link:hover {
+      background: var(--neon-red);
+      color: black !important;
+      box-shadow: 0 0 20px var(--neon-orange);
+      font-weight: bold;
+    }
+
+    .nav-link.active {
+      background: var(--neon-red);
+      color: black !important;
+      box-shadow: 0 0 20px var(--neon-red);
+    }
+
+    /* Policy Section */
+    .policy-section {
+      max-width: 900px;
+      margin: 50px auto;
+      background: rgba(5, 5, 5, 0.9);
+      padding: 40px;
+      border: 2px solid var(--neon-red);
+      border-radius: 10px;
+      box-shadow: 0 0 30px rgba(255, 8, 8, 0.5);
+      position: relative;
+      clip-path: polygon(0 0, 95% 0, 100% 5%, 100% 95%, 95% 100%, 5% 100%, 0 95%, 0 5%);
+      z-index: 1;
+      backdrop-filter: blur(5px);
+      line-height: 1.8;
+    }
+
+    .policy-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255,8,8,0.1) 0%, rgba(255,102,0,0.1) 100%);
+      z-index: -1;
+      border-radius: 8px;
+    }
+
+    .policy-section h1 {
+      color: var(--neon-orange);
+      text-transform: uppercase;
+      font-size: 2.5rem;
+      margin-bottom: 40px;
+      text-align: center;
+      text-shadow: var(--text-glow-orange);
+      letter-spacing: 2px;
+      position: relative;
+    }
+
+    .policy-section h1::after {
+      content: '';
+      display: block;
+      width: 100px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--neon-red), var(--neon-orange));
+      margin: 15px auto 0;
+    }
+
+    .policy-section h3 {
+      color: var(--neon-orange);
+      margin-top: 30px;
+      margin-bottom: 15px;
+      text-shadow: var(--text-glow-orange);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .policy-section p {
+      color: #ccc;
+      margin-bottom: 15px;
+    }
+
+    .policy-section ul {
+      padding-left: 20px;
+      color: #ccc;
+    }
+
+    .policy-section li {
+      margin-bottom: 8px;
+      position: relative;
+      padding-left: 25px;
+    }
+
+    .policy-section li::before {
+      content: '•';
+      color: var(--neon-red);
+      font-size: 1.5rem;
+      position: absolute;
+      left: 0;
+      top: -5px;
+    }
+
+    .policy-section a {
+      color: var(--neon-orange);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .policy-section a:hover {
+      color: var(--neon-red);
+      text-shadow: var(--text-glow-orange);
+    }
+
+    /* Back Button */
+    .back-btn {
+      display: inline-block;
+      background: linear-gradient(90deg, var(--neon-red) 0%, var(--neon-orange) 100%);
+      color: black;
+      border: none;
+      padding: 10px 25px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      margin-top: 30px;
+      clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+    }
+
+    .back-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 20px rgba(255, 8, 8, 0.7);
+      color: black;
+    }
+
+    /* Animations */
+    @keyframes pulse {
+      0% { text-shadow: 0 0 10px var(--neon-red); }
+      50% { text-shadow: 0 0 20px var(--neon-orange); }
+      100% { text-shadow: 0 0 10px var(--neon-red); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .policy-section {
+        margin: 30px 20px;
+        padding: 25px;
+      }
+      
+      .policy-section h1 {
+        font-size: 2rem;
+      }
+      
+      .policy-section h3 {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="FF Gaming Final.html">
+        <img src="Faux Fire.png" alt="Faux Fire Logo">
+        FAUX FIRE
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="FF Gaming Final.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="Games.html">Games</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="Tournaments.html">Tournaments</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="Streams.html">Streams</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="News.html">News</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="Contact.html">Contact</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="FAQs.html">FAQs</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="Refund-Policy.html">Refunds</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Policy Section -->
+  <div class="policy-section">
+    <h1>REFUND POLICY</h1>
+    
+    <p>At Faux Fire Gaming, we value our community and strive to ensure a transparent and fair experience for all our players. Please read our refund policy carefully before making any purchases.</p>
+
+    <h3><i class="fas fa-check-circle"></i> Eligibility for Refunds</h3>
+    <p>Refunds are available for digital purchases made within <strong>7 days</strong> if the product or service was not used or activated. To be eligible, your request must meet the following criteria:</p>
+    <ul>
+      <li>Request submitted within 7 days of purchase</li>
+      <li>Product key not revealed or activated</li>
+      <li>Tournament not yet started</li>
+    </ul>
+
+    <h3><i class="fas fa-times-circle"></i> Non-Refundable Items</h3>
+    <p>The following are not eligible for refunds under any circumstances:</p>
+    <ul>
+      <li>Used or activated game keys</li>
+      <li>Completed tournament entry fees</li>
+      <li>Promotional or discounted bundles</li>
+      <li>Virtual currency or in-game purchases</li>
+      <li>Subscription services after first billing cycle</li>
+    </ul>
+
+    <h3><i class="fas fa-envelope"></i> How to Request a Refund</h3>
+    <p>To request a refund, please contact us via our <a href="contact us.html">Contact Us</a> page and include:</p>
+    <ul>
+      <li>Your transaction ID (found in your confirmation email)</li>
+      <li>Reason for refund request</li>
+      <li>Proof of purchase if requested</li>
+    </ul>
+
+    <h3><i class="fas fa-clock"></i> Processing Time</h3>
+    <p>Refunds are typically processed within <strong>3–7 business days</strong> after approval. You will receive:</p>
+    <ul>
+      <li>Email confirmation when request is received</li>
+      <li>Notification of approval/denial within 48 hours</li>
+      <li>Final confirmation when refund is issued</li>
+    </ul>
+    <p>Refunds will be credited to your original payment method. Processing times may vary by financial institution.</p>
+
+    <h3><i class="fas fa-exclamation-triangle"></i> Abuse of Refunds</h3>
+    <p>We monitor refund requests to prevent abuse of our policy. Accounts exhibiting patterns of:</p>
+    <ul>
+      <li>Excessive refund requests</li>
+      <li>Fraudulent claims</li>
+      <li>Policy circumvention</li>
+    </ul>
+    <p>May be subject to restrictions including but not limited to: temporary suspension, permanent ban, or revocation of refund privileges.</p>
+
+    <a href="FF Gaming Final.html" class="back-btn">
+      <i class="fas fa-arrow-left me-2"></i> BACK TO HOME
+    </a>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Add animation to policy items
+    document.querySelectorAll('.policy-section li').forEach((item, index) => {
+      item.style.opacity = '0';
+      item.style.transform = 'translateX(-20px)';
+      item.style.transition = `all 0.3s ease ${index * 0.1}s`;
+      
+      setTimeout(() => {
+        item.style.opacity = '1';
+        item.style.transform = 'translateX(0)';
+      }, 500);
+    });
+  </script>
+</body>
+</html>
