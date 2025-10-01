@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tap Plane - Sky Dodge</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #000;
+      font-family: 'Audiowide', cursive, Arial, sans-serif;
+    }
+    canvas {
+      display: block;
+    }
+    #gameUI {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    #scoreContainer {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: 2px solid #00fffc;
+      box-shadow: 0 0 15px rgba(0, 255, 252, 0.5);
+    }
+    .scoreText {
+      color: #00fffc;
+      text-shadow: 0 0 5px #00fffc;
+      margin: 5px 0;
+      font-size: 18px;
+    }
+    #gameOver {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.9);
+      padding: 30px;
+      border-radius: 15px;
+      border: 3px solid #ff0055;
+      box-shadow: 0 0 30px rgba(255, 0, 85, 0.7);
+      text-align: center;
+      display: none;
+      pointer-events: all;
+    }
+    #gameOver h1 {
+      color: #ff0055;
+      text-shadow: 0 0 10px #ff0055;
+      margin-top: 0;
+    }
+    #gameOver button {
+      background: linear-gradient(to bottom, #ff0055, #990033);
+      border: none;
+      color: white;
+      padding: 12px 25px;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Audiowide', cursive;
+      margin-top: 20px;
+      box-shadow: 0 0 15px rgba(255, 0, 85, 0.7);
+      transition: all 0.3s;
+    }
+    #gameOver button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(255, 0, 85, 1);
+    }
+    #controlsHint {
+      position: absolute;
+      bottom: 30px;
+      width: 100%;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 16px;
+      text-shadow: 0 0 5px #000;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+</head>
+<body>
+  <canvas id="gameCanvas"></canvas>
+  
+  <div id="gameUI">
+    <div id="scoreContainer">
+      <div class="scoreText">SCORE: <span id="scoreDisplay">0</span></div>
+      <div class="scoreText">HIGH SCORE: <span id="highScoreDisplay">0</span></div>
+      <div class="scoreText">COINS: <span id="coinsDisplay">0</span></div>
+    </div>
+    
+    <div id="gameOver">
+      <h1>GAME OVER</h1>
+      <p style="color: white;">Your Score: <span id="finalScore" style="color: #00fffc;">0</span></p>
+      <p style="color: white;">High Score: <span id="finalHighScore" style="color: #00fffc;">0</span></p>
+      <button id="retryButton">RETRY</button>
+    </div>
+    
+    <div id="controlsHint">TAP or CLICK to FLY</div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // UI Elements
+    const scoreDisplay = document.getElementById("scoreDisplay");
+    const highScoreDisplay = document.getElementById("highScoreDisplay");
+    const coinsDisplay = document.getElementById("coinsDisplay");
+    const finalScore = document.getElementById("finalScore");
+    const finalHighScore = document.getElementById("finalHighScore");
+    const gameOverScreen = document.getElementById("gameOver");
+    const retryButton = document.getElementById("retryButton");
+
+    const player = {
+      x: 100,
+      y: 100,
+      width: 60,
+      height: 60,
+      velocity: 0,
+      gravity: 0.28,
+      lift: -6
+    };
+
+    const obstacles = [];
+    const coins = [];
+    let score = 0;
+    let highScore = localStorage.getItem("highScore") || 0;
+    let totalCoins = localStorage.getItem("totalCoins") || 0;
+    let gameOver = false;
+    let backgroundX = 0;
+
+    // Create gradient for background
+    const bgGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    bgGradient.addColorStop(0, "#000428");
+    bgGradient.addColorStop(1, "#004e92");
+
+    // Create gradient for player
+    const playerGradient = ctx.createLinearGradient(0, 0, player.width, 0);
+    playerGradient.addColorStop(0, "#00c6ff");
+    playerGradient.addColorStop(1, "#0072ff");
+
+    // Update UI displays
+    function updateUI() {
+      scoreDisplay.textContent = score;
+      highScoreDisplay.textContent = highScore;
+      coinsDisplay.textContent = totalCoins;
+    }
+
+    updateUI();
+
+    function drawBackground() {
+      // Draw gradient background
+      ctx.fillStyle = bgGradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw stars
+      ctx.fillStyle = "white";
+      for (let i = 0; i < 100; i++) {
+        const x = (backgroundX + i * 50) % canvas.width;
+        const y = (i * 37) % canvas.height;
+        const size = Math.random() * 2 + 1;
+        ctx.beginPath();
+        ctx.arc(x, y, size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      
+      // Draw moving stars (parallax effect)
+      ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
+      for (let i = 0; i < 50; i++) {
+        const x = (backgroundX * 2 + i * 100) % canvas.width;
+        const y = (i * 74) % canvas.height;
+        const size = Math.random() * 1 + 0.5;
+        ctx.beginPath();
+        ctx.arc(x, y, size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      
+      backgroundX -= 1;
+    }
+
+    function drawPlayer() {
+      // Draw player with gradient and outline
+      ctx.save();
+      ctx.shadowColor = "#0072ff";
+      ctx.shadowBlur = 15;
+      ctx.fillStyle = playerGradient;
+      ctx.beginPath();
+      ctx.moveTo(player.x, player.y + player.height/2);
+      ctx.lineTo(player.x + player.width/2, player.y);
+      ctx.lineTo(player.x + player.width, player.y + player.height/2);
+      ctx.lineTo(player.x + player.width/2, player.y + player.height);
+      ctx.closePath();
+      ctx.fill();
+      
+      // Draw cockpit
+      ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
+      ctx.beginPath();
+      ctx.arc(player.x + player.width/2, player.y + player.height/2, player.width/4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function drawObstacles() {
+      obstacles.forEach(obs => {
+        // Draw obstacle with meteor-like appearance
+        ctx.save();
+        ctx.shadowColor = "#ff6600";
+        ctx.shadowBlur = 10;
+        
+        // Meteor body
+        ctx.fillStyle = "#ff9933";
+        ctx.beginPath();
+        ctx.arc(obs.x + obs.width/2, obs.y + obs.height/2, obs.width/2, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Meteor dark spots
+        ctx.fillStyle = "#cc6600";
+        ctx.beginPath();
+        ctx.arc(obs.x + obs.width/3, obs.y + obs.height/3, obs.width/6, 0, Math.PI * 2);
+        ctx.arc(obs.x + obs.width/1.5, obs.y + obs.height/1.5, obs.width/4, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Meteor glow
+        ctx.strokeStyle = "rgba(255, 153, 51, 0.5)";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(obs.x + obs.width/2, obs.y + obs.height/2, obs.width/2 + 5, 0, Math.PI * 2);
+        ctx.stroke();
+        
+        ctx.restore();
+        
+        obs.x -= 4;
+      });
+    }
+
+    function drawCoins() {
+      coins.forEach((coin, index) => {
+        ctx.save();
+        // Coin glow
+        ctx.shadowColor = "#ffcc00";
+        ctx.shadowBlur = 15;
+        
+        // Coin body
+        ctx.fillStyle = "#ffcc00";
+        ctx.beginPath();
+        ctx.arc(coin.x + coin.width/2, coin.y + coin.height/2, coin.width/2, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Coin details
+        ctx.strokeStyle = "#ff9900";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(coin.x + coin.width/2, coin.y + coin.height/2, coin.width/3, 0, Math.PI * 2);
+        ctx.stroke();
+        
+        ctx.fillStyle = "#ff9900";
+        ctx.font = "bold " + (coin.width/2) + "px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("$", coin.x + coin.width/2, coin.y + coin.height/2);
+        
+        ctx.restore();
+        
+        coin.x -= 4;
+
+        // Check collision with player
+        if (
+          player.x < coin.x + coin.width &&
+          player.x + player.width > coin.x &&
+          player.y < coin.y + coin.height &&
+          player.y + player.height > coin.y
+        ) {
+          coins.splice(index, 1);
+          score += 10;
+          totalCoins = parseInt(totalCoins) + 10;
+          localStorage.setItem("totalCoins", totalCoins);
+          updateUI();
+          
+          // Create coin collection effect
+          createParticles(coin.x + coin.width/2, coin.y + coin.height/2, "#ffcc00");
+        }
+      });
+    }
+
+    function createParticles(x, y, color) {
+      for (let i = 0; i < 15; i++) {
+        setTimeout(() => {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = Math.random() * 3 + 1;
+          const size = Math.random() * 4 + 2;
+          const lifetime = Math.random() * 30 + 20;
+          
+          const particle = {
+            x, y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            size,
+            color,
+            alpha: 1,
+            lifetime,
+            currentLife: 0
+          };
+          
+          // Draw particle
+          ctx.save();
+          ctx.globalAlpha = particle.alpha;
+          ctx.fillStyle = particle.color;
+          ctx.beginPath();
+          ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }, i * 10);
+      }
+    }
+
+    function updatePlayer() {
+      player.velocity += player.gravity;
+      player.y += player.velocity;
+
+      if (player.y + player.height > canvas.height || player.y < 0) {
+        endGame();
+      }
+    }
+
+    function checkCollision() {
+      obstacles.forEach(obs => {
+        if (
+          player.x < obs.x + obs.width &&
+          player.x + player.width > obs.x &&
+          player.y < obs.y + obs.height &&
+          player.y + player.height > obs.y
+        ) {
+          // Create explosion effect on collision
+          createParticles(player.x + player.width/2, player.y + player.height/2, "#ff3300");
+          endGame();
+        }
+      });
+    }
+
+    function endGame() {
+      if (gameOver) return;
+      
+      gameOver = true;
+      if (score > highScore) {
+        highScore = score;
+        localStorage.setItem("highScore", highScore);
+      }
+      
+      finalScore.textContent = score;
+      finalHighScore.textContent = highScore;
+      
+      setTimeout(() => {
+        gameOverScreen.style.display = "block";
+      }, 500);
+    }
+
+    function resetGame() {
+      player.y = 100;
+      player.velocity = 0;
+      obstacles.length = 0;
+      coins.length = 0;
+      score = 0;
+      gameOver = false;
+      gameOverScreen.style.display = "none";
+      updateUI();
+      gameLoop();
+    }
+
+    function gameLoop() {
+      if (gameOver) return;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawBackground();
+      drawObstacles();
+      drawCoins();
+      drawPlayer();
+      updatePlayer();
+      checkCollision();
+
+      requestAnimationFrame(gameLoop);
+    }
+
+    function spawnObstacle() {
+      if (gameOver) return;
+      
+      const height = Math.random() * 100 + 50;
+      obstacles.push({
+        x: canvas.width,
+        y: Math.random() * (canvas.height - height),
+        width: 50,
+        height
+      });
+    }
+
+    function spawnCoin() {
+      if (gameOver) return;
+      if (Math.random() < 0.7) return; // 30% chance to spawn
+      
+      coins.push({
+        x: canvas.width,
+        y: Math.random() * (canvas.height - 50),
+        width: 40,
+        height: 40
+      });
+    }
+
+    // Event listeners
+    window.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      if (gameOver) return;
+      player.velocity = player.lift;
+    });
+    
+    window.addEventListener("mousedown", () => {
+      if (gameOver) return;
+      player.velocity = player.lift;
+    });
+    
+    retryButton.addEventListener("click", resetGame);
+
+    // Handle window resize
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    // Start game
+    setInterval(spawnObstacle, 1500);
+    setInterval(spawnCoin, 2000);
+    gameLoop();
+  </script>
+</body>
+</html>

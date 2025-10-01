@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQs - Faux Fire Gaming</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --neon-red: #ff0808;
+      --neon-orange: #ff6600;
+      --dark-bg: #0d0d0d;
+      --darker-bg: #050505;
+      --text-glow-red: 0 0 10px var(--neon-red), 0 0 20px rgba(255, 42, 42, 0.5);
+      --text-glow-orange: 0 0 10px var(--neon-orange), 0 0 20px rgba(255, 102, 0, 0.5);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    body {
+      background-color: var(--dark-bg);
+      color: white;
+      font-family: 'Rajdhani', sans-serif;
+      overflow-x: hidden;
+      background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-blend-mode: overlay;
+      background-color: rgba(13, 13, 13, 0.9);
+   
+    }
+
+    /* Navbar Styles (same as contact page) */
+    .navbar {
+      background-color: var(--darker-bg) !important;
+      border-bottom: 1px solid var(--neon-red);
+      padding: 15px 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar-brand {
+      font-size: 2rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--neon-red) !important;
+      text-shadow: var(--text-glow-red);
+      animation: pulse 2s infinite;
+      display: flex;
+      align-items: center;
+    }
+
+    .navbar-brand img {
+      height: 50px;
+      margin-right: 10px;
+    }
+
+    .nav-link {
+      position: relative;
+      display: inline-block;
+      padding: 12px 25px;
+      color: white !important;
+      text-transform: uppercase;
+      font-weight: 600;
+      background: #0d0d0d;
+      clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
+      transition: var(--transition);
+      border: 1px solid #ff080833;
+      box-shadow: 0 0 8px #ff080844;
+      letter-spacing: 1px;
+      font-size: 1rem;
+      margin: 0 5px;
+    }
+
+    .nav-link:hover {
+      background: var(--neon-red);
+      color: black !important;
+      box-shadow: 0 0 20px var(--neon-orange);
+      font-weight: bold;
+    }
+
+    .nav-link.active {
+      background: var(--neon-red);
+      color: black !important;
+      box-shadow: 0 0 20px var(--neon-red);
+    }
+
+    /* FAQ Section */
+    .faq-section {
+      max-width: 900px;
+      margin: 50px auto;
+      background: rgba(5, 5, 5, 0.9);
+      padding: 40px;
+      border: 2px solid var(--neon-red);
+      border-radius: 10px;
+      box-shadow: 0 0 30px rgba(255, 8, 8, 0.5);
+      position: relative;
+      clip-path: polygon(0 0, 95% 0, 100% 5%, 100% 95%, 95% 100%, 5% 100%, 0 95%, 0 5%);
+      z-index: 1;
+      backdrop-filter: blur(5px);
+    }
+
+    .faq-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255,8,8,0.1) 0%, rgba(255,102,0,0.1) 100%);
+      z-index: -1;
+      border-radius: 8px;
+    }
+
+    .faq-section h1 {
+      color: var(--neon-orange);
+      text-transform: uppercase;
+      font-size: 2.5rem;
+      margin-bottom: 40px;
+      text-align: center;
+      text-shadow: var(--text-glow-orange);
+      letter-spacing: 2px;
+      position: relative;
+    }
+
+    .faq-section h1::after {
+      content: '';
+      display: block;
+      width: 100px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--neon-red), var(--neon-orange));
+      margin: 15px auto 0;
+    }
+
+    .accordion {
+      --bs-accordion-bg: transparent;
+      --bs-accordion-border-color: var(--neon-red);
+      --bs-accordion-active-color: black;
+      --bs-accordion-active-bg: var(--neon-orange);
+      --bs-accordion-btn-focus-box-shadow: 0 0 0 0.25rem rgba(255, 102, 0, 0.25);
+    }
+
+    .accordion-button {
+      background: rgba(17, 17, 17, 0.8);
+      color: white;
+      font-weight: 600;
+      font-size: 1.1rem;
+      border-bottom: 1px solid rgba(255, 8, 8, 0.3);
+      transition: var(--transition);
+    }
+
+    .accordion-button:not(.collapsed) {
+      background: linear-gradient(90deg, var(--neon-red) 0%, var(--neon-orange) 100%);
+      color: black;
+      box-shadow: 0 0 15px rgba(255, 102, 0, 0.5);
+    }
+
+    .accordion-button::after {
+      filter: brightness(0) invert(1);
+    }
+
+    .accordion-button:not(.collapsed)::after {
+      filter: brightness(0) invert(0);
+    }
+
+    .accordion-body {
+      background: rgba(17, 17, 17, 0.6);
+      color: #ccc;
+      border-left: 2px solid var(--neon-red);
+      border-right: 2px solid var(--neon-red);
+      border-bottom: 2px solid var(--neon-red);
+    }
+
+    .accordion-body a {
+      color: var(--neon-orange);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .accordion-body a:hover {
+      color: var(--neon-red);
+      text-shadow: var(--text-glow-orange);
+    }
+
+    /* Back Button */
+    .back-btn {
+      display: inline-block;
+      background: linear-gradient(90deg, var(--neon-red) 0%, var(--neon-orange) 100%);
+      color: black;
+      border: none;
+      padding: 10px 25px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      margin-top: 30px;
+      clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+    }
+
+    .back-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 20px rgba(255, 8, 8, 0.7);
+      color: black;
+    }
+
+    /* Animations */
+    @keyframes pulse {
+      0% { text-shadow: 0 0 10px var(--neon-red); }
+      50% { text-shadow: 0 0 20px var(--neon-orange); }
+      100% { text-shadow: 0 0 10px var(--neon-red); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .faq-section {
+        margin: 30px 20px;
+        padding: 25px;
+      }
+      
+      .faq-section h1 {
+        font-size: 2rem;
+      }
+      
+      .accordion-button {
+        font-size: 1rem;
+        padding: 12px 15px;
+      }
+    }
+      /* Dropdown menu styling */
+        .navbar .dropdown-menu {
+            background-color: var(--darker-bg);
+            border: 1px solid var(--neon-red);
+        }
+
+        .navbar .dropdown-item {
+            color: white;
+            transition: var(--transition);
+        }
+
+        .navbar .dropdown-item:hover {
+            background-color: var(--neon-red);
+            color: black;
+        }
+
+        .navbar .nav-link.dropdown-toggle {
+            cursor: pointer;
+        }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="FF Gaming Final.html">
+        <img src="Faux Fire.png" alt="Faux Fire Logo">
+        FAUX FIRE
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+         <li class="nav-item">
+                        <a class="nav-link active" href="FF Gaming Final.html">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Game Zone
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="Games.html">Games</a></li>
+                            <li><a class="dropdown-item" href="Earn Page.html">Earn</a></li>
+
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Arena
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="Streams.html">Streams</a></li>
+                            <li><a class="dropdown-item" href="Tournaments.html">Tournament</a></li>
+
+                        </ul>
+                    </li>
+
+
+                    <!-- Add this to your navbar, after the existing navigation items -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Gaming Gear
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="pcgear.html">PC Gaming Gear</a></li>
+                            <li><a class="dropdown-item" href="Games Iteam.html">Games Iteam</a></li>
+                            <li><a class="dropdown-item active" href="mobilegear.html">Mobile Gaming Gear</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Explore
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="News.html">News</a></li>
+                            <li><a class="dropdown-item" href="Comunity Page.html">Comunity</a></li>
+                        </ul>
+                    </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- FAQ Section -->
+  <div class="faq-section">
+    <h1>FREQUENTLY ASKED QUESTIONS</h1>
+    
+    <div class="accordion" id="faqAccordion">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+            <i class="fas fa-gamepad me-3"></i> How do I join a tournament?
+          </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            <strong>To join a tournament:</strong> Navigate to our <a href="Tournaments.html">Tournaments page</a>, select your preferred game from the list, and click the "Join Now" button on the tournament you wish to enter. You'll need to have an active Faux Fire account and meet any specific requirements for that tournament.
+          </div>
+        </div>
+      </div>
+      
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+            <i class="fas fa-user-plus me-3"></i> Is registration free?
+          </button>
+        </h2>
+        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            <strong>Yes!</strong> Creating a Faux Fire account and browsing our games and tournaments is completely free. Some premium tournaments may have entry fees, but these will always be clearly marked. You'll never be charged without your explicit consent.
+          </div>
+        </div>
+      </div>
+      
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+            <i class="fas fa-headset me-3"></i> How can I contact support?
+          </button>
+        </h2>
+        <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            For support, please visit our <a href="Contact.html">Contact Us page</a> and fill out the form with your inquiry. Our average response time is under 24 hours. For urgent matters, you can also DM our official Twitter account <a href="#">@FauxFireSupport</a>.
+          </div>
+        </div>
+      </div>
+      
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">
+            <i class="fas fa-trophy me-3"></i> Are prizes real?
+          </button>
+        </h2>
+        <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            <strong>Absolutely!</strong> All tournament prizes are 100% real and verified. We distribute cash prizes via PayPal or bank transfer within 7 business days of tournament completion. Physical prizes are shipped via tracked delivery. You can verify past winners on our <a href="News.html">News page</a>.
+          </div>
+        </div>
+      </div>
+      
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive">
+            <i class="fas fa-stream me-3"></i> Can I stream my tournament gameplay?
+          </button>
+        </h2>
+        <div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            <strong>Yes, and we encourage it!</strong> You're welcome to stream your tournament participation on any platform. Tag us <strong>@FauxFireGaming</strong> and we may feature your stream on our <a href="Streams.html">Streams page</a>. Some sponsored tournaments may have specific streaming requirements - these will be detailed in the tournament rules.
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <a href="FF Gaming Final.html" class="back-btn">
+      <i class="fas fa-arrow-left me-2"></i> BACK TO HOME
+    </a>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Add slight delay to accordion opening for better UX
+    document.querySelectorAll('.accordion-button').forEach(button => {
+      button.addEventListener('click', function() {
+        setTimeout(() => {
+          const icon = this.querySelector('i');
+          if (this.classList.contains('collapsed')) {
+            icon.classList.remove('fa-chevron-down');
+            icon.classList.add('fa-chevron-up');
+          } else {
+            icon.classList.remove('fa-chevron-up');
+            icon.classList.add('fa-chevron-down');
+          }
+        }, 10);
+      });
+    });
+  </script>
+</body>
+</html>

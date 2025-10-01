@@ -1,0 +1,1628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Items - Faux Fire</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-red: #ff0808;
+            --neon-orange: #ff6600;
+            --dark-bg: #0d0d0d;
+            --darker-bg: #050505;
+            --text-glow-red: 0 0 10px var(--neon-red), 0 0 20px rgba(255, 42, 42, 0.5);
+            --text-glow-orange: 0 0 10px var(--neon-orange), 0 0 20px rgba(255, 102, 0, 0.5);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: white;
+            font-family: 'Rajdhani', 'Arial', sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: var(--darker-bg) !important;
+            border-bottom: 1px solid var(--neon-red);
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            font-size: 2rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--neon-red) !important;
+            text-shadow: var(--text-glow-red);
+            animation: pulse 2s infinite;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand img {
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .nav-link {
+            position: relative;
+            display: inline-block;
+            padding: 12px 25px;
+            color: white !important;
+            text-transform: uppercase;
+            font-weight: 600;
+            background: #0d0d0d;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
+            transition: var(--transition);
+            border: 1px solid #ff080833;
+            box-shadow: 0 0 8px #ff080844;
+            letter-spacing: 1px;
+            font-size: 1rem;
+            margin: 0 5px;
+        }
+
+        .nav-link:hover {
+            background: var(--neon-red);
+            color: black !important;
+            box-shadow: 0 0 20px var(--neon-orange);
+            font-weight: bold;
+        }
+
+        .dropdown-menu {
+            background-color: var(--darker-bg);
+            border: 1px solid var(--neon-red);
+        }
+
+        .dropdown-item {
+            color: white;
+            transition: var(--transition);
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--neon-red);
+            color: black;
+        }
+
+        .page-header {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            padding: 100px 0;
+            text-align: center;
+            border-bottom: 2px solid var(--neon-red);
+        }
+
+        .page-title {
+            color: var(--neon-red);
+            text-transform: uppercase;
+            font-size: 3.5rem;
+            text-shadow: var(--text-glow-red);
+            margin-bottom: 20px;
+        }
+
+        .page-subtitle {
+            color: #ccc;
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .search-section {
+            padding: 40px 0;
+            background-color: var(--darker-bg);
+            border-bottom: 1px solid #333;
+        }
+
+        .search-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            background-color: #111;
+            border: 2px solid var(--neon-orange);
+            color: white;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            padding-left: 50px;
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 0 15px rgba(255, 102, 0, 0.5);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--neon-orange);
+            font-size: 1.2rem;
+        }
+
+        .products-section {
+            padding: 60px 0;
+        }
+
+        /* Unique Product Card Design */
+        .product-card {
+            background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
+            border: 1px solid #333;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: var(--transition);
+            margin-bottom: 30px;
+            height: 100%;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            clip-path: polygon(0 0, 100% 0, 100% 95%, 50% 100%, 0 95%);
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px) rotate(1deg);
+            border-color: var(--neon-red);
+            box-shadow: 0 15px 30px rgba(255, 8, 8, 0.3);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--neon-red);
+            color: black;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            z-index: 10;
+        }
+
+        .product-image-container {
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.1);
+        }
+
+        .product-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+            padding: 20px;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .product-card:hover .product-overlay {
+            opacity: 1;
+        }
+
+        .quick-view-btn {
+            background: var(--neon-orange);
+            color: black;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .quick-view-btn:hover {
+            background: var(--neon-red);
+            transform: scale(1.05);
+        }
+
+        .product-content {
+            padding: 20px;
+        }
+
+        .product-category {
+            color: var(--neon-orange);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .product-title {
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            color: white;
+            font-weight: 700;
+            min-height: 68px;
+        }
+
+        .product-description {
+            color: #aaa;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            min-height: 80px;
+        }
+
+        .quantity-selector {
+            margin-bottom: 15px;
+        }
+
+        .quantity-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--neon-orange);
+            font-weight: 600;
+        }
+
+        .quantity-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .quantity-option {
+            background: transparent;
+            border: 1px solid var(--neon-orange);
+            color: var(--neon-orange);
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .quantity-option:hover, .quantity-option.selected {
+            background: var(--neon-orange);
+            color: black;
+        }
+
+        .custom-quantity {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .custom-quantity input {
+            width: 80px;
+            padding: 8px;
+            background-color: #111;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        .product-price {
+            color: var(--neon-red);
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 8, 8, 0.3);
+        }
+
+        .product-rating {
+            color: #ffc107;
+            margin-bottom: 20px;
+        }
+
+        .btn-add-to-cart {
+            background: linear-gradient(90deg, #ff0808 0%, #ff6600 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: var(--transition);
+            width: 100%;
+            letter-spacing: 1px;
+            clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+        }
+
+        .btn-add-to-cart:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 8, 8, 0.4);
+        }
+
+        /* Cart Styles */
+        .cart-container {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .cart-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff0808 0%, #ff6600 100%);
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 8, 8, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--neon-orange);
+            color: black;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .cart-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(255, 8, 8, 0.8);
+        }
+
+        .cart-window {
+            position: absolute;
+            top: 70px;
+            right: 0;
+            width: 350px;
+            background-color: var(--darker-bg);
+            border: 2px solid var(--neon-red);
+            border-radius: 8px;
+            padding: 20px;
+            display: none;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+            clip-path: polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%);
+            z-index: 1001;
+        }
+
+        .cart-window.active {
+            display: block;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #333;
+        }
+
+        .cart-item-img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-right: 15px;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-title {
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            color: var(--neon-orange);
+            font-weight: bold;
+        }
+
+        .cart-item-quantity {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .remove-from-cart {
+            background: transparent;
+            border: none;
+            color: #aaa;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .remove-from-cart:hover {
+            color: var(--neon-red);
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 20px 0;
+            padding-top: 15px;
+            border-top: 2px solid var(--neon-red);
+        }
+
+        .checkout-btn {
+            background: linear-gradient(90deg, #ff0808 0%, #ff6600 100%);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: var(--transition);
+            width: 100%;
+            clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+        }
+
+        .checkout-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 8, 8, 0.4);
+        }
+
+        /* Checkout Modal */
+        .checkout-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 9998;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .checkout-modal-content {
+            background-color: var(--darker-bg);
+            max-width: 600px;
+            margin: 50px auto;
+            border: 2px solid var(--neon-red);
+            box-shadow: 0 0 30px rgba(255, 8, 8, 0.5);
+            position: relative;
+            clip-path: polygon(0 0, 95% 0, 100% 5%, 100% 95%, 95% 100%, 5% 100%, 0 95%, 0 5%);
+        }
+
+        .checkout-modal-header {
+            padding: 20px;
+            background: linear-gradient(90deg, #ff0808 0%, #ff6600 100%);
+            color: black;
+            text-transform: uppercase;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-checkout {
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-checkout:hover {
+            transform: rotate(90deg);
+        }
+
+        .checkout-modal-body {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--neon-orange);
+            font-weight: 600;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 12px;
+            background-color: #111;
+            border: 1px solid #333;
+            color: white;
+            font-size: 1rem;
+            transition: var(--transition);
+            border-radius: 4px;
+        }
+
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--neon-orange);
+            box-shadow: 0 0 10px rgba(255, 102, 0, 0.3);
+        }
+
+        .payment-options {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .payment-option {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .payment-option:hover, .payment-option.selected {
+            border-color: var(--neon-orange);
+            background: rgba(255, 102, 0, 0.1);
+        }
+
+        .payment-option i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--neon-orange);
+        }
+
+        .checkout-summary {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #333;
+            color: var(--neon-red);
+        }
+
+        .btn-pay-now {
+            background: linear-gradient(90deg, #ff0808 0%, #ff6600 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            font-size: 1.1rem;
+            clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+            margin-top: 20px;
+        }
+
+        .btn-pay-now:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 8, 8, 0.5);
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0% {
+                text-shadow: 0 0 10px var(--neon-red);
+            }
+            50% {
+                text-shadow: 0 0 20px var(--neon-red);
+            }
+            100% {
+                text-shadow: 0 0 10px var(--neon-red);
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .page-title {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-link {
+                width: 100%;
+                clip-path: none;
+                border-radius: 4px;
+                margin: 5px 0;
+            }
+            
+            .cart-window {
+                width: 300px;
+                right: -50px;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .payment-options {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .page-title {
+                font-size: 1.8rem;
+            }
+            
+            .page-subtitle {
+                font-size: 1rem;
+            }
+            
+            .cart-window {
+                width: 280px;
+                right: -70px;
+            }
+        }
+         /* Dropdown menu styling */
+        .navbar .dropdown-menu {
+            background-color: var(--darker-bg);
+            border: 1px solid var(--neon-red);
+        }
+
+        .navbar .dropdown-item {
+            color: white;
+            transition: var(--transition);
+        }
+
+        .navbar .dropdown-item:hover {
+            background-color: var(--neon-red);
+            color: black;
+        }
+
+        .navbar .nav-link.dropdown-toggle {
+            cursor: pointer;
+        }
+
+        /* Auth Button */
+.btn-auth {
+    position: relative;
+    display: inline-block;
+    padding: 12px 30px;
+    color: black !important;
+    text-transform: uppercase;
+    font-weight: 600;
+    background: var(--neon-red);
+    clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+    transition: var(--transition);
+    border: none;
+    box-shadow: 0 0 15px rgba(255, 8, 8, 0.5);
+    letter-spacing: 1px;
+    font-size: 1rem;
+    margin-left: 15px;
+}
+
+.btn-auth:hover {
+    background: var(--neon-orange);
+    color: black !important;
+    box-shadow: 0 0 25px var(--neon-orange);
+    transform: translateY(-2px);
+}
+
+/* User Icon */
+.user-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--neon-red);
+    color: black;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 15px;
+    position: relative;
+    transition: var(--transition);
+}
+
+.user-icon:hover {
+    background-color: var(--neon-orange);
+    transform: scale(1.1);
+}
+
+/* User Dropdown */
+.user-dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: 280px;
+    background-color: var(--darker-bg);
+    border: 2px solid var(--neon-red);
+    border-radius: 8px;
+    box-shadow: 0 5px 25px rgba(255, 8, 8, 0.4);
+    padding: 20px;
+    z-index: 1000;
+    display: none;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    clip-path: polygon(0 0, 100% 0, 100% 90%, 50% 100%, 0 90%);
+}
+
+.user-dropdown.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.user-info {
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 102, 0, 0.2);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid var(--neon-orange);
+    object-fit: cover;
+}
+
+.user-info-content h4 {
+    color: var(--neon-orange);
+    margin-bottom: 5px;
+    font-size: 1.1rem;
+    text-shadow: 0 0 8px rgba(255, 102, 0, 0.3);
+}
+
+.user-info-content p {
+    color: #aaa;
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.user-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.user-menu li {
+    margin-bottom: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.user-menu li::before {
+    content: '';
+    position: absolute;
+    left: -100%;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--neon-orange);
+    transition: all 0.3s ease;
+}
+
+.user-menu li:hover::before {
+    left: 0;
+}
+
+.user-menu a {
+    color: #ddd;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    padding: 8px 10px;
+    border-radius: 4px;
+    background: rgba(255, 8, 8, 0.05);
+}
+
+.user-menu a:hover {
+    color: white;
+    background: rgba(255, 8, 8, 0.15);
+    transform: translateX(5px);
+}
+
+.user-menu i {
+    width: 25px;
+    text-align: center;
+    margin-right: 10px;
+    color: var(--neon-orange);
+}
+
+.btn-logout {
+    background: linear-gradient(90deg, #ff0808 0%, #ff6600 100%);
+    color: black;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: var(--transition);
+    width: 100%;
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-logout:hover {
+    box-shadow: 0 0 15px rgba(255, 8, 8, 0.5);
+}
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="Faux Fire.png" alt="Faux Fire Logo">
+                FAUX FIRE
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                  <li class="nav-item">
+                        <a class="nav-link active" href="FF Gaming Final.html">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Game Zone
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="Games.html">Games</a></li>
+                            <li><a class="dropdown-item" href="Earn Page.html">Earn</a></li>
+
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Arena
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="Streams.html">Streams</a></li>
+                            <li><a class="dropdown-item" href="Tournaments.html">Tournament</a></li>
+
+                        </ul>
+                    </li>
+
+
+                    <!-- Add this to your navbar, after the existing navigation items -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Gaming Gear
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="pcgear.html">PC Gaming Gear</a></li>
+                            <li><a class="dropdown-item" href="Games Iteam.html">Games Iteam</a></li>
+                            <li><a class="dropdown-item " href="mobilegear.html">Mobile Gaming Gear</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Explore
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="News.html">News</a></li>
+                            <li><a class="dropdown-item" href="Comunity Page.html">Comunity</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+    <button class="btn-auth" id="authButton" onclick="openAuthModal()">SIGN IN</button>
+    <div class="user-icon" id="userIcon">
+        <i class="fas fa-user"></i>
+    </div>
+    <div class="user-dropdown" id="userDropdown">
+        <div class="user-info">
+            <img src="Anonymus avatar 3.png" class="user-avatar" alt="User Avatar">
+            <div class="user-info-content">
+                <h4 id="userName">Username</h4>
+                <p id="userEmail">user@example.com</p>
+            </div>
+        </div>
+        <ul class="user-menu">
+            <li><a href="Profile Page.html"><i class="fas fa-user-circle"></i> My Profile</a></li>
+            <li><a href="UGC.html"><i class="fas fa-gamepad"></i>UGC</a></li>
+            <li><a href="Wallet.html"><i class="fas fa-wallet"></i> My Wallet</a></li>
+        </ul>
+        <button class="btn-logout" onclick="logoutUser()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </div>
+</li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">Game Items Store</h1>
+            <p class="page-subtitle">Purchase in-game currencies, items, and cosmetics for your favorite games</p>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <section class="search-section">
+        <div class="container">
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search for game items...">
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products-section">
+        <div class="container">
+            <div class="row" id="productsContainer">
+                <!-- Product cards will be dynamically generated here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Container -->
+    <div class="cart-container">
+        <button class="cart-btn" id="cartButton">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count" id="cartCount">0</span>
+        </button>
+        <div class="cart-window" id="cartWindow">
+            <h4>Your Cart</h4>
+            <div id="cartItems">
+                <p class="text-center">Your cart is empty</p>
+            </div>
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cartTotal">$0.00</span>
+            </div>
+            <button class="checkout-btn" id="checkoutBtn">Checkout</button>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkoutModal" class="checkout-modal">
+        <div class="checkout-modal-content">
+            <div class="checkout-modal-header">
+                <h3>Complete Your Purchase</h3>
+                <span class="close-checkout" onclick="closeCheckoutModal()">&times;</span>
+            </div>
+            <div class="checkout-modal-body">
+                <form id="checkoutForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="fullName">Full Name</label>
+                                <input type="text" id="fullName" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="gameId">Game ID/Username</label>
+                                <input type="text" id="gameId" required placeholder="Your in-game ID">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="gameServer">Game Server (if applicable)</label>
+                        <input type="text" id="gameServer" placeholder="Server region or number">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Payment Method</label>
+                        <div class="payment-options">
+                            <div class="payment-option" onclick="selectPayment(this, 'credit-card')">
+                                <i class="fas fa-credit-card"></i>
+                                <div>Credit Card</div>
+                            </div>
+                            <div class="payment-option" onclick="selectPayment(this, 'paypal')">
+                                <i class="fab fa-paypal"></i>
+                                <div>PayPal</div>
+                            </div>
+                            <div class="payment-option" onclick="selectPayment(this, 'crypto')">
+                                <i class="fab fa-bitcoin"></i>
+                                <div>Crypto</div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="paymentMethod" required>
+                    </div>
+                    
+                    <div class="checkout-summary">
+                        <h5>Order Summary</h5>
+                        <div id="checkoutSummary">
+                            <!-- Order items will be inserted here -->
+                        </div>
+                        <div class="summary-total">
+                            <span>Total:</span>
+                            <span id="checkoutTotal">$0.00</span>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-pay-now">Pay Now</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Application state
+let currentUser = null;
+
+// Check if user is logged in from localStorage
+function checkLoggedInUser() {
+    const savedUser = localStorage.getItem('currentUser');
+    if (savedUser) {
+        currentUser = JSON.parse(savedUser);
+        updateUserUI();
+    }
+}
+
+// Initialize the application
+function init() {
+    checkLoggedInUser();
+    setupEventListeners();
+}
+
+// Setup event listeners
+function setupEventListeners() {
+    // User dropdown
+    const userIcon = document.getElementById('userIcon');
+    if (userIcon) {
+        userIcon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (currentUser) {
+                toggleUserDropdown();
+            } else {
+                openAuthModal();
+            }
+        });
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', () => {
+        const dropdown = document.getElementById('userDropdown');
+        if (dropdown) dropdown.classList.remove('show');
+    });
+}
+
+// Toggle user dropdown
+function toggleUserDropdown() {
+    const dropdown = document.getElementById('userDropdown');
+    if (dropdown) dropdown.classList.toggle('show');
+}
+
+// Update UI based on auth state
+function updateUserUI() {
+    const authBtn = document.getElementById('authButton');
+    const userIcon = document.getElementById('userIcon');
+    const userName = document.getElementById('userName');
+    const userEmail = document.getElementById('userEmail');
+
+    if (currentUser) {
+        // User is logged in
+        if (authBtn) authBtn.style.display = 'none';
+        if (userIcon) {
+            userIcon.style.display = 'flex';
+            // Update user info in dropdown
+            if (userName) userName.textContent = currentUser.displayName || currentUser.username || 'Player';
+            if (userEmail) userEmail.textContent = currentUser.email || '';
+        }
+    } else {
+        // User is logged out
+        if (authBtn) authBtn.style.display = 'inline-block';
+        if (userIcon) userIcon.style.display = 'none';
+        // Hide dropdown if visible
+        const dropdown = document.getElementById('userDropdown');
+        if (dropdown) dropdown.classList.remove('show');
+    }
+}
+
+// ========== AUTHENTICATION FUNCTIONS ==========
+function openAuthModal() {
+    // In a real implementation, this would show the auth modal
+    alert('Authentication modal would open here');
+}
+
+function logoutUser() {
+    currentUser = null;
+    localStorage.removeItem('currentUser');
+    updateUserUI();
+    showNotification('You have been logged out');
+}
+
+// Show notification
+function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.style.position = 'fixed';
+    notification.style.bottom = '20px';
+    notification.style.right = '20px';
+    notification.style.backgroundColor = 'var(--neon-orange)';
+    notification.style.color = 'black';
+    notification.style.padding = '10px 20px';
+    notification.style.borderRadius = '4px';
+    notification.style.zIndex = '1000';
+    notification.style.boxShadow = '0 3px 10px rgba(0, 0, 0, 0.2)';
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        notification.style.transition = 'opacity 0.5s';
+        setTimeout(() => notification.remove(), 500);
+    }, 3000);
+}
+
+// Initialize the application when DOM is loaded
+document.addEventListener('DOMContentLoaded', init);
+        const products = [
+            {
+                id: 1,
+                name: "PUBG Mobile UC",
+                category: "pubg",
+                basePrice: 0.99,
+                image: "https://images.unsplash.com/photo-1614294149710-32eec425a251?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                description: "Purchase UC for PUBG Mobile. Use to purchase crates, skins, and other in-game items.",
+                rating: 4.8,
+                featured: true,
+                quantityOptions: [60, 325, 660, 1800, 3850, 8100],
+                prices: [0.99, 4.99, 9.99, 24.99, 49.99, 99.99]
+            },
+            {
+                id: 2,
+                name: "Free Fire Diamonds",
+                category: "freefire",
+                basePrice: 0.99,
+                image: "https://images.unsplash.com/photo-1638434744316-9da6d7a8c833?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                description: "Purchase Diamonds for Garena Free Fire. Premium currency for exclusive items.",
+                rating: 4.7,
+                featured: true,
+                quantityOptions: [50, 110, 310, 520, 1060, 2180],
+                prices: [0.99, 1.99, 4.99, 7.99, 14.99, 29.99]
+            },
+            {
+                id: 3,
+                name: "Clash of Clans Gems",
+                category: "coc",
+                basePrice: 1.99,
+                image: "https://images.unsplash.com/photo-1619472357199-553c9275c8e8?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                description: "Purchase Gems for Clash of Clans. Speed up upgrades and training instantly.",
+                rating: 4.9,
+                featured: true,
+                quantityOptions: [80, 500, 1200, 2500, 6500, 14000],
+                prices: [0.99, 4.99, 9.99, 19.99, 49.99, 99.99]
+            },
+            {
+                id: 4,
+                name: "Call of Duty Points",
+                category: "cod",
+                basePrice: 0.99,
+                image: "https://images.unsplash.com/photo-1618338826355-c47c2f10c0bb?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                description: "Purchase CP for Call of Duty Mobile. Get battle passes and exclusive bundles.",
+                rating: 4.6,
+                featured: false,
+                quantityOptions: [80, 400, 1000, 2200, 6000, 11500],
+                prices: [0.99, 4.99, 9.99, 19.99, 49.99, 99.99]
+            },
+            {
+                id: 5,
+                name: "Fortnite V-Bucks",
+                category: "fortnite",
+                basePrice: 0.99,
+                image: "https://images.unsplash.com/photo-1560253023-3ec5d502959f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                description: "Purchase V-Bucks for Fortnite. Purchase skins, emotes, and battle passes.",
+                rating: 4.7,
+                featured: false,
+                quantityOptions: [1000, 2800, 5000, 13500],
+                prices: [7.99, 19.99, 31.99, 79.99]
+            },
+            {
+                id: 6,
+                name: "Valorant Points",
+                category: "valorant",
+                basePrice: 0.99,
+                image: "https://images.unsplash.com/photo-1593305841991-05c297ba4575?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                description: "Purchase VP for Valorant. Unlock weapon skins and agents.",
+                rating: 4.8,
+                featured: false,
+                quantityOptions: [475, 1000, 2050, 3650, 5350, 11000],
+                prices: [4.99, 9.99, 19.99, 34.99, 49.99, 99.99]
+            },
+            {
+                id: 7,
+                name: "Assassin's Creed Helix Credits",
+                category: "assassins",
+                basePrice: 0.99,
+                image: "https://images.unsplash.com/photo-1593305841991-05c297ba4575?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                description: "Purchase Helix Credits for Assassin's Creed games. Purchase gear packs and time savers.",
+                rating: 4.5,
+                featured: false,
+                quantityOptions: [500, 1500, 3500, 7500],
+                prices: [4.99, 12.99, 24.99, 49.99]
+            },
+            {
+                id: 8,
+                name: "Genshin Impact Crystals",
+                category: "genshin",
+                basePrice: 0.99,
+                image: "https://images.unsplash.com/photo-1638434744316-9da6d7a8c833?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                description: "Purchase Genesis Crystals for Genshin Impact. Exchange for Primogems and items.",
+                rating: 4.7,
+                featured: true,
+                quantityOptions: [60, 330, 1090, 2240, 3880, 8080],
+                prices: [0.99, 4.99, 14.99, 29.99, 49.99, 99.99]
+            }
+        ];
+
+        // Cart functionality
+        let cart = [];
+        const cartCount = document.getElementById('cartCount');
+        const cartItems = document.getElementById('cartItems');
+        const cartTotal = document.getElementById('cartTotal');
+        const cartWindow = document.getElementById('cartWindow');
+        const cartButton = document.getElementById('cartButton');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        const checkoutModal = document.getElementById('checkoutModal');
+        const checkoutSummary = document.getElementById('checkoutSummary');
+        const checkoutTotal = document.getElementById('checkoutTotal');
+        const checkoutForm = document.getElementById('checkoutForm');
+        const searchInput = document.getElementById('searchInput');
+
+        // Function to render products
+        function renderProducts(searchTerm = '') {
+            const container = document.getElementById('productsContainer');
+            container.innerHTML = '';
+            
+            const filteredProducts = products.filter(product => 
+                product.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                product.category.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            
+            filteredProducts.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'col-md-6 col-lg-4 col-xl-3 mb-4';
+                
+                // Generate quantity options HTML
+                let quantityOptionsHTML = '';
+                product.quantityOptions.forEach((qty, index) => {
+                    quantityOptionsHTML += `
+                        <div class="quantity-option" data-quantity="${qty}" data-price="${product.prices[index]}">
+                            ${qty}
+                        </div>
+                    `;
+                });
+                
+                productCard.innerHTML = `
+                    <div class="product-card">
+                        ${product.featured ? '<span class="product-badge">Featured</span>' : ''}
+                        <div class="product-image-container">
+                            <img src="${product.image}" alt="${product.name}" class="product-image">
+                            <div class="product-overlay">
+                                <button class="quick-view-btn">Quick View</button>
+                            </div>
+                        </div>
+                        <div class="product-content">
+                            <div class="product-category">${product.category.toUpperCase()}</div>
+                            <h3 class="product-title">${product.name}</h3>
+                            <p class="product-description">${product.description}</p>
+                            
+                            <div class="quantity-selector">
+                                <span class="quantity-label">Select Quantity:</span>
+                                <div class="quantity-options">
+                                    ${quantityOptionsHTML}
+                                </div>
+                                <div class="custom-quantity">
+                                    <input type="number" min="1" placeholder="Custom Qty" class="custom-quantity-input">
+                                    <button class="quantity-option">Apply</button>
+                                </div>
+                            </div>
+                            
+                            <div class="product-price">Price: <span class="selected-price">$${product.prices[0].toFixed(2)}</span></div>
+                            
+                            <div class="product-rating">
+                                ${generateStarRating(product.rating)}
+                            </div>
+                            
+                            <button class="btn-add-to-cart" data-product-id="${product.id}" data-base-price="${product.basePrice}">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(productCard);
+            });
+            
+            // Add event listeners to quantity options
+            document.querySelectorAll('.quantity-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove selected class from all options in this product card
+                    const parentCard = this.closest('.product-card');
+                    parentCard.querySelectorAll('.quantity-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                    
+                    // Update price display
+                    if (this.dataset.price) {
+                        const priceElement = parentCard.querySelector('.selected-price');
+                        priceElement.textContent = `$${parseFloat(this.dataset.price).toFixed(2)}`;
+                    }
+                });
+            });
+            
+            // Add event listeners to Add to Cart buttons
+            document.querySelectorAll('.btn-add-to-cart').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.dataset.productId);
+                    const product = products.find(p => p.id === productId);
+                    
+                    const parentCard = this.closest('.product-card');
+                    const selectedOption = parentCard.querySelector('.quantity-option.selected');
+                    
+                    if (!selectedOption) {
+                        alert('Please select a quantity first');
+                        return;
+                    }
+                    
+                    const quantity = parseInt(selectedOption.dataset.quantity);
+                    const price = parseFloat(selectedOption.dataset.price);
+                    
+                    addToCart(product, quantity, price);
+                });
+            });
+        }
+
+        // Generate star rating HTML
+        function generateStarRating(rating) {
+            let stars = '';
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 >= 0.5;
+            
+            for (let i = 0; i < fullStars; i++) {
+                stars += '<i class="fas fa-star"></i>';
+            }
+            
+            if (hasHalfStar) {
+                stars += '<i class="fas fa-star-half-alt"></i>';
+            }
+            
+            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+            for (let i = 0; i < emptyStars; i++) {
+                stars += '<i class="far fa-star"></i>';
+            }
+            
+            return stars;
+        }
+
+        // Add to cart function
+        function addToCart(product, quantity, price) {
+            // Check if product already exists in cart
+            const existingItemIndex = cart.findIndex(item => 
+                item.product.id === product.id && item.quantity === quantity
+            );
+            
+            if (existingItemIndex !== -1) {
+                // Update quantity if same product and quantity already in cart
+                cart[existingItemIndex].quantity += 1;
+            } else {
+                // Add new item to cart
+                cart.push({
+                    product: product,
+                    quantity: quantity,
+                    price: price,
+                    total: price
+                });
+            }
+            
+            updateCart();
+            showNotification(`${quantity} ${product.name} added to cart!`);
+        }
+
+        // Update cart display
+        function updateCart() {
+            // Update cart count
+            cartCount.textContent = cart.length;
+            
+            // Update cart items
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p class="text-center">Your cart is empty</p>';
+                cartTotal.textContent = '$0.00';
+                checkoutBtn.disabled = true;
+                return;
+            }
+            
+            checkoutBtn.disabled = false;
+            
+            let itemsHTML = '';
+            let total = 0;
+            
+            cart.forEach((item, index) => {
+                const itemTotal = item.price;
+                total += itemTotal;
+                
+                itemsHTML += `
+                    <div class="cart-item">
+                        <img src="${item.product.image}" alt="${item.product.name}" class="cart-item-img">
+                        <div class="cart-item-details">
+                            <h6 class="cart-item-title">${item.product.name}</h6>
+                            <div class="cart-item-price">$${item.price.toFixed(2)}</div>
+                            <div class="cart-item-quantity">Qty: ${item.quantity}</div>
+                        </div>
+                        <button class="remove-from-cart" data-index="${index}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+            });
+            
+            cartItems.innerHTML = itemsHTML;
+            cartTotal.textContent = `$${total.toFixed(2)}`;
+            
+            // Add event listeners to remove buttons
+            document.querySelectorAll('.remove-from-cart').forEach(button => {
+                button.addEventListener('click', function() {
+                    const index = parseInt(this.dataset.index);
+                    cart.splice(index, 1);
+                    updateCart();
+                });
+            });
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'position-fixed bottom-0 end-0 m-3 p-3 bg-success text-white rounded shadow';
+            notification.style.zIndex = '1050';
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Toggle cart window
+        cartButton.addEventListener('click', function() {
+            cartWindow.classList.toggle('active');
+        });
+
+        // Open checkout modal
+        checkoutBtn.addEventListener('click', function() {
+            if (cart.length === 0) return;
+            
+            let summaryHTML = '';
+            let total = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price;
+                total += itemTotal;
+                
+                summaryHTML += `
+                    <div class="summary-item">
+                        <span>${item.quantity} ${item.product.name}</span>
+                        <span>$${item.price.toFixed(2)}</span>
+                    </div>
+                `;
+            });
+            
+            checkoutSummary.innerHTML = summaryHTML;
+            checkoutTotal.textContent = `$${total.toFixed(2)}`;
+            
+            checkoutModal.style.display = 'block';
+        });
+
+        // Close checkout modal
+        function closeCheckoutModal() {
+            checkoutModal.style.display = 'none';
+        }
+
+        // Select payment method
+        function selectPayment(element, method) {
+            document.querySelectorAll('.payment-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            element.classList.add('selected');
+            document.getElementById('paymentMethod').value = method;
+        }
+
+        // Form submission
+        checkoutForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate payment method
+            const paymentMethod = document.getElementById('paymentMethod').value;
+            if (!paymentMethod) {
+                alert('Please select a payment method');
+                return;
+            }
+            
+            // In a real application, you would process the payment here
+            alert('Payment processed successfully! Your game items will be delivered shortly.');
+            
+            // Clear cart and close modal
+            cart = [];
+            updateCart();
+            closeCheckoutModal();
+            checkoutForm.reset();
+        });
+
+        // Search functionality
+        searchInput.addEventListener('input', function() {
+            renderProducts(this.value);
+        });
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            renderProducts();
+            updateCart();
+        });
+
+        // Close cart when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!cartButton.contains(event.target) && !cartWindow.contains(event.target)) {
+                cartWindow.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

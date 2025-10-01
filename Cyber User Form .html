@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Signup + Login in One Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script>
+    emailjs.init("yj30qDC4NQRUMHJIS");
+  </script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDM9zOfVMfqFFaODd7OZ-N2qC4ZuZhe10o",
+      authDomain: "fauxfireotp.firebaseapp.com",
+      projectId: "fauxfireotp",
+      storageBucket: "fauxfireotp.firebasestorage.app",
+      messagingSenderId: "254203897427",
+      appId: "1:254203897427:web:a786eb9cf8d7c3514208a6"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    window.db = db;
+  </script>
+  <style>
+    body {
+      background-color: #f2f2f2;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .form-box {
+      background: white;
+      max-width: 450px;
+      margin: 0 auto;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    #msg {
+      margin-top: 15px;
+      text-align: center;
+      font-weight: bold;
+    }
+    #otpSection, #loginForm {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-box">
+    <div id="signupForm">
+      <h2>Signup</h2>
+      <input type="text" id="name" placeholder="Full Name" required />
+      <input type="text" id="city" placeholder="City" required />
+      <input type="email" id="email" placeholder="Gmail" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <input type="password" id="confirm" placeholder="Confirm Password" required />
+      <button onclick="checkAndSendOTP()">Get OTP</button>
+    </div>
+
+    <div id="otpSection">
+      <h2>Verify OTP</h2>
+      <input type="text" id="otpInput" placeholder="Enter OTP" />
+      <button onclick="verifyOTP()">Verify OTP</button>
+    </div>
+
+    <div id="loginForm">
+      <h2>Login</h2>
+      <input type="email" id="loginEmail" placeholder="Gmail" required />
+      <input type="password" id="loginPassword" placeholder="Password" required />
+      <button onclick="loginUser()">Login</button>
+    </div>
+
+    <p id="msg"></p>
+  </div>
+
+  <script type="module">
+    import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+    function generateOTP() {
+      return Math.floor(100000 + Math.random() * 900000);
+    }
+
+    window.checkAndSendOTP = async function () {
+      const name = document.getElementById("name").value.trim();
+      const city = document.getElementById("city").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const confirm = document.getElementById("confirm").value;
+      const msg = document.getElementById("msg");
+
+      if (!email.includes("@gmail.com") || !name || !city || !password || !confirm) {
+        msg.innerText = "Please fill in all fields.";
+        return;
+      }
+      if (password !== confirm) {
+        msg.innerText = "Passwords do not match.";
+        return;
+      }
+
+      const userRef = doc(window.db, "verified_users", email);
+      const docSnap = await getDoc(userRef);
+      if (docSnap.exists()) {
+        msg.innerText = "This email is already verified.";
+        return;
+      }
+
+      const otp = generateOTP();
+      sessionStorage.setItem("otp", otp);
+      sessionStorage.setItem("name", name);
+      sessionStorage.setItem("city", city);
+      sessionStorage.setItem("email", email);
+      sessionStorage.setItem("password", password);
+
+      emailjs.send("service_wmv24tj", "template_p8zeqz6", {
+        to_email: email,
+        otp_code: otp
+      }).then(() => {
+        msg.innerText = "OTP sent to your Gmail.";
+        document.getElementById("signupForm").style.display = "none";
+        document.getElementById("otpSection").style.display = "block";
+      }).catch((err) => {
+        msg.innerText = "Failed to send OTP. Try again.";
+        console.error(err);
+      });
+    };
+
+    window.verifyOTP = async function () {
+      const entered = document.getElementById("otpInput").value.trim();
+      const actual = sessionStorage.getItem("otp");
+      const name = sessionStorage.getItem("name");
+      const city = sessionStorage.getItem("city");
+      const email = sessionStorage.getItem("email");
+      const password = sessionStorage.getItem("password");
+      const msg = document.getElementById("msg");
+
+      if (entered === actual) {
+        const userRef = doc(window.db, "verified_users", email);
+        await setDoc(userRef, {
+          name,
+          city,
+          email,
+          password,
+          verifiedAt: new Date().toISOString()
+        });
+        msg.innerText = "OTP Verified! Please login.";
+        document.getElementById("otpSection").style.display = "none";
+        document.getElementById("loginForm").style.display = "block";
+      } else {
+        msg.innerText = "Incorrect OTP.";
+      }
+    };
+
+    window.loginUser = async function () {
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value;
+      const msg = document.getElementById("msg");
+
+      const userRef = doc(window.db, "verified_users", email);
+      const userSnap = await getDoc(userRef);
+
+      if (userSnap.exists()) {
+        const data = userSnap.data();
+        if (data.password === password) {
+          msg.style.color = "green";
+          msg.innerText = "Thank you, login successful!";
+        } else {
+          msg.style.color = "red";
+          msg.innerText = "Incorrect password.";
+        }
+      } else {
+        msg.style.color = "red";
+        msg.innerText = "User not found. Please signup first.";
+      }
+    }
+  </script>
+</body>
+</html>

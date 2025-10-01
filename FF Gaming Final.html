@@ -1,0 +1,4195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Gaming Destination</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            AOS.init({
+  duration: 400,    // abhi 800 → slow lagta hai
+  easing: "ease-out",
+  once: true,
+  offset: 80
+});
+
+        });
+    </script>
+
+
+    <script>
+        // EmailJS init
+        emailjs.init("yj30qDC4NQRUMHJIS");
+    </script>
+    <script type="module">
+        // ✅ Firebase + Firestore imports
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+        // ✅ Admin list
+        const ADMIN_EMAILS = ["fauxfireofficial@gmail.com"];
+        window.ADMIN_EMAILS = ADMIN_EMAILS;
+
+        // ✅ Firebase init
+        const firebaseConfig = {
+            apiKey: "AIzaSyDM9zOfVMfqFFaODd7OZ-N2qC4ZuZhe10o",
+            authDomain: "fauxfireotp.firebaseapp.com",
+            databaseURL: "https://fauxfireotp-default-rtdb.firebaseio.com",
+            projectId: "fauxfireotp",
+            storageBucket: "fauxfireotp.firebasestorage.app",
+            messagingSenderId: "254203897427",
+            appId: "1:254203897427:web:a786eb9cf8d7c3514208a6"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // 👉 expose sab kuch window pe
+        window.db = db;
+        window.doc = doc;
+        window.getDoc = getDoc;
+        window.setDoc = setDoc;
+
+        // ✅ Admin nav render
+        function renderAdminNav() {
+            const nav = document.querySelector(".navbar-nav.ms-auto");
+            if (!nav) return;
+
+            const old = document.getElementById("adminNavItem");
+            if (old) old.remove();
+
+            const cu = JSON.parse(localStorage.getItem("currentUser") || "null");
+            if (cu && cu.role === "admin") {
+                const li = document.createElement("li");
+                li.id = "adminNavItem";
+                li.className = "nav-item";
+                const a = document.createElement("a");
+                a.href = "Admin.html";
+                a.textContent = "Admin";
+                a.className = "nav-link";
+                li.appendChild(a);
+                nav.appendChild(li);
+            }
+        }
+        window.renderAdminNav = renderAdminNav;
+        window.addEventListener("DOMContentLoaded", renderAdminNav);
+    </script>
+
+
+
+    <style>
+        :root {
+            --neon-red: #ff0808;
+            --neon-orange: #ff6600;
+            --dark-bg: #0d0d0d;
+            --darker-bg: #050505;
+            --text-glow-red: 0 0 10px var(--neon-red), 0 0 20px rgba(255, 42, 42, 0.5);
+            --text-glow-orange: 0 0 10px var(--neon-orange), 0 0 20px rgba(255, 102, 0, 0.5);
+            /* --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); */
+            :root {
+  --transition: all 0.25s ease-out;  /* fast & smooth */
+}
+
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: white;
+            font-family: 'Rajdhani', 'Arial', sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: var(--darker-bg) !important;
+            border-bottom: 1px solid var(--neon-red);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-size: 2rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--neon-red) !important;
+            text-shadow: var(--text-glow-red);
+            animation: pulse 2s infinite;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand img {
+            height: 50px;
+            margin-right: 10px;
+
+        }
+
+        /* Navigation Menu Items */
+        .nav-link {
+            position: relative;
+            display: inline-block;
+            padding: 12px 25px;
+            color: white !important;
+            text-transform: uppercase;
+            font-weight: 600;
+            background: #0d0d0d;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
+            transition: var(--transition);
+            border: 1px solid #ff080833;
+            /* box-shadow: 0 0 8px #ff080844; */
+            letter-spacing: 1px;
+            font-size: 1rem;
+            margin: 0 5px;
+        }
+
+        .nav-link:hover {
+            background: var(--neon-red);
+            color: black !important;
+            /* box-shadow: 0 0 20px var(--neon-orange); */
+            font-weight: bold;
+        }
+
+        .nav-link.active {
+            background: var(--neon-red);
+            color: black !important;
+            box-shadow: 0 0 20px var(--neon-red);
+        }
+
+        /* Auth Button */
+        .btn-auth {
+            position: relative;
+            display: inline-block;
+            padding: 12px 30px;
+            color: black !important;
+            text-transform: uppercase;
+            font-weight: 600;
+            background: var(--neon-red);
+            clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+            transition: var(--transition);
+            border: none;
+            box-shadow: 0 0 15px rgba(255, 8, 8, 0.5);
+            letter-spacing: 1px;
+            font-size: 1rem;
+            margin-left: 15px;
+        }
+
+        .btn-auth:hover {
+            background: var(--neon-orange);
+            color: black !important;
+            box-shadow: 0 0 25px var(--neon-orange);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section with Video Background */
+        .hero-section {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 2px solid var(--neon-red);
+        }
+
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            opacity: 1;
+        }
+
+        .hero-content {
+            text-align: center;
+            padding: 0 20px;
+            z-index: 1;
+            max-width: 800px;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: white;
+            text-shadow: 0 0 20px var(--neon-red);
+            margin-bottom: 20px;
+            animation: fadeInDown 1s;
+            opacity: 0.6;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            color: #ccc;
+            animation: fadeInUp 1s;
+            opacity: 0.6;
+        }
+
+
+        /* User Icon */
+        .user-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--neon-red);
+            color: black;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+            margin-left: 15px;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .user-icon:hover {
+            background-color: var(--neon-orange);
+            transform: scale(1.1);
+        }
+
+        /* User Dropdown */
+        .user-dropdown {
+            position: absolute;
+            top: calc(100% + 10px);
+            /* Added space below the user icon */
+            right: 0;
+            width: 280px;
+            /* Slightly wider */
+            background-color: var(--darker-bg);
+            border: 2px solid var(--neon-red);
+            border-radius: 8px;
+            box-shadow: 0 5px 25px rgba(255, 8, 8, 0.4);
+            padding: 20px;
+            z-index: 1000;
+            display: none;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 50% 100%, 0 90%);
+        }
+
+        .user-dropdown.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .user-info {
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 102, 0, 0.2);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid var(--neon-orange);
+            object-fit: cover;
+        }
+
+        .user-info-content h4 {
+            color: var(--neon-orange);
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+            text-shadow: 0 0 8px rgba(255, 102, 0, 0.3);
+        }
+
+        .user-info-content p {
+            color: #aaa;
+            font-size: 0.85rem;
+            margin: 0;
+        }
+
+        .user-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .user-menu li {
+            margin-bottom: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .user-menu li::before {
+            content: '';
+            position: absolute;
+            left: -100%;
+            bottom: 0;
+            width: 100%;
+            height: 1px;
+            background: var(--neon-orange);
+            transition: all 0.3s ease;
+        }
+
+        .user-menu li:hover::before {
+            left: 0;
+        }
+
+        .user-menu a {
+            color: #ddd;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 8px 10px;
+            border-radius: 4px;
+            background: rgba(255, 8, 8, 0.05);
+        }
+
+        .user-menu a:hover {
+            color: white;
+            background: rgba(255, 8, 8, 0.15);
+            transform: translateX(5px);
+        }
+
+        .user-menu i {
+            width: 25px;
+            text-align: center;
+            margin-right: 10px;
+            color: var(--neon-orange);
+        }
+
+        .btn-logout {
+            background: rgba(255, 8, 8, 0.2);
+            color: var(--neon-orange);
+            border: 1px solid var(--neon-red);
+            padding: 10px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-logout {
+            background-color: var(--neon-red);
+            color: black;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-logout:hover {
+            background: linear-gradient(90deg, #ff0808 0%, #ff6600 100%);
+            color: black;
+            box-shadow: 0 0 15px rgba(255, 8, 8, 0.5);
+        }
+
+
+        /* Auth Modal Styles */
+        .auth-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 9998;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .auth-modal-content {
+            background-color: var(--darker-bg);
+            max-width: 400px;
+            /* Reduced width */
+            margin: 50px auto;
+            border: 2px solid var(--neon-red);
+            box-shadow: 0 0 30px rgba(255, 8, 8, 0.5);
+            position: relative;
+            clip-path: polygon(0 0, 95% 0, 100% 5%, 100% 95%, 95% 100%, 5% 100%, 0 95%, 0 5%);
+        }
+
+        .auth-modal-header {
+            padding: 15px 20px;
+            background: linear-gradient(90deg, #ff0808 0%, #ff6600 100%);
+            color: black;
+            text-transform: uppercase;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .auth-modal-header h3 {
+            margin: 0;
+            font-size: 1.3rem;
+        }
+
+        .close-auth {
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close-auth:hover {
+            transform: rotate(90deg);
+        }
+
+        .auth-modal-body {
+            padding: 20px;
+        }
+
+        .auth-tabs {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .auth-tabs li {
+            padding: 8px 15px;
+            cursor: pointer;
+            color: #aaa;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .auth-tabs li.active {
+            color: var(--neon-red);
+        }
+
+        .auth-tabs li.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--neon-red);
+            box-shadow: var(--text-glow-red);
+        }
+
+        .auth-tab-content {
+            display: none;
+        }
+
+        .auth-tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px 12px;
+            background-color: #111;
+            border: 1px solid #333;
+            color: white;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--neon-orange);
+            box-shadow: 0 0 10px rgba(255, 102, 0, 0.3);
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 0.8rem;
+        }
+
+        .form-options a {
+            color: var(--neon-orange);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .form-options a:hover {
+            color: var(--neon-red);
+        }
+
+        .form-check {
+            margin-bottom: 15px;
+            font-size: 0.8rem;
+        }
+
+        .form-check label {
+            margin-left: 5px;
+        }
+
+        .form-check a {
+            color: var(--neon-orange);
+            text-decoration: none;
+        }
+
+        .btn-auth-submit {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(90deg, #ff0808 0%, #ff6600 100%);
+            color: white;
+            border: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+        }
+
+        .btn-auth-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 8, 8, 0.5);
+        }
+
+        .auth-divider {
+            position: relative;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .auth-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: #333;
+            z-index: 1;
+        }
+
+        .auth-divider span {
+            position: relative;
+            display: inline-block;
+            padding: 0 10px;
+            background-color: var(--darker-bg);
+            color: #777;
+            z-index: 2;
+            font-size: 0.8rem;
+        }
+
+        .social-auth {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .btn-social {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            position: relative;
+        }
+
+        .btn-social::after {
+            content: attr(title);
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #111;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .btn-social:hover::after {
+            opacity: 1;
+        }
+
+        .btn-social.google {
+            background-color: #4285F4;
+            color: white;
+        }
+
+        .btn-social.facebook {
+            background-color: #3b5998;
+            color: white;
+        }
+
+        .btn-social.discord {
+            background-color: #5865F2;
+            color: white;
+        }
+
+        .btn-social:hover {
+            transform: translateY(-3px) scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-explore {
+            color: rgb(255, 255, 255);
+            background: rgb(0, 0, 0);
+            padding: 15px 50px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: var(--transition);
+            box-shadow: var(--text-glow-orange);
+            white-space: nowrap;
+            clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+            border: 2px solid var(--neon-red);
+            animation: fadeIn 1.5s;
+        }
+
+        .btn-explore:hover {
+            background-color: var(--neon-red);
+            color: black;
+            font-weight: bold;
+            box-shadow: 0 0 15px var(--neon-orange);
+            transform: translateY(-3px);
+        }
+
+        /* Featured Games Carousel */
+        .featured-carousel {
+            padding: 50px 0;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-top: 2px solid var(--neon-orange);
+            border-bottom: 2px solid var(--neon-red);
+        }
+
+        /* Game Cards */
+        .game-card {
+            background-color: var(--darker-bg);
+            border: 1px solid #333;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: var(--transition);
+            margin-bottom: 30px;
+            /* box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); */
+            position: relative;
+            cursor: pointer;
+            height: 100%;
+        }
+
+        .game-card:hover {
+            transform: translateY(-15px);
+            /* box-shadow: 0 15px 30px rgba(255, 42, 42, 0.4); */
+            border: 1px solid var(--neon-red);
+        }
+
+        .game-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-bottom: 1px solid #333;
+            transition: var(--transition);
+        }
+
+        .game-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .game-card h3 {
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0;
+        }
+
+        .game-card .game-info {
+            padding: 0 15px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .game-price {
+            background-color: var(--neon-red);
+            color: black;
+            padding: 5px 15px;
+            font-weight: bold;
+            border-radius: 4px;
+            font-size: 1rem;
+            box-shadow: 0 0 6px rgba(255, 8, 8, 0.7);
+        }
+
+        .game-free {
+            background-color: var(--neon-orange);
+        }
+
+        .game-rating {
+            color: #ffc107;
+            font-size: 0.9rem;
+        }
+
+        .game-rating i {
+            margin-right: 3px;
+        }
+
+        /* Game Details Modal */
+        .game-details-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 9998;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .game-details-content {
+            background-color: var(--darker-bg);
+            max-width: 1000px;
+            margin: 50px auto;
+            border: 2px solid var(--neon-red);
+            box-shadow: 0 0 18px rgba(255, 8, 8, 0.5);
+            position: relative;
+            clip-path: polygon(0 0, 95% 0, 100% 5%, 100% 95%, 95% 100%, 5% 100%, 0 95%, 0 5%);
+        }
+
+        .game-details-header {
+            padding: 20px;
+            background: linear-gradient(90deg, #ff0808 0%, #ff6600 100%);
+            color: black;
+            text-transform: uppercase;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-details {
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-details:hover {
+            transform: rotate(90deg);
+        }
+
+        .game-details-body {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+
+        .game-details-left {
+            flex: 1;
+            min-width: 300px;
+            padding: 10px;
+        }
+
+        .game-details-right {
+            flex: 1;
+            min-width: 300px;
+            padding: 10px;
+        }
+
+        /* Screenshot Gallery */
+        .game-screenshots {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            overflow-x: auto;
+            padding-bottom: 15px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--neon-red) #333;
+        }
+
+        .game-screenshots::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .game-screenshots::-webkit-scrollbar-track {
+            background: #333;
+        }
+
+        .game-screenshots::-webkit-scrollbar-thumb {
+            background-color: var(--neon-red);
+            border-radius: 6px;
+        }
+
+        .screenshot-thumb {
+            width: 150px;
+            height: 100px;
+            object-fit: cover;
+            border: 1px solid #333;
+            cursor: pointer;
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+
+        .screenshot-thumb:hover {
+            transform: scale(1.05);
+            border-color: var(--neon-orange);
+        }
+
+        .screenshot-thumb.active {
+            border: 3px solid var(--neon-red);
+            box-shadow: 0 0 8px var(--neon-orange);
+        }
+
+        /* Game Info Items */
+        .game-info-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #333;
+        }
+
+        .game-info-item h4 {
+            color: var(--neon-orange);
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .game-info-item p {
+            color: #ccc;
+            margin: 0;
+        }
+
+        .game-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .game-tag {
+            background-color: rgba(255, 8, 8, 0.2);
+            color: #ff8a8a;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        /* Download Button */
+        .btn-download {
+            background: linear-gradient(90deg, #ff0808 0%, #ff6600 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 20px;
+            transition: var(--transition);
+            width: 100%;
+            clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+            font-size: 1.1rem;
+        }
+
+        .btn-download:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 3px 7px rgba(255, 8, 8, 0.5);
+        }
+
+        /* System Requirements */
+        .system-reqs {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .reqs-tabs {
+            display: flex;
+            border-bottom: 1px solid #333;
+            margin-bottom: 15px;
+        }
+
+        .reqs-tab {
+            padding: 8px 15px;
+            cursor: pointer;
+            color: #aaa;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .reqs-tab.active {
+            color: var(--neon-orange);
+        }
+
+        .reqs-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--neon-orange);
+        }
+
+        .reqs-content {
+            display: none;
+        }
+
+        .reqs-content.active {
+            display: block;
+        }
+
+        .reqs-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .reqs-list li {
+            margin-bottom: 8px;
+            display: flex;
+        }
+
+        .reqs-list strong {
+            color: var(--neon-orange);
+            min-width: 120px;
+            display: inline-block;
+        }
+
+        /* Section Titles */
+        .section-title {
+            color: var(--neon-red);
+            text-transform: uppercase;
+            font-size: 2.5rem;
+            margin: 60px 0 40px;
+            text-align: center;
+            text-shadow: var(--text-glow-red);
+            letter-spacing: 3px;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-red), var(--neon-orange));
+            margin: 15px auto 0;
+        }
+
+        .section-subtitle {
+            color: #aaa;
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            font-size: 1.1rem;
+        }
+
+        /* Stream Section */
+        .match-streams {
+            padding: 80px 0;
+            background-color: var(--dark-bg);
+            border-top: 2px solid var(--neon-red);
+            overflow: hidden;
+        }
+
+        /* Carousel Container */
+        .stream-carousel-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Carousel */
+        .stream-carousel {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            width: 100%;
+        }
+
+        /* Single Card */
+        .stream-card {
+            flex: 0 0 100%;
+            min-width: 100%;
+            height: 500px;
+            position: relative;
+            border: 1px solid #ff080833;
+            box-shadow: 0 0 6px #ff080844;
+            clip-path: polygon(0 0, 95% 0, 100% 10%, 100% 100%, 5% 100%, 0 90%);
+            overflow: hidden;
+            background-color: var(--darker-bg);
+        }
+
+        /* Background Image */
+        .stream-bg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Play Button */
+        .play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 3px solid var(--neon-red);
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--text-glow-red);
+            transition: var(--transition);
+        }
+
+        .play-btn:hover {
+            background-color: var(--neon-red);
+            color: black;
+            box-shadow: 0 0 15px var(--neon-orange);
+        }
+
+        /* Stream Info */
+        .stream-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            padding: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid var(--neon-red);
+            background-color: #000;
+            margin-right: 15px;
+        }
+
+        .streamer-name {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .stream-title {
+            color: #ccc;
+            margin-bottom: 5px;
+        }
+
+        .viewer-count {
+            color: var(--neon-orange);
+            font-size: 0.9rem;
+        }
+
+        .viewer-count i {
+            margin-right: 5px;
+        }
+
+        /* Arrow Buttons */
+        .slider-btn {
+            background: #111;
+            border: none;
+            color: var(--neon-red);
+            font-size: 2rem;
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 10;
+            margin: 0 15px;
+            border-radius: 50%;
+        }
+
+        .slider-btn:hover {
+            background: var(--neon-red);
+            color: black;
+            /* box-shadow: 0 0 15px var(--neon-orange); */
+        }
+
+        /* Video Modal */
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .video-modal.active {
+            display: flex;
+        }
+
+        .video-content {
+            width: 90%;
+            max-width: 800px;
+            aspect-ratio: 16 / 9;
+        }
+
+        .video-content iframe {
+            width: 100%;
+            height: 100%;
+            border: 5px solid var(--neon-red);
+            /* box-shadow: 0 0 8px var(--neon-orange); */
+            border-radius: 10px;
+        }
+
+        /* Carousel Wrapper */
+        .stream-carousel-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            width: 100%;
+        }
+
+        .stream-carousel-container {
+            width: 80%;
+            overflow: hidden;
+        }
+
+        /* Tournament Section */
+        .tournaments-section {
+            background-color: #0a0a0a;
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+            border-top: 2px solid var(--neon-red);
+            border-bottom: 2px solid var(--neon-orange);
+        }
+
+        .tournaments-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('ULTRA BG.webp') center/cover;
+            opacity: 0.05;
+            z-index: 0;
+        }
+
+        .tournament-card {
+           background: #0d0d0d;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: var(--transition);
+            position: relative;
+            z-index: 1;
+            margin-bottom: 30px;
+            /* box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); */
+            height: 100%;
+        }
+
+        .tournament-card:hover {
+            transform: translateY(-10px);
+            /* box-shadow: 0 6px 12px rgba(255, 8, 8, 0.3); */
+            border-color: var(--neon-red);
+        }
+
+        .tournament-header {
+            background: linear-gradient(90deg, #ff0808 0%, #ff6600 100%);
+            padding: 15px 20px;
+            color: white;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tournament-title {
+            font-size: 1.3rem;
+            margin: 0;
+        }
+
+        .tournament-prize {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .tournament-body {
+            padding: 20px;
+        }
+
+        .tournament-game {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .tournament-game img {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            margin-right: 15px;
+            border: 2px solid #333;
+        }
+
+        .tournament-game-info h4 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: white;
+        }
+
+        .tournament-game-info p {
+            margin: 5px 0 0;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .tournament-details {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #333;
+        }
+
+        .tournament-detail {
+            text-align: center;
+        }
+
+        .tournament-detail h5 {
+            color: var(--neon-orange);
+            margin: 0 0 5px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .tournament-detail p {
+            color: white;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .tournament-footer {
+            padding: 15px 20px;
+            background-color: #111;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tournament-registered {
+            color: #4CAF50;
+            font-weight: 600;
+        }
+
+        .btn-register {
+            background: linear-gradient(90deg, #ff0808 0%, #ff6600 100%);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            transition: var(--transition);
+        }
+
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 7px rgba(255, 8, 8, 0.4);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-header h2 {
+            color: var(--neon-red);
+            text-transform: uppercase;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            text-shadow: var(--text-glow-red);
+        }
+
+        .section-header p {
+            color: #aaa;
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+
+        .view-all {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .btn-view-all {
+            background: transparent;
+            color: var(--neon-orange);
+            border: 2px solid var(--neon-orange);
+            padding: 10px 30px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: var(--transition);
+        }
+
+        .btn-view-all:hover {
+            background: var(--neon-orange);
+            color: black;
+            box-shadow: 0 0 20px rgba(255, 102, 0, 0.5);
+        }
+
+        /* Hidden tournaments */
+        .hidden-tournament {
+            display: none;
+        }
+
+        /* News Section */
+        .news-section {
+            padding: 80px 0;
+            background-color: var(--darker-bg);
+            border-top: 2px solid var(--neon-orange);
+            border-bottom: 2px solid var(--neon-red);
+        }
+
+        .news-card {
+            background-color: var(--dark-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: var(--transition);
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            height: 100%;
+        }
+
+        .news-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(255, 8, 8, 0.3);
+        }
+
+        .news-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 2px solid var(--neon-red);
+        }
+
+        .news-content {
+            padding: 20px;
+        }
+
+        .news-date {
+            color: var(--neon-orange);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .news-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .news-excerpt {
+            color: #aaa;
+            margin-bottom: 15px;
+        }
+
+        .read-more {
+            color: var(--neon-red);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .read-more:hover {
+            color: var(--neon-orange);
+            text-shadow: var(--text-glow-orange);
+        }
+
+        /* Developers Section */
+        .developers-section {
+            padding: 80px 0;
+            background-color: var(--dark-bg);
+            border-top: 2px solid var(--neon-red);
+        }
+
+        .developer-card {
+            background-color: var(--darker-bg);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            transition: var(--transition);
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .developer-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(255, 8, 8, 0.3);
+            border: 1px solid var(--neon-red);
+        }
+
+        .developer-logo {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            border: 2px solid var(--neon-red);
+            padding: 10px;
+        }
+
+        .developer-name {
+            font-size: 1.3rem;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .developer-games {
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .btn-view-games {
+            background: transparent;
+            color: var(--neon-orange);
+            border: 1px solid var(--neon-orange);
+            padding: 5px 15px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .btn-view-games:hover {
+            background: var(--neon-orange);
+            color: black;
+        }
+
+        /* Footer Section */
+        .footer {
+            background-color: var(--darker-bg);
+            padding: 50px 0 20px;
+            border-top: 2px solid var(--neon-red);
+            position: relative;
+        }
+
+        .footer::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+           background: url('ULTRA BG.webp') center/cover;
+            opacity: 0.05;
+            z-index: 0;
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--neon-red);
+            text-shadow: var(--text-glow-red);
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .footer-links h4 {
+            color: var(--neon-orange);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+
+        .footer-links ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--neon-red);
+            text-shadow: var(--text-glow-red);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            color: white;
+            font-size: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .social-icons a:hover {
+            color: var(--neon-red);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #333;
+            padding-top: 20px;
+            margin-top: 30px;
+            text-align: center;
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        /* Chatbot */
+        .chatbot-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .chatbot-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff0808 0%, #ff6600 100%);
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 8, 8, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .chatbot-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(255, 8, 8, 0.8);
+        }
+
+        .chatbot-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 350px;
+            height: 450px;
+            background-color: var(--darker-bg);
+            border: 2px solid var(--neon-red);
+            border-radius: 10px;
+            overflow: hidden;
+            display: none;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+            clip-path: polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%);
+        }
+
+        .chatbot-window.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chatbot-header {
+            background: linear-gradient(90deg, #ff0808 0%, #ff6600 100%);
+            padding: 15px;
+            color: black;
+            font-weight: bold;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbot-close {
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            margin-bottom: 0;
+            padding: 10px 15px;
+            border-radius: 8px;
+            max-width: 80%;
+            font-size: 0.9rem;
+            line-height: 1.4;
+           
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeInUp 0.4s forwards;
+
+        }
+
+        .bot-message {
+            background-color: rgba(255, 8, 8, 0.2);
+            border: 1px solid rgba(255, 8, 8, 0.5);
+            align-self: flex-start;
+        }
+
+        .user-message {
+            background-color: rgba(255, 102, 0, 0.2);
+            border: 1px solid rgba(255, 102, 0, 0.5);
+            align-self: flex-end;
+            margin-left: auto;
+        }
+
+        .chatbot-input {
+            display: flex;
+            padding: 10px;
+            background-color: #111;
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: 10px;
+            background-color: #222;
+            border: 1px solid #333;
+            color: white;
+            outline: none;
+        }
+
+        .chatbot-input button {
+            background-color: var(--neon-red);
+            color: black;
+            border: none;
+            padding: 0 15px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: var(--transition);
+        }
+
+        .chatbot-input button:hover {
+            background-color: var(--neon-orange);
+        }
+
+        /* Screenshot Viewer Modal */
+        .screenshot-viewer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .screenshot-viewer.active {
+            display: flex;
+        }
+
+        .viewer-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+        }
+
+        .viewer-image {
+            max-width: 100%;
+            max-height: 80vh;
+            border: 5px solid var(--neon-red);
+            box-shadow: 0 0 30px var(--neon-orange);
+        }
+
+        .viewer-nav {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+            padding: 0 20px;
+        }
+
+        .viewer-btn {
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: 2px solid var(--neon-red);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1.5rem;
+        }
+
+        .viewer-btn:hover {
+            background-color: var(--neon-red);
+            color: black;
+        }
+
+        .viewer-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: 2px solid var(--neon-red);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1.2rem;
+        }
+
+        .viewer-close:hover {
+            background-color: var(--neon-red);
+            color: black;
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0% {
+                text-shadow: 0 0 10px var(--neon-red);
+            }
+
+            50% {
+                text-shadow: 0 0 20px var(--neon-red);
+            }
+
+            100% {
+                text-shadow: 0 0 10px var(--neon-red);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--neon-red);
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1200px) {
+            .navbar-nav {
+                gap: 5px;
+            }
+
+            .nav-link {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+
+            .btn-auth {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .stream-card {
+                height: 400px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar-nav {
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 15px;
+                align-items: flex-start;
+            }
+
+            .nav-link {
+                width: 100%;
+                clip-path: none;
+                border-radius: 4px;
+            }
+
+            .btn-auth {
+                margin-left: 0;
+                margin-top: 10px;
+                width: 100%;
+                clip-path: none;
+                border-radius: 4px;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .game-details-body {
+                flex-direction: column;
+            }
+
+            .stream-carousel-container {
+                width: 100%;
+            }
+
+            .slider-btn {
+                display: none;
+            }
+
+            .chatbot-window {
+                width: 300px;
+                height: 400px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .btn-explore {
+                padding: 12px 30px;
+                font-size: 1.1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .game-screenshots {
+                gap: 5px;
+            }
+
+            .screenshot-thumb {
+                width: 120px;
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 768px) {
+    .game-details-content {
+        width: 92%;              
+        max-height: 78vh;        
+        margin: 20px auto;
+        border-radius: 12px;
+        overflow-y: auto;
+    }
+
+    .game-details-body {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;               
+    }
+
+    .game-details-left img {
+        width: 100% !important;
+        max-height: 350px !important; /* force override inline */
+        height: auto !important;
+        object-fit: cover;
+    }
+
+
+
+    .game-info-item h4 {
+        font-size: 1.1rem;
+        margin-bottom: 6px;
+    }
+
+    .game-info-item p {
+        font-size: 0.95rem;
+        line-height: 1.4;
+    }
+
+    .game-price {
+        font-size: 1.1rem;
+        padding: 8px 14px;
+        margin: 10px 0;
+        display: inline-block;
+    }
+
+    .btn-download,
+    .btn-add-cart {
+        padding: 12px;
+        font-size: 1rem;
+        width: 100%;
+        margin-top: 12px;
+        border-radius: 8px;
+    }
+
+    .system-reqs {
+        font-size: 0.95rem;
+        padding: 14px;
+        border-radius: 8px;
+        margin-top: 14px;
+    }
+
+    .reqs-list li {
+        font-size: 0.9rem;
+        margin-bottom: 6px;
+    }
+}
+
+
+        /* Top Games Section */
+        .section-title {
+            color: var(--neon-red);
+            text-transform: uppercase;
+            font-size: 2.5rem;
+            margin: 60px 0 40px;
+            text-align: center;
+            text-shadow: var(--text-glow-red);
+            letter-spacing: 3px;
+        }
+
+        .game-card {
+            background-color: var(--darker-bg);
+            border: 1px solid #333;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.4s;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            clip-path: polygon(0 0, 90% 0, 100% 10%, 100% 100%, 0 100%);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .game-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    border: 1px solid var(--neon-red);
+}
+
+
+        .game-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-bottom: 1px solid #333;
+        }
+
+        .game-card h3 {
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0;
+        }
+
+        .game-price {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--neon-red);
+            color: black;
+            padding: 5px 10px;
+            font-weight: bold;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            box-shadow: 0 0 10px rgba(255, 8, 8, 0.7);
+        }
+
+        .game-free {
+            background-color: var(--neon-orange);
+        }
+
+        /* Chatbot Typing Indicator */
+        .typing-indicator {
+            display: flex;
+            padding: 10px;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            margin: 0 2px;
+            background-color: var(--neon-orange);
+            border-radius: 50%;
+            display: inline-block;
+            animation: typing 1s infinite ease-in-out;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* Chatbot Buttons */
+        .chatbot-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+        }
+
+        .chatbot-button {
+            background-color: rgba(255, 102, 0, 0.1);
+            border: 1px solid var(--neon-orange);
+            color: var(--neon-orange);
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+
+        .chatbot-button:hover {
+            background-color: var(--neon-orange);
+            color: black;
+        }
+
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #aaa;
+        }
+
+        .toggle-password:hover {
+            color: var(--neon-orange);
+        }
+
+        /* Dropdown menu styling */
+        .navbar .dropdown-menu {
+            background-color: var(--darker-bg);
+            border: 1px solid var(--neon-red);
+        }
+
+        .navbar .dropdown-item {
+            color: white;
+            transition: var(--transition);
+        }
+
+        .navbar .dropdown-item:hover {
+            background-color: var(--neon-red);
+            color: black;
+        }
+
+        .navbar .nav-link.dropdown-toggle {
+            cursor: pointer;
+        }
+
+        /* Cookie Banner */
+        .cookie-banner {
+            position: fixed;
+            bottom: -200px;
+            left: 0;
+            width: 100%;
+            background: rgba(13, 13, 13, 0.95);
+            border-top: 2px solid var(--neon-red);
+            color: #fff;
+            padding: 15px;
+            z-index: 99999;
+            transition: all 0.5s ease;
+            box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.6);
+        }
+
+        .cookie-banner.show {
+            bottom: 0;
+        }
+
+        .cookie-content {
+            max-width: 1000px;
+            margin: auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .cookie-content p {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        .cookie-content a {
+            color: var(--neon-orange);
+            text-decoration: underline;
+        }
+
+        /* Buttons */
+        .cookie-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-neon {
+            background: linear-gradient(90deg, var(--neon-red), var(--neon-orange));
+            border: none;
+            color: #000;
+            font-weight: 700;
+            padding: 8px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-neon:hover {
+            filter: brightness(1.1);
+            box-shadow: 0 0 15px rgba(255, 102, 0, 0.6);
+        }
+
+        .btn-decline {
+            background: transparent;
+            border: 1px solid var(--neon-red);
+            color: #fff;
+            font-weight: 600;
+            padding: 8px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-decline:hover {
+            background: rgba(255, 8, 8, 0.2);
+        }
+
+        * {
+  box-shadow: none !important;
+}
+
+* {
+  text-shadow: none !important;
+}
+
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="Faux Fire.png" alt="Faux Fire Logo">
+                FAUX FIRE
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Game Zone
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="Games.html">Games</a></li>
+                            <li><a class="dropdown-item" href="Earn Page.html">Earn</a></li>
+
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Arena
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="Streams.html">Streams</a></li>
+                            <li><a class="dropdown-item" href="Tournaments.html">Tournament</a></li>
+
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Gaming Gear
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="pcgear.html">PC Gaming Gear</a></li>
+                            <li><a class="dropdown-item" href="Games Iteam.html">Games Iteam</a></li>
+                            <li><a class="dropdown-item" href="mobilegear.html">Mobile Gaming Gear</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Explore
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="News.html">News</a></li>
+                            <li><a class="dropdown-item" href="Comunity Page.html">Comunity</a></li>
+
+                        </ul>
+                    </li>
+
+                    <li class="nav-item">
+                        <button class="btn-auth" id="authButton" onclick="openAuthModal()">SIGN IN</button>
+                        <div class="user-icon" id="userIcon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="user-dropdown" id="userDropdown">
+                            <div class="user-info">
+                                <img src="Anonymus avatar 3.png" class="user-avatar" id="dropdownAvatar" loading="lazy">
+                                <div class="user-info-content">
+                                    <h4 id="userName">Username</h4>
+                                    <p id="userEmail">user@example.com</p>
+                                </div>
+                            </div>
+                            <ul class="user-menu">
+                                <li><a href="Profile Page.html"><i class="fas fa-user-circle"></i> My Profile</a></li>
+                                <li><a href="UGC.html"><i class="fas fa-gamepad"></i> UGC</a></li>
+                                <li><a href="Wallet.html"><i class="fas fa-wallet"></i> My Wallet</a></li>
+                            </ul>
+                            <button class="btn-logout" onclick="logoutUser()">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- User Auth Modal -->
+    <div id="authModal" class="auth-modal">
+        <div class="auth-modal-content">
+            <div class="auth-modal-header">
+                <h3>Join the Gaming Community</h3>
+                <span class="close-auth" onclick="closeAuthModal()">&times;</span>
+            </div>
+            <div class="auth-modal-body">
+                <!-- Signup Form -->
+                <ul class="auth-tabs">
+                    <li class="active" data-tab="signupForm">Sign Up</li>
+                    <li data-tab="loginForm">Login</li>
+                </ul>
+                <div id="signupForm" class="auth-tab-content active">
+
+                    <form id="signupFormFields">
+                        <div class="form-group">
+                            <input type="text" id="name" placeholder="Full Name" required />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="city" placeholder="City" required />
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="signupEmail" placeholder="Gmail" required />
+                        </div>
+                        <div class="form-group position-relative">
+                            <input type="password" id="password" placeholder="Password" required />
+                            <i class="fa-solid fa-eye toggle-password" onclick="togglePassword('password', this)"></i>
+                        </div>
+
+                        <div class="form-group position-relative">
+                            <input type="password" id="confirm" placeholder="Confirm Password" required />
+                            <i class="fa-solid fa-eye toggle-password" onclick="togglePassword('confirm', this)"></i>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="terms" required>
+                            <label for="terms">I agree to the <a href="#">Terms</a></label>
+                        </div>
+                        <button type="button" class="btn-auth-submit" onclick="checkAndSendOTP()">Get OTP</button>
+                    </form>
+                </div>
+
+                <!-- OTP Verification Section -->
+                <div id="otpSection" class="auth-tab-content">
+                    <h4>Verify OTP</h4>
+                    <div class="form-group">
+                        <input type="text" id="otpInput" placeholder="Enter OTP" />
+                    </div>
+                    <button type="button" class="btn-auth-submit" onclick="verifyOTP()">Verify OTP</button>
+                </div>
+
+                <!-- Login Form -->
+                <div id="loginForm" class="auth-tab-content">
+                    <form id="loginFormFields">
+                        <div class="form-group">
+                            <input type="email" id="loginEmail" placeholder="Gmail" required />
+                        </div>
+
+                        <div class="form-group position-relative">
+                            <input type="password" id="loginPassword" placeholder="Password" required />
+                            <i class="fa-solid fa-eye toggle-password"
+                                onclick="togglePassword('loginPassword', this)"></i>
+                        </div>
+                        <div class="form-options">
+                            <label>
+                                <input type="checkbox"> Remember me
+                            </label>
+                            <a href="#">Forgot password?</a>
+                        </div>
+                        <button type="button" class="btn-auth-submit" onclick="loginUser()">SIGN IN</button>
+                    </form>
+                    <div class="auth-divider">
+                        <span>OR</span>
+                    </div>
+                    <div class="social-auth">
+                        <button class="btn-social google" title="Continue with Google">
+                            <i class="fab fa-google"></i>
+                        </button>
+                        <button class="btn-social facebook" title="Continue with Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </button>
+                        <button class="btn-social discord" title="Continue with Discord">
+                            <i class="fab fa-discord"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <p id="authMsg" style="color: var(--neon-orange); text-align: center; margin-top: 15px;"></p>
+            </div>
+        </div>
+    </div>
+    <!-- Hero Section with Video Background -->
+    <section class="hero-section">
+        <video autoplay muted loop playsinline preload="metadata" class="hero-video" poster="bg-poster.jpg">
+            <source src="bg video.webm" type="video/webm">
+            Your browser does not support the video tag.
+        </video>
+
+        <div class="hero-content">
+            <h1 class="hero-title">THE ULTIMATE GAMING EXPERIENCE</h1>
+            <p class="hero-subtitle">Join millions of players worldwide in the most exciting games and tournaments</p>
+            <button class="btn-explore"
+                onclick="document.querySelector('#featuredCarousel').scrollIntoView({behavior:'smooth'})">
+                EXPLORE NOW
+            </button>
+        </div>
+    </section>
+
+    <!-- Featured Games Carousel -->
+    <section class="featured-carousel">
+        <div class="container">
+            <h2 class="section-title">Featured Games</h2>
+            <p class="section-subtitle">Check out our handpicked selection of the hottest games right now</p>
+
+            <div id="featuredCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="game-card" data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="100"
+                                    data-aos-easing="ease-in-out"
+                                    onclick="openGameDetails('Grand Theft Auto VI', 'gta6.jpg', '$59.99', 'Action, Adventure, Open World', 'Rockstar Games', '2023', 'Experience the biggest, most immersive evolution of the Grand Theft Auto series to date. Explore a massive open world with unprecedented detail and freedom.')">
+                                    <img src="Gta 6.png" alt="Grand Theft Auto VI" loading="lazy">
+                                    <h3>Grand Theft Auto VI</h3>
+                                    <div class="game-info">
+                                        <div class="game-price">$59.99</div>
+                                        <div class="game-rating">
+                                            <i class="fas fa-star"></i> 4.9
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="game-card" data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="200"
+                                    data-aos-easing="ease-in-out"
+                                    onclick="openGameDetails('Assassin\'s Creed Valhalla', 'ac-valhalla.jpg', '$49.99', 'Action, RPG, Open World', 'Ubisoft', '2020', 'Become Eivor, a Viking raider raised to be a fearless warrior, and lead your clan from the harsh shores of Norway to a new home amid the lush farmlands of ninth-century England.')">
+                                    <img src="ASC3.jpeg" alt="Assassin's Creed Valhalla" loading="lazy">
+                                    <h3>Assassin's Creed Valhalla</h3>
+                                    <div class="game-info">
+                                        <div class="game-price">$49.99</div>
+                                        <div class="game-rating">
+                                            <i class="fas fa-star"></i> 4.7
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="game-card" data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="300"
+                                    data-aos-easing="ease-in-out"
+                                    onclick="openGameDetails('Call of Duty: Warzone', 'warzone.jpg', 'FREE', 'FPS, Battle Royale', 'Activision', '2020', 'Experience classic Call of Duty combat in a massive battle royale experience. Free to play with optional purchases.')">
+                                    <img src="cod1.jpeg" alt="Call of Duty: Warzone" loading="lazy">
+                                    <h3>Call of Duty: Warzone</h3>
+                                    <div class="game-info">
+                                        <div class="game-price game-free">FREE</div>
+                                        <div class="game-rating">
+                                            <i class="fas fa-star"></i> 4.5
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="game-card" data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="400"
+                                    data-aos-easing="ease-in-out"
+                                    onclick="openGameDetails('Need For Speed Unbound', 'nfs-unbound.jpg', '$39.99', 'Racing, Open World', 'Electronic Arts', '2022', 'Outrun the cops, outsmart rivals, and outdrive your friends in the most thrilling street racing experience yet.')">
+                                    <img src="NFS1.jpeg" alt="Need For Speed Unbound" loading="lazy">
+                                    <h3>Need For Speed Unbound</h3>
+                                    <div class="game-info">
+                                        <div class="game-price">$39.99</div>
+                                        <div class="game-rating">
+                                            <i class="fas fa-star"></i> 4.3
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="game-card" data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="500"
+                                    data-aos-easing="ease-in-out"
+                                    onclick="openGameDetails('Elden Ring', 'elden-ring.jpg', '$59.99', 'Action, RPG', 'FromSoftware', '2022', 'Rise, Tarnished, and be guided by grace to brandish the power of the Elden Ring and become an Elden Lord in the Lands Between.')">
+                                    <img src="ER1.jpeg" alt="Elden Ring" loading="lazy">
+                                    <h3>Elden Ring</h3>
+                                    <div class="game-info">
+                                        <div class="game-price">$59.99</div>
+                                        <div class="game-rating">
+                                            <i class="fas fa-star"></i> 4.9
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="game-card" data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="600"
+                                    data-aos-easing="ease-in-out"
+                                    onclick="openGameDetails('God of War: Ragnar�k', 'gow-ragnarok.jpg', '$69.99', 'Action, Adventure', 'Santa Monica Studio', '2022', 'Join Kratos and Atreus on a mythic journey for answers before Ragnar�k arrives.')">
+                                    <img src="GOD1.jpeg" alt="God of War: Ragnar�k" loading="lazy">
+                                    <h3>God of War: Ragnar�k</h3>
+                                    <div class="game-info">
+                                        <div class="game-price">$69.99</div>
+                                        <div class="game-rating">
+                                            <i class="fas fa-star"></i> 5.0
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="game-card" data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="700"
+                                    data-aos-easing="ease-in-out"
+                                    onclick="openGameDetails('Cyberpunk 2077', 'cyberpunk.jpg', '$49.99', 'RPG, Open World', 'CD Projekt Red', '2020', 'Become a cyberpunk, an urban mercenary equipped with cybernetic enhancements, and build your legend on the streets of Night City.')">
+                                    <img src="CYBER1.jpeg" alt="Cyberpunk 2077" loading="lazy">
+                                    <h3>Cyberpunk 2077</h3>
+                                    <div class="game-info">
+                                        <div class="game-price">$49.99</div>
+                                        <div class="game-rating">
+                                            <i class="fas fa-star"></i> 4.6
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="game-card" data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="800"
+                                    data-aos-easing="ease-in-out"
+                                    onclick="openGameDetails('The Witcher 3: Wild Hunt', 'witcher3.jpg', '$29.99', 'RPG, Open World', 'CD Projekt Red', '2015', 'As war rages on throughout the Northern Realms, take on the most important contract of your life - tracking down the Child of Prophecy, a living weapon that can alter the shape of the world.')">
+                                    <img src="WITCH1.jpeg" alt="The Witcher 3: Wild Hunt"loading="lazy">
+                                    <h3>The Witcher 3: Wild Hunt</h3>
+                                    <div class="game-info">
+                                        <div class="game-price">$29.99</div>
+                                        <div class="game-rating">
+                                            <i class="fas fa-star"></i> 5.0
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#featuredCarousel"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#featuredCarousel"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Game Details Modal -->
+    <div id="gameDetailsModal" class="game-details-modal">
+        <div class="game-details-content">
+            <div class="game-details-header">
+                <h3 id="detailGameTitle">Game Title</h3>
+                <span class="close-details" onclick="closeGameDetails()">&times;</span>
+            </div>
+            <div class="game-details-body">
+                <div class="game-details-left">
+                    <!-- <img id="detailGameImage" src="Joystick.png" alt="Game"
+                        style="width:100%; max-height:300px; object-fit:cover;" loading="lazy"> -->
+                    <div class="game-screenshots">
+                        <img src="download.jpeg" alt="Screenshot 1" class="screenshot-thumb active"
+                            onclick="viewScreenshot(this, 'download.jpeg')" loading="lazy">
+                        <img src="Gta6 ss.jpg" alt="Screenshot 2" class="screenshot-thumb"
+                            onclick="viewScreenshot(this, 'Gta6 ss.jpg')" loading="lazy">
+                        <img src="Gta6 ss 2.jpg" alt="Screenshot 3" class="screenshot-thumb"
+                            onclick="viewScreenshot(this, 'Gta6 ss 2.jpg')" loading="lazy">
+                        <img src="GOW2.jpeg" alt="Screenshot 4" class="screenshot-thumb"
+                            onclick="viewScreenshot(this, 'GOW2.jpeg')" loading="lazy">
+                    </div>
+                    <div class="system-reqs">
+                        <div class="reqs-tabs">
+                            <div class="reqs-tab active" onclick="changeReqsTab('minimum')">Minimum</div>
+                            <div class="reqs-tab" onclick="changeReqsTab('recommended')">Recommended</div>
+                        </div>
+                        <div class="reqs-content active" id="minimum-reqs">
+                            <ul class="reqs-list">
+                                <li><strong>OS:</strong> Windows 10 64-bit</li>
+                                <li><strong>Processor:</strong> Intel Core i5-2500K / AMD FX-6300</li>
+                                <li><strong>Memory:</strong> 8 GB RAM</li>
+                                <li><strong>Graphics:</strong> NVIDIA GeForce GTX 770 / AMD Radeon R9 280</li>
+                                <li><strong>Storage:</strong> 70 GB available space</li>
+                            </ul>
+                        </div>
+                        <div class="reqs-content" id="recommended-reqs">
+                            <ul class="reqs-list">
+                                <li><strong>OS:</strong> Windows 10 64-bit</li>
+                                <li><strong>Processor:</strong> Intel Core i7-4770K / AMD Ryzen 5 1500X</li>
+                                <li><strong>Memory:</strong> 16 GB RAM</li>
+                                <li><strong>Graphics:</strong> NVIDIA GeForce GTX 1060 / AMD Radeon RX 580</li>
+                                <li><strong>Storage:</strong> 70 GB available space</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="game-details-right">
+                    <div class="game-info-item">
+                        <h4>Price</h4>
+                        <p id="detailGamePrice">$0.00</p>
+                    </div>
+                    <div class="game-info-item">
+                        <h4>Genre</h4>
+                        <p id="detailGameGenre">Action, Adventure</p>
+                        <div class="game-tags">
+                            <span class="game-tag">Open World</span>
+                            <span class="game-tag">Single Player</span>
+                            <span class="game-tag">Multiplayer</span>
+                        </div>
+                    </div>
+                    <div class="game-info-item">
+                        <h4>Developer</h4>
+                        <p id="detailGameDeveloper">Developer Name</p>
+                    </div>
+                    <div class="game-info-item">
+                        <h4>Release Date</h4>
+                        <p id="detailGameYear">2023</p>
+                    </div>
+                    <div class="game-info-item">
+                        <h4>Rating</h4>
+                        <p>
+                            <i class="fas fa-star" style="color: #ffc107;"></i>
+                            <i class="fas fa-star" style="color: #ffc107;"></i>
+                            <i class="fas fa-star" style="color: #ffc107;"></i>
+                            <i class="fas fa-star" style="color: #ffc107;"></i>
+                            <i class="fas fa-star-half-alt" style="color: #ffc107;"></i>
+                            <span style="margin-left: 5px;">4.7/5 (12,345 reviews)</span>
+                        </p>
+                    </div>
+                    <div class="game-info-item">
+                        <h4>Description</h4>
+                        <p id="detailGameDesc">Game description goes here...</p>
+                    </div>
+                    <button class="btn-download" onclick="addToCart()">
+                        <i class="fas fa-shopping-cart"></i> ADD TO CART
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screenshot Viewer Modal -->
+    <div class="screenshot-viewer" id="screenshotViewer">
+        <div class="viewer-content">
+            <img src="" class="viewer-image" id="viewerImage" loading="lazy">
+            <div class="viewer-nav">
+                <button class="viewer-btn" onclick="prevScreenshot()">&#10094;</button>
+                <button class="viewer-btn" onclick="nextScreenshot()">&#10095;</button>
+            </div>
+            <button class="viewer-close" onclick="closeScreenshotViewer()">&times;</button>
+        </div>
+    </div>
+
+    <!-- Match Streams Section -->
+    <section class="match-streams">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up" data-aos-duration="600">Live Streams</h2>
+            <p class="section-subtitle" data-aos="fade-up" data-aos-duration="600" data-aos-delay="100">
+                Watch your favorite streamers play the hottest games</p>
+            <div class="stream-carousel-wrapper">
+                <button class="slider-btn left" onclick="prevSlide()">&#10094;</button>
+
+                <div class="stream-carousel-container">
+                    <div class="stream-carousel" id="streamCarousel">
+                        <!-- Stream 1 -->
+                        <div class="stream-card" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100">
+                            <img src="valorant.jpg" class="stream-bg" loading="lazy">
+                            <button class="play-btn" onclick="openModal('Stream 1.mp4')">&#9658;</button>
+                            <div class="stream-info">
+                                <img src="Anonymus avatar 3.png" class="avatar" loading="lazy">
+                                <div>
+                                    <div class="streamer-name">ProGamer123</div>
+                                    <div class="stream-title">Playing GTA VI - 24hr Stream!</div>
+                                    <div class="viewer-count">
+                                        <i class="fas fa-eye"></i> 12,345 viewers
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Stream 2 -->
+                        <div class="stream-card" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+                            <img src="NOS3.jpeg" class="stream-bg" loading="lazy">
+                            <button class="play-btn" onclick="openModal('Stream 1.mp4')">&#9658;</button>
+                            <div class="stream-info">
+                                <img src="Gir Avatar 1.webp" class="avatar" loading="lazy">
+                                <div>
+                                    <div class="streamer-name">FPSMaster</div>
+                                    <div class="stream-title">Warzone Tournament Finals</div>
+                                    <div class="viewer-count">
+                                        <i class="fas fa-eye"></i> 8,765 viewers
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Stream 3 -->
+                        <div class="stream-card" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300">
+                            <img src="CYBER.jpg" class="stream-bg" loading="lazy">
+                            <button class="play-btn" onclick="openModal('Stream 1.mp4')">&#9658;</button>
+                            <div class="stream-info">
+                                <img src="Boy avatar 2.webp" class="avatar" loading="lazy">
+                                <div>
+                                    <div class="streamer-name">SpeedQueen</div>
+                                    <div class="stream-title">Need for Speed World Record Attempt</div>
+                                    <div class="viewer-count">
+                                        <i class="fas fa-eye"></i> 5,432 viewers
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="slider-btn right" onclick="nextSlide()">&#10095;</button>
+            </div>
+        </div>
+
+        <!-- Video Modal -->
+        <div id="videoModal" class="video-modal" onclick="closeModal()">
+            <div class="video-content">
+                <iframe id="videoIframe" src="" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Tournaments Section -->
+    <section class="tournaments-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-aos="fade-up" data-aos-duration="600">
+                    Upcoming Tournaments
+                </h2>
+                <p class="section-subtitle" data-aos="fade-up" data-aos-duration="600" data-aos-delay="100">
+                    Compete and win exciting prizes!
+                </p>
+            </div>
+
+            <div class="row" id="tournamentsContainer">
+                <!-- Tournament 1 (Visible) -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="tournament-card" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100">
+                        <div class="tournament-header">
+                            <h3 class="tournament-title">Faux Fire Cup</h3>
+                            <span class="tournament-prize">$5,000</span>
+                        </div>
+                        <div class="tournament-body">
+                            <div class="tournament-game">
+                                <img src="GTA.jpg" alt="GTA 6 Online" loading="lazy">
+                                <div class="tournament-game-info">
+                                    <h4>GTA 6 Online</h4>
+                                    <p>Gang Wars Tournament</p>
+                                </div>
+                            </div>
+                            <div class="tournament-details">
+                                <div class="tournament-detail">
+                                    <h5>Date</h5>
+                                    <p>June 15, 2023</p>
+                                </div>
+                                <div class="tournament-detail">
+                                    <h5>Time</h5>
+                                    <p>7:00 PM EST</p>
+                                </div>
+                                <div class="tournament-detail">
+                                    <h5>Players</h5>
+                                    <p>50/100</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tournament-footer">
+                            <span class="tournament-registered">50 Registered</span>
+                            <button class="btn-register">Register Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tournament 2 (Visible) -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="tournament-card" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+                        <div class="tournament-header">
+                            <h3 class="tournament-title">Neon Showdown</h3>
+                            <span class="tournament-prize">$3,200</span>
+                        </div>
+                        <div class="tournament-body">
+                            <div class="tournament-game">
+                                <img src="cod1.jpeg" alt="Call of Duty" loading="lazy">
+                                <div class="tournament-game-info">
+                                    <h4>Call of Duty: Warzone</h4>
+                                    <p>5v5 Competitive</p>
+                                </div>
+                            </div>
+                            <div class="tournament-details">
+                                <div class="tournament-detail">
+                                    <h5>Date</h5>
+                                    <p>June 18, 2023</p>
+                                </div>
+                                <div class="tournament-detail">
+                                    <h5>Time</h5>
+                                    <p>6:30 PM EST</p>
+                                </div>
+                                <div class="tournament-detail">
+                                    <h5>Players</h5>
+                                    <p>20/32</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tournament-footer">
+                            <span class="tournament-registered">20 Registered</span>
+                            <button class="btn-register">Register Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tournament 3 (Visible) -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="tournament-card" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300">
+                        <div class="tournament-header">
+                            <h3 class="tournament-title">Speed Masters</h3>
+                            <span class="tournament-prize">$2,500</span>
+                        </div>
+                        <div class="tournament-body">
+                            <div class="tournament-game">
+                                <img src="ned.jpg" alt="Need for Speed" loading="lazy">
+                                <div class="tournament-game-info">
+                                    <h4>Need for Speed Unbound</h4>
+                                    <p>Racing Championship</p>
+                                </div>
+                            </div>
+                            <div class="tournament-details">
+                                <div class="tournament-detail">
+                                    <h5>Date</h5>
+                                    <p>June 22, 2023</p>
+                                </div>
+                                <div class="tournament-detail">
+                                    <h5>Time</h5>
+                                    <p>8:00 PM EST</p>
+                                </div>
+                                <div class="tournament-detail">
+                                    <h5>Players</h5>
+                                    <p>15/25</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tournament-footer">
+                            <span class="tournament-registered">15 Registered</span>
+                            <button class="btn-register">Register Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tournament 4 (Hidden) -->
+                <div class="col-lg-4 col-md-6 hidden-tournament">
+                    <div class="tournament-card" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
+                        <div class="tournament-header">
+                            <h3 class="tournament-title">Battle Royale</h3>
+                            <span class="tournament-prize">$4,000</span>
+                        </div>
+                        <div class="tournament-body">
+                            <div class="tournament-game">
+                                <img src="fortnite.jpg" alt="Fortnite" loading="lazy">
+                                <div class="tournament-game-info">
+                                    <h4>Fortnite</h4>
+                                    <p>Squad Tournament</p>
+                                </div>
+                            </div>
+                            <div class="tournament-details">
+                                <div class="tournament-detail">
+                                    <h5>Date</h5>
+                                    <p>June 25, 2023</p>
+                                </div>
+                                <div class="tournament-detail">
+                                    <h5>Time</h5>
+                                    <p>5:00 PM EST</p>
+                                </div>
+                                <div class="tournament-detail">
+                                    <h5>Players</h5>
+                                    <p>40/80</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tournament-footer">
+                            <span class="tournament-registered">40 Registered</span>
+                            <button class="btn-register">Register Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tournament 5 (Hidden) -->
+                <div class="col-lg-4 col-md-6 hidden-tournament">
+                    <div class="tournament-card" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="500">
+                        <div class="tournament-header">
+                            <h3 class="tournament-title">FIFA Championship</h3>
+                            <span class="tournament-prize">$1,800</span>
+                        </div>
+                        <div class="tournament-body">
+                            <div class="tournament-game">
+                                <img src="fifa23.jpg" alt="FIFA 23" loading="lazy">
+                                <div class="tournament-game-info">
+                                    <h4>FIFA 23</h4>
+                                    <p>1v1 Tournament</p>
+                                </div>
+                            </div>
+                            <div class="tournament-details">
+                                <div class="tournament-detail">
+                                    <h5>Date</h5>
+                                    <p>June 28, 2023</p>
+                                </div>
+                                <div class="tournament-detail">
+                                    <h5>Time</h5>
+                                    <p>7:30 PM EST</p>
+                                </div>
+                                <div class="tournament-detail">
+                                    <h5>Players</h5>
+                                    <p>12/16</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tournament-footer">
+                            <span class="tournament-registered">12 Registered</span>
+                            <button class="btn-register">Register Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="view-all">
+                <button class="btn-view-all" id="viewAllBtn">View All Tournaments</button>
+            </div>
+        </div>
+    </section>
+    </section>
+    <div class="container">
+        <h2 class="section-title">Top Games</h2>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="game-card" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100"
+                    onclick="openGameDetails('Grand Theft Auto Six', 'Gta 6.jpg', '$59.99', 'Action, Adventure', 'Rockstar Games', '2023', 'Experience the biggest, most immersive Grand Theft Auto game to date. Explore a massive open world with unprecedented detail and freedom.')">
+                    <img src="Gta 6.png" alt="Game 1" loading="lazy">
+                    <h3>Grand Theft Auto Six</h3>
+                    <div class="game-price">$59.99</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="game-card" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200"
+                    onclick="openGameDetails('Assassin\'s Creed', 'Assasian Careed.jpg', '$49.99', 'Action, RPG', 'Ubisoft', '2023', 'Embark on an epic journey through ancient civilizations in this latest installment of the acclaimed franchise.')">
+                    <img src="Assasian Careed.jpg" alt="Game 2" loading="lazy">
+                    <h3>Assassin's Creed</h3>
+                    <div class="game-price">$49.99</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="game-card" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300"
+                    onclick="openGameDetails('Call of Duty', 'explor games.jpg', 'FREE', 'FPS, Action', 'Activision', '2023', 'Join the ultimate battle experience with the latest Call of Duty installment. Free to play with optional purchases.')">
+                    <img src="explor games.jpg" alt="Game 3" loading="lazy">
+                    <h3>Call of Duty</h3>
+                    <div class="game-price game-free">FREE</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="game-card" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400"
+                    onclick="openGameDetails('Need For Speed', 'ned.jpg', '$39.99', 'Racing', 'Electronic Arts', '2022', 'Outrun the competition in the most thrilling street racing experience yet.')">
+                    <img src="ned.jpg" alt="Game 4" loading="lazy">
+                    <h3>Need For Speed</h3>
+                    <div class="game-price">$39.99</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gaming News Section -->
+    <section class="news-section">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up" data-aos-duration="600">
+                Latest News
+            </h2>
+
+            <p class="section-subtitle">Stay updated with the latest gaming news and announcements</p>
+
+            <div class="row">
+                <!-- News Item 1 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="news-card" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100">
+                        <img src="Gta 6.png" alt="GTA VI Announcement" class="news-image" loading="lazy">
+                        <div class="news-content">
+                            <div class="news-date">June 10, 2023</div>
+                            <h3 class="news-title">GTA VI Release Date Officially Announced</h3>
+                            <p class="news-excerpt">Rockstar Games has finally revealed the official release date for
+                                the highly anticipated Grand Theft Auto VI...</p>
+                            <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- News Item 2 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="news-card" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+                        <img src="newxbox.jpg" alt="New Console" class="news-image" loading="lazy">
+                        <div class="news-content">
+                            <div class="news-date">June 8, 2023</div>
+                            <h3 class="news-title">Next-Gen Console Unveiled at E3 2023</h3>
+                            <p class="news-excerpt">The gaming world was shocked today as a major manufacturer revealed
+                                their next-generation console with revolutionary features...</p>
+                            <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- News Item 3 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="news-card" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300">
+                        <img src="CR_7.png" alt="Esports Tournament" class="news-image" loading="lazy">
+                        <div class="news-content">
+                            <div class="news-date">June 5, 2023</div>
+                            <h3 class="news-title">Record-Breaking Prize Pool for International Tournament</h3>
+                            <p class="news-excerpt">The upcoming world championship tournament has set a new record with
+                                a $10 million prize pool, the largest in esports history...</p>
+                            <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Game Developers Section -->
+    <section class="developers-section">
+        <div class="container">
+            <h2 class="section-title">Featured Developers</h2>
+            <p class="section-subtitle">Meet the studios behind your favorite games</p>
+
+            <div class="row">
+                <!-- Developer 1 -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="developer-card">
+                        <img src="Rockstar_Games_Lo.png" alt="Rockstar Games" class="developer-logo" loading="lazy">
+                        <h3 class="developer-name">Rockstar Games</h3>
+                        <p class="developer-games">GTA Series, Red Dead Redemption</p>
+                        <button class="btn-view-games">View Games</button>
+                    </div>
+                </div>
+
+                <!-- Developer 2 -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="developer-card">
+                        <img src="CD Projekt Red.png" alt="CD Projekt Red" class="developer-logo" loading="lazy">
+                        <h3 class="developer-name">CD Projekt Red</h3>
+                        <p class="developer-games">The Witcher, Cyberpunk 2077</p>
+                        <button class="btn-view-games">View Games</button>
+                    </div>
+                </div>
+
+                <!-- Developer 3 -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="developer-card">
+                        <img src="ubisoft.png" alt="Ubisoft" class="developer-logo" loading="lazy">
+                        <h3 class="developer-name">Ubisoft</h3>
+                        <p class="developer-games">Assassin's Creed, Far Cry</p>
+                        <button class="btn-view-games">View Games</button>
+                    </div>
+                </div>
+
+                <!-- Developer 4 -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="developer-card">
+                        <img src="Electronic Arts.png" alt="Electronic Arts" class="developer-logo" loading="lazy">
+                        <h3 class="developer-name">Electronic Arts</h3>
+                        <p class="developer-games">FIFA, Battlefield, Need for Speed</p>
+                        <button class="btn-view-games">View Games</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="footer" data-aos="fade-up" data-aos-duration="100">
+        <div class="container">
+            <div class="row footer-content">
+                <div class="col-lg-4 mb-5 mb-lg-0">
+                    <a href="#" class="footer-logo">Faux Fire Gaming</a>
+                    <p style="color: #aaa; margin-bottom: 20px;">The ultimate destination for gamers worldwide. Join our
+                        community and experience gaming like never before.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-twitch"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-5 mb-md-0">
+                    <div class="footer-links" data-aos="fade-up" 
+         data-aos-duration="600">
+                        <h4>Quick Links</h4>
+                        <ul>
+                            <li><a href="#">Home</a></li>
+                            <li><a href="#">Games</a></li>
+                            <li><a href="#">Tournaments</a></li>
+                            <li><a href="#">Streams</a></li>
+                            <li><a href="#">News</a></li>
+                            <li><a href="#">Support</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-5 mb-md-0">
+                    <div class="footer-links" data-aos="fade-up" 
+         data-aos-duration="600" 
+         data-aos-delay="100">
+                        <h4>Games</h4>
+                        <ul>
+                            <li><a href="#">New Releases</a></li>
+                            <li><a href="#">Popular</a></li>
+                            <li><a href="#">Free to Play</a></li>
+                            <li><a href="#">Pre-Orders</a></li>
+                            <li><a href="#">On Sale</a></li>
+                            <li><a href="#">Coming Soon</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4">
+                    <div class="footer-links" data-aos="fade-up" 
+         data-aos-duration="600" 
+         data-aos-delay="100">
+                        <h4>Support</h4>
+                        <ul>
+                            <li><a href="contact us.html">Contact Us</a></li>
+                            <li><a href="faqs page.html">FAQs</a></li>
+                            <li><a href="refund policy.html">Refund Policy</a></li>
+                            <li><a href="refund policy.html">Terms of Service</a></li>
+                            <li><a href="Privacy Policy.html">Privacy Policy</a></li>
+                            <li><a href="#">Cookie Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="footer-links" data-aos="fade-up" 
+         data-aos-duration="600" 
+         data-aos-delay="100">
+                        <h4>Account</h4>
+                        <ul>
+                            <li><a href="#">My Profile</a></li>
+                            <li><a href="#">My Library</a></li>
+                            <li><a href="#">Wishlist</a></li>
+                            <li><a href="#">Friends</a></li>
+                            <li><a href="#">Settings</a></li>
+                            <li><a href="#">Log Out</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Faux Fire Gaming. All rights reserved. All trademarks are property of their respective
+                    owners.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chatbot -->
+    <div class="chatbot-container">
+        <button class="chatbot-btn" onclick="toggleChatbot()">
+            <i class="fas fa-robot"></i>
+        </button>
+        <div class="chatbot-window" id="chatbotWindow">
+            <div class="chatbot-header">
+                <span>Faux Fire Assistant</span>
+                <span class="chatbot-close" onclick="toggleChatbot()">&times;</span>
+            </div>
+
+            <!-- Tabs -->
+            <div class="chatbot-tabs"
+                style="display: flex; justify-content: space-around; padding: 5px; background-color: #111;">
+                <button onclick="switchChatTab('chat')" style="flex:1" class="chatbot-button">Chat</button>
+                <button onclick="switchChatTab('quiz')" style="flex:1" class="chatbot-button">IQ Game Test</button>
+            </div>
+
+            <!-- Chat Tab -->
+            <div id="chatTab" class="chatbot-tab" style="display: block;">
+                <div class="chatbot-messages" id="chatbotMessages">
+                    <p class="message bot-message">Hello! I'm your gaming assistant. How can I help you today?</p>
+                </div>
+                <div class="chatbot-input">
+                    <input type="text" placeholder="Type your message..." id="chatbotInput">
+                    <button onclick="sendChatbotMessage()">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quiz Tab -->
+            <div id="quizTab" class="chatbot-tab" style="display: none; padding: 10px; flex-direction: column;">
+                <div id="quizContainer">
+                    <button onclick="startQuiz()" class="chatbot-button" style="margin-top: 20px;">Start IQ
+                        Test</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Cookies Consent Banner -->
+    <div id="cookieBanner" class="cookie-banner">
+        <div class="cookie-content">
+            <p>🍪 We use cookies to improve your experience on <strong>FAUX FIRE</strong>. By using our site, you agree
+                to our <a href="Privacy Policy.html">Privacy Policy</a>.</p>
+            <div class="cookie-buttons">
+                <button id="acceptCookies" class="btn-neon">Accept</button>
+                <button id="declineCookies" class="btn-decline">Decline</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const banner = document.getElementById("cookieBanner");
+            const acceptBtn = document.getElementById("acceptCookies");
+            const declineBtn = document.getElementById("declineCookies");
+
+            // Check if already set
+            if (!localStorage.getItem("cookieConsent")) {
+                banner.classList.add("show");
+            }
+
+            acceptBtn.addEventListener("click", () => {
+                localStorage.setItem("cookieConsent", "accepted");
+                banner.classList.remove("show");
+            });
+
+            declineBtn.addEventListener("click", () => {
+                localStorage.setItem("cookieConsent", "declined");
+                banner.classList.remove("show");
+            });
+        });
+    </script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <script>/**
+* FauxFire Gaming Platform - Main Application
+*/
+        const FauxFireApp = {
+            // Application state
+            currentUser: null,
+            currentGame: null,
+            currentScreenshotIndex: 0,
+            currentStreamSlide: 0,
+            streamSlides: [],
+            totalStreamSlides: 0,
+
+            // Initialize the application
+            init: function () {
+                this.checkLoggedInUser();
+                this.setupEventListeners();
+                this.setupStreamCarousel();
+                this.chatbot.init();
+                console.log("FauxFire Gaming initialized");
+            },
+
+            // Check if user is logged in from localStorage
+            checkLoggedInUser: function () {
+                const savedUser = localStorage.getItem('currentUser');
+                if (savedUser) {
+                    this.currentUser = JSON.parse(savedUser);
+                    this.updateUserUI();
+                }
+            },
+
+            // Setup all event listeners
+            setupEventListeners: function () {
+                // Auth modal tabs
+                document.querySelectorAll('.auth-tabs li').forEach(tab => {
+                    tab.addEventListener('click', (e) => {
+                        const tabId = e.target.getAttribute('data-tab');
+                        this.switchAuthTab(tabId);
+
+                    });
+                });
+
+                // Form submissions
+                document.getElementById('signinForm')?.addEventListener('submit', (e) => this.handleSignIn(e));
+                document.getElementById('signupForm')?.addEventListener('submit', (e) => this.handleSignUp(e));
+
+                // User dropdown
+                // User dropdown
+                const userIcon = document.getElementById('userIcon');
+                if (userIcon) {
+                    userIcon.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const dropdown = document.getElementById('userDropdown');
+
+                        if (this.currentUser) {
+                            // Toggle dropdown if user is logged in
+                            dropdown.classList.toggle('show');
+                        } else {
+                            // Show auth modal if user is not logged in
+                            this.openAuthModal();
+                        }
+                    });
+                }
+                // Logout button
+                document.querySelector('.btn-logout')?.addEventListener('click', () => this.logoutUser());
+
+                // View all tournaments button
+                document.getElementById('viewAllBtn')?.addEventListener('click', () => this.showAllTournaments());
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', () => {
+                    const dropdown = document.getElementById('userDropdown');
+                    if (dropdown) dropdown.classList.remove('show');
+                });
+            },
+
+            // Toggle user dropdown
+            toggleUserDropdown: function () {
+                const dropdown = document.getElementById('userDropdown');
+                if (dropdown) dropdown.classList.toggle('show');
+                document.addEventListener('click', (e) => {
+                    const dropdown = document.getElementById('userDropdown');
+                    const userIcon = document.getElementById('userIcon');
+
+                    if (dropdown && !userIcon.contains(e.target) && !dropdown.contains(e.target)) {
+                        dropdown.classList.remove('show');
+                    }
+                });
+
+            },
+
+            // Update UI based on auth state
+            updateUserUI: function () {
+                const authBtn = document.querySelector('.btn-auth');
+                const userIcon = document.getElementById('userIcon');
+                const userName = document.getElementById('userName');
+                const userEmail = document.getElementById('userEmail');
+
+                if (this.currentUser) {
+                    // User is logged in
+                    if (authBtn) authBtn.style.display = 'none';
+                    if (userIcon) {
+                        userIcon.style.display = 'flex';
+                        // Update user info in dropdown
+                        if (userName) userName.textContent = this.currentUser.displayName || this.currentUser.username || 'Player';
+                        if (userEmail) userEmail.textContent = this.currentUser.email || '';
+                    }
+                } else {
+                    // User is logged out
+                    if (authBtn) authBtn.style.display = 'inline-block';
+                    if (userIcon) userIcon.style.display = 'none';
+                    // Hide dropdown if visible
+                    const dropdown = document.getElementById('userDropdown');
+                    if (dropdown) dropdown.classList.remove('show');
+                }
+            },
+
+            // Setup stream carousel
+            setupStreamCarousel: function () {
+                this.streamSlides = document.querySelectorAll('.stream-card');
+                this.totalStreamSlides = this.streamSlides.length;
+                this.updateCarousel();
+            },
+
+            // ========== AUTHENTICATION FUNCTIONS ==========
+            openAuthModal: function () {
+                document.getElementById('authModal').style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            },
+
+            closeAuthModal: function () {
+                document.getElementById('authModal').style.display = 'none';
+                document.body.style.overflow = 'auto';
+            },
+
+            switchAuthTab: function (tabId) {
+                document.querySelectorAll('.auth-tabs li').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.auth-tab-content').forEach(c => c.classList.remove('active'));
+
+                document.querySelector(`.auth-tabs li[data-tab="${tabId}"]`).classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            },
+
+            handleSignIn: function (e) {
+                e.preventDefault();
+                const email = e.target.querySelector('input[type="email"]').value;
+                const password = e.target.querySelector('input[type="password"]').value;
+
+                if (email && password) {
+                    const username = email.split('@')[0];
+                    this.loginUser(username, email);
+                }
+            },
+
+            handleSignUp: function (e) {
+                e.preventDefault();
+                const username = e.target.querySelector('input[type="text"]').value;
+                const email = e.target.querySelector('input[type="email"]').value;
+                const password = e.target.querySelector('input[type="password"]').value;
+                const confirmPassword = e.target.querySelectorAll('input[type="password"]')[1].value;
+
+                if (username && email && password && password === confirmPassword) {
+                    this.loginUser(username, email);
+                }
+            },
+
+            loginUser: function (username, email) {
+                this.currentUser = {
+                    id: this.generateId(),
+                    username: username.toLowerCase(),
+                    displayName: username,
+                    email: email || `${username.toLowerCase()}@example.com`,
+                    avatar: 'Anonymus avatar 3.png',
+                    joinDate: new Date().toISOString(),
+                    cart: [],
+                    wishlist: [],
+                    stats: {
+                        hoursPlayed: 1256,
+                        gamesOwned: 87,
+                        tournaments: 23,
+                        wins: 12,
+                        followers: 5430,
+                        following: 256
+                    }
+                };
+
+                localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+                this.updateUserUI();
+                this.closeAuthModal();
+                this.showNotification(`Welcome back, ${username}!`);
+            },
+
+            logoutUser: function () {
+                this.currentUser = null;
+                localStorage.removeItem('currentUser');
+                this.updateUserUI();
+                this.showNotification('You have been logged out');
+            },
+
+            // ========== GAME DETAILS FUNCTIONS ==========
+            openGameDetails: function (title, image, price, genre, developer, year, description) {
+                const modal = document.getElementById('gameDetailsModal');
+                document.getElementById('detailGameTitle').textContent = title;
+                document.getElementById('detailGameImage').src = image;
+                document.getElementById('detailGamePrice').textContent = price;
+                document.getElementById('detailGameGenre').textContent = genre;
+                document.getElementById('detailGameDeveloper').textContent = developer;
+                document.getElementById('detailGameYear').textContent = year;
+                document.getElementById('detailGameDesc').textContent = description;
+
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            },
+
+            closeGameDetails: function () {
+                document.getElementById('gameDetailsModal').style.display = 'none';
+                document.body.style.overflow = 'auto';
+            },
+
+
+            // ========== SCREENSHOT VIEWER FUNCTIONS ==========
+            viewScreenshot: function (element, imageSrc) {
+                document.querySelectorAll('.screenshot-thumb').forEach(thumb => thumb.classList.remove('active'));
+                element.classList.add('active');
+
+                document.getElementById('viewerImage').src = imageSrc;
+                document.getElementById('screenshotViewer').classList.add('active');
+                document.body.style.overflow = 'hidden';
+
+                this.currentScreenshotIndex = Array.from(document.querySelectorAll('.screenshot-thumb')).indexOf(element);
+            },
+
+            closeScreenshotViewer: function () {
+                document.getElementById('screenshotViewer').classList.remove('active');
+                document.body.style.overflow = 'auto';
+            },
+
+            nextScreenshot: function () {
+                const thumbs = document.querySelectorAll('.screenshot-thumb');
+                this.currentScreenshotIndex = (this.currentScreenshotIndex + 1) % thumbs.length;
+                const nextThumb = thumbs[this.currentScreenshotIndex];
+                this.viewScreenshot(nextThumb, nextThumb.src);
+            },
+
+            prevScreenshot: function () {
+                const thumbs = document.querySelectorAll('.screenshot-thumb');
+                this.currentScreenshotIndex = (this.currentScreenshotIndex - 1 + thumbs.length) % thumbs.length;
+                const prevThumb = thumbs[this.currentScreenshotIndex];
+                this.viewScreenshot(prevThumb, prevThumb.src);
+            },
+
+            // ========== SYSTEM REQUIREMENTS TABS ==========
+            changeReqsTab: function (tabId) {
+                document.querySelectorAll('.reqs-tab').forEach(tab => tab.classList.remove('active'));
+                document.querySelectorAll('.reqs-content').forEach(content => content.classList.remove('active'));
+
+                document.querySelector(`.reqs-tab[onclick*="${tabId}"]`).classList.add('active');
+                document.getElementById(`${tabId}-reqs`).classList.add('active');
+            },
+
+            // ========== VIDEO MODAL FUNCTIONS ==========
+            openVideoModal: function (videoUrl) {
+                document.getElementById('videoIframe').src = videoUrl;
+                document.getElementById('videoModal').classList.add('active');
+                document.body.style.overflow = 'hidden';
+            },
+
+            closeVideoModal: function () {
+                document.getElementById('videoIframe').src = '';
+                document.getElementById('videoModal').classList.remove('active');
+                document.body.style.overflow = 'auto';
+            },
+
+            // ========== STREAM CAROUSEL FUNCTIONS ==========
+            nextSlide: function () {
+                this.currentStreamSlide = (this.currentStreamSlide + 1) % this.totalStreamSlides;
+                this.updateCarousel();
+            },
+
+            prevSlide: function () {
+                this.currentStreamSlide = (this.currentStreamSlide - 1 + this.totalStreamSlides) % this.totalStreamSlides;
+                this.updateCarousel();
+            },
+
+            updateCarousel: function () {
+                document.getElementById('streamCarousel').style.transform = `translateX(-${this.currentStreamSlide * 100}%)`;
+            },
+
+            // ========== TOURNAMENT FUNCTIONS ==========
+            showAllTournaments: function () {
+                document.querySelectorAll('.hidden-tournament').forEach(t => t.classList.remove('hidden-tournament'));
+                document.getElementById('viewAllBtn').style.display = 'none';
+            },
+
+            // ========== CART & WISHLIST FUNCTIONS ==========
+            addToCart: function () {
+                if (!this.currentUser) {
+                    this.showNotification('Please log in to add items to your cart');
+                    this.openAuthModal();
+                    return;
+                }
+
+                const gameTitle = document.getElementById('detailGameTitle').textContent;
+                const gamePrice = document.getElementById('detailGamePrice').textContent;
+
+                this.currentUser.cart.push({
+                    title: gameTitle,
+                    price: gamePrice,
+                    addedAt: new Date().toISOString()
+                });
+
+                localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+                this.showNotification(`Added ${gameTitle} (${gamePrice}) to your cart!`);
+                this.closeGameDetails();
+            },
+
+            // ========== UTILITY FUNCTIONS ==========
+            showNotification: function (message) {
+                const notification = document.createElement('div');
+                notification.className = 'cart-notification';
+                notification.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+                document.body.appendChild(notification);
+
+                setTimeout(() => notification.classList.add('show'), 10);
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+            },
+
+            generateId: function () {
+                return Math.random().toString(36).substr(2, 9);
+            },
+
+            // ========== CHATBOT IMPLEMENTATION ==========
+            chatbot: {
+                init: function () {
+                    this.setupChatbotUI();
+                    console.log("Chatbot initialized");
+                },
+
+                setupChatbotUI: function () {
+                    const chatbotWindow = document.getElementById('chatbotWindow');
+                    if (!chatbotWindow) return;
+
+                    if (!document.getElementById('chatbotMessages')) {
+                        const messagesDiv = document.createElement('div');
+                        messagesDiv.id = 'chatbotMessages';
+                        messagesDiv.className = 'chatbot-messages';
+                        chatbotWindow.insertBefore(messagesDiv, document.querySelector('.chatbot-input'));
+
+                        this.addBotMessage("Hello! I'm your Faux Fire gaming assistant. How can I help you today?");
+                    }
+                },
+
+                toggle: function () {
+                    const chatbotWindow = document.getElementById('chatbotWindow');
+                    if (chatbotWindow) {
+                        chatbotWindow.classList.toggle('active');
+
+                        if (chatbotWindow.classList.contains('active')) {
+                            const messages = document.getElementById('chatbotMessages');
+                            if (messages) {
+                                setTimeout(() => {
+                                    messages.scrollTop = messages.scrollHeight;
+                                }, 100);
+                            }
+                        }
+                    }
+                },
+
+                sendUserMessage: function () {
+                    const input = document.getElementById('chatbotInput');
+                    if (!input) return;
+
+                    const message = input.value.trim();
+                    if (message) {
+                        this.addUserMessage(message);
+                        input.value = '';
+
+                        this.showTypingIndicator();
+
+                        setTimeout(() => {
+                            this.hideTypingIndicator();
+                            this.generateResponse(message);
+                        }, 800);
+                    }
+                },
+
+                addUserMessage: function (message) {
+                    const messagesContainer = document.getElementById('chatbotMessages');
+                    if (!messagesContainer) return;
+
+                    const messageElement = document.createElement('p');
+                    messageElement.className = 'message user-message';
+                    messageElement.textContent = message;
+                    messagesContainer.appendChild(messageElement);
+
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                },
+
+                addBotMessage: function (message) {
+                    const messagesContainer = document.getElementById('chatbotMessages');
+                    if (!messagesContainer) return;
+
+                    const messageElement = document.createElement('p');
+                    messageElement.className = 'message bot-message';
+                    messageElement.textContent = message;
+                    messagesContainer.appendChild(messageElement);
+
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                },
+
+                showTypingIndicator: function () {
+                    const messagesContainer = document.getElementById('chatbotMessages');
+                    if (!messagesContainer) return;
+
+                    this.hideTypingIndicator();
+
+                    const typingElement = document.createElement('div');
+                    typingElement.id = 'typingIndicator';
+                    typingElement.className = 'typing-indicator';
+                    typingElement.innerHTML = `
+                <span></span>
+                <span></span>
+                <span></span>
+            `;
+                    messagesContainer.appendChild(typingElement);
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                },
+
+                hideTypingIndicator: function () {
+                    const typingElement = document.getElementById('typingIndicator');
+                    if (typingElement) {
+                        typingElement.remove();
+                    }
+                },
+
+                generateResponse: function (userMessage) {
+                    const lowerMsg = userMessage.toLowerCase();
+
+                    // Game database
+                    const gameDatabase = {
+                        'gta|grand theft auto': {
+                            title: "Grand Theft Auto VI",
+                            response: "GTA VI is our most popular open-world action game.",
+                            actions: [
+                                { text: "View Details", action: () => FauxFireApp.openGameDetails('Grand Theft Auto VI', 'Gta 6.png', '$59.99', 'Action, Adventure', 'Rockstar Games', '2023', 'Experience the biggest, most immersive Grand Theft Auto game to date.') },
+                                { text: "System Requirements", action: () => this.showSystemRequirements('gta') },
+                                { text: "Tournaments", action: () => window.location.href = "Tournaments.html?game=gta" }
+                            ]
+                        },
+                        'call of duty|cod|warzone': {
+                            title: "Call of Duty: Warzone",
+                            response: "Call of Duty: Warzone is our free-to-play battle royale game.",
+                            actions: [
+                                { text: "View Details", action: () => FauxFireApp.openGameDetails('Call of Duty: Warzone', 'cod1.jpeg', 'FREE', 'FPS, Battle Royale', 'Activision', '2020', 'Experience classic Call of Duty combat in a massive battle royale experience.') },
+                                { text: "Join Tournament", action: () => window.location.href = "Tournaments.html?game=cod" }
+                            ]
+                        }
+                    };
+
+                    // General responses
+                    const generalResponses = [
+                        { pattern: 'hello|hi|hey', response: "Hello! Welcome to Faux Fire Gaming. How can I help you today?" },
+                        { pattern: 'help|support', response: "I can help with:\n- Game information\n- Tournament details\n- Technical support\n- Account questions\n\nWhat do you need?" },
+                        { pattern: 'price|cost|how much', response: "Game prices vary. Ask about a specific game or check our Games page." }
+                    ];
+
+                    // Check for specific game mentions
+                    let matchedGame = null;
+                    for (const [pattern, game] of Object.entries(gameDatabase)) {
+                        if (new RegExp(pattern).test(lowerMsg)) {
+                            matchedGame = game;
+                            break;
+                        }
+                    }
+
+                    // Generate appropriate response
+                    if (matchedGame) {
+                        this.addBotMessage(matchedGame.response);
+                        if (matchedGame.actions) {
+                            this.addActionButtons(matchedGame.actions);
+                        }
+                    } else {
+                        let response = "I'm not sure I understand. Could you rephrase or ask about a specific game?";
+
+                        for (const item of generalResponses) {
+                            if (new RegExp(item.pattern).test(lowerMsg)) {
+                                response = item.response;
+                                break;
+                            }
+                        }
+
+                        this.addBotMessage(response);
+                    }
+                },
+
+                addActionButtons: function (actions) {
+                    const messagesContainer = document.getElementById('chatbotMessages');
+                    if (!messagesContainer || !actions) return;
+
+                    const buttonContainer = document.createElement('div');
+                    buttonContainer.className = 'chatbot-buttons';
+
+                    actions.forEach(action => {
+                        const button = document.createElement('button');
+                        button.className = 'chatbot-button';
+                        button.textContent = action.text;
+                        button.onclick = action.action;
+                        buttonContainer.appendChild(button);
+                    });
+
+                    messagesContainer.appendChild(buttonContainer);
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                },
+
+                showSystemRequirements: function (gameId) {
+                    const requirements = {
+                        'gta': {
+                            min: "OS: Win 10\nCPU: i5-2500K\nGPU: GTX 770\nRAM: 8GB\nStorage: 150GB",
+                            rec: "OS: Win 10\nCPU: i7-4770K\nGPU: GTX 1060\nRAM: 16GB\nStorage: 150GB"
+                        }
+                    };
+
+                    if (requirements[gameId]) {
+                        this.addBotMessage(`Minimum Requirements:\n${requirements[gameId].min}`);
+                        this.addBotMessage(`Recommended:\n${requirements[gameId].rec}`);
+                    } else {
+                        this.addBotMessage("System requirements not available for this game.");
+                    }
+                }
+            }
+        };
+
+        // Initialize the application when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => FauxFireApp.init());
+
+        // Global functions for HTML event handlers
+        function openGameDetails(title, image, price, genre, developer, year, description) {
+            FauxFireApp.openGameDetails(title, image, price, genre, developer, year, description);
+        }
+
+        function viewScreenshot(element, imageSrc) {
+            FauxFireApp.viewScreenshot(element, imageSrc);
+        }
+
+        function nextScreenshot() {
+            FauxFireApp.nextScreenshot();
+        }
+
+        function prevScreenshot() {
+            FauxFireApp.prevScreenshot();
+        }
+
+        function changeReqsTab(tabId) {
+            FauxFireApp.changeReqsTab(tabId);
+        }
+
+        function openModal(videoUrl) {
+            FauxFireApp.openVideoModal(videoUrl);
+        }
+
+        function closeModal() {
+            FauxFireApp.closeVideoModal();
+        }
+
+        function nextSlide() {
+            FauxFireApp.nextSlide();
+        }
+
+        function prevSlide() {
+            FauxFireApp.prevSlide();
+        }
+
+        function openAuthModal() {
+            FauxFireApp.openAuthModal();
+        }
+
+        function closeAuthModal() {
+            FauxFireApp.closeAuthModal();
+        }
+
+        function addToCart() {
+            FauxFireApp.addToCart();
+        }
+
+        function toggleChatbot() {
+            FauxFireApp.chatbot.toggle();
+        }
+
+        function sendChatbotMessage() {
+            FauxFireApp.chatbot.sendUserMessage();
+        }
+
+        function logoutUser() {
+            FauxFireApp.logoutUser();
+        }</script>
+
+    <script type="module">
+        function generateOTP() {
+            return Math.floor(100000 + Math.random() * 900000);
+        }
+
+        // ✅ Signup OTP
+        window.checkAndSendOTP = async function () {
+            const name = document.getElementById("name").value.trim();
+            const city = document.getElementById("city").value.trim();
+            const email = document.getElementById("signupEmail").value.trim();
+            const password = document.getElementById("password").value;
+            const confirm = document.getElementById("confirm").value;
+            const msg = document.getElementById("authMsg");
+
+            if (!email.includes("@gmail.com") || !name || !city || !password || !confirm) {
+                msg.innerText = "Please fill in all fields.";
+                return;
+            }
+            if (password !== confirm) {
+                msg.innerText = "Passwords do not match.";
+                return;
+            }
+
+            const otp = generateOTP();
+            sessionStorage.setItem("otp", otp);
+            sessionStorage.setItem("name", name);
+            sessionStorage.setItem("city", city);
+            sessionStorage.setItem("email", email);
+            sessionStorage.setItem("password", password);
+
+            try {
+                await emailjs.send("service_wmv24tj", "template_p8zeqz6", {
+                    user_name: name,
+                    otp_code: otp,
+                    to_email: email
+                });
+
+                msg.innerText = "OTP sent to your Gmail.";
+                document.getElementById("signupForm").classList.remove("active");
+                document.getElementById("otpSection").classList.add("active");
+            } catch (err) {
+                msg.innerText = "Failed to send OTP. Try again.";
+                console.error(err);
+            }
+        };
+
+        // ✅ Verify OTP & save user
+        window.verifyOTP = async function () {
+            const entered = document.getElementById("otpInput").value.trim();
+            const actual = sessionStorage.getItem("otp");
+            const name = sessionStorage.getItem("name");
+            const city = sessionStorage.getItem("city");
+            const email = sessionStorage.getItem("email");
+            const password = sessionStorage.getItem("password");
+            const msg = document.getElementById("authMsg");
+
+            if (entered === actual) {
+                const role = window.ADMIN_EMAILS.includes(email.toLowerCase()) ? "admin" : "user";
+                const userRef = doc(window.db, "users", email);
+                await setDoc(userRef, {
+                    name, city, email, password, role,
+                    createdAt: new Date().toISOString(),
+                });
+
+                msg.innerText = "Account created! Please login.";
+                document.getElementById("otpSection").classList.remove("active");
+                document.getElementById("loginForm").classList.add("active");
+            } else {
+                msg.innerText = "Incorrect OTP.";
+            }
+        };
+        // ✅ Login
+        window.loginUser = async function () {
+            const email = document.getElementById("loginEmail").value.trim();
+            const password = document.getElementById("loginPassword").value;
+            const msg = document.getElementById("authMsg");
+
+            const userRef = doc(window.db, "users", email);
+            const userSnap = await getDoc(userRef);
+
+            if (userSnap.exists()) {
+                const data = userSnap.data();
+                if (data.password === password) {
+                    msg.style.color = "green";
+                    msg.innerText = "Login successful!";
+
+                    // save current user
+                    window.currentUser = data;
+                    localStorage.setItem("currentUser", JSON.stringify(data));
+
+                    // update admin nav if needed
+                    window.renderAdminNav();
+
+                    // 🔹 If admin → redirect with delay
+                    if (data.role === "admin") {
+                        setTimeout(() => {
+                            window.location.href = "Admin.html";
+                        }, 500);
+                        return;
+                    }
+
+                    // 🔹 Normal user UI update
+                    document.getElementById("userName").innerText = data.name;
+                    document.getElementById("userEmail").innerText = data.email;
+                    document.getElementById("authModal").style.display = "none";
+                    document.getElementById("authButton").style.display = "none";
+                    document.getElementById("userIcon").style.display = "flex";
+
+                    // ✅ Ensure dropdown toggle works for user too
+                    const userIcon = document.getElementById("userIcon");
+                    const userDropdown = document.getElementById("userDropdown");
+                    if (userIcon && userDropdown) {
+                        userIcon.onclick = () => {
+                            userDropdown.classList.toggle("show");
+                        };
+                    }
+                } else {
+                    msg.style.color = "red";
+                    msg.innerText = "Incorrect password.";
+                }
+            } else {
+                msg.style.color = "red";
+                msg.innerText = "User not found. Please signup first.";
+            }
+        };
+
+        window.logoutUser = function () {
+            window.currentUser = null;
+            localStorage.removeItem("currentUser"); // also clear storage
+            document.getElementById("authButton").style.display = "inline-block";
+            document.getElementById("userIcon").style.display = "none";
+            document.getElementById("userDropdown").classList.remove("show");
+            document.getElementById("authMsg").innerText = "You have been logged out.";
+        };
+
+
+        document.addEventListener("click", (e) => {
+            const dropdown = document.getElementById("userDropdown");
+            const userIcon = document.getElementById("userIcon");
+            if (dropdown && userIcon) {
+                if (!dropdown.contains(e.target) && !userIcon.contains(e.target)) {
+                    dropdown.classList.remove("show");
+                }
+            }
+        });
+    </script>
+    <script>
+        const questions = [
+            { q: "What comes next? 1, 2, 4, 8, ?", options: ["10", "12", "16", "20"], answer: "16" },         // easy
+            { q: "Which shape has 4 sides?", options: ["Triangle", "Circle", "Square", "Line"], answer: "Square" },
+            { q: "What is 9 + 6 ÷ 3?", options: ["5", "11", "13", "15"], answer: "11" },
+            { q: "Which one is the odd word?", options: ["Dog", "Cat", "Rabbit", "Car"], answer: "Car" },
+            { q: "How many legs does a spider have?", options: ["6", "8", "10", "12"], answer: "8" },
+
+            { q: "Which number fits: 3, 6, 9, 12, ?", options: ["14", "15", "18", "21"], answer: "15" },       // medium
+            { q: "If A=1, B=2... Z=26. What is ACE?", options: ["9", "8", "12", "11"], answer: "9" },
+            { q: "Which number is missing? 2, 4, 7, 11, ?", options: ["15", "14", "16", "18"], answer: "16" },
+
+            { q: "Which image completes the sequence?", options: ["A", "B", "C", "D"], answer: "C" },          // hard placeholder
+            { q: "Which of these does not belong: Iron, Copper, Mercury, Wood?", options: ["Iron", "Wood", "Mercury", "Copper"], answer: "Wood" },
+            { q: "How many squares are in a 3x3 grid?", options: ["9", "14", "6", "13"], answer: "14" },
+            { q: "Find the odd one: 121, 144, 169, 182", options: ["121", "144", "169", "182"], answer: "182" }
+        ];
+
+        let currentQ = 0, score = 0, timer;
+
+        function switchChatTab(tab) {
+            document.getElementById("chatTab").style.display = (tab === "chat") ? "block" : "none";
+            document.getElementById("quizTab").style.display = (tab === "quiz") ? "flex" : "none";
+        }
+
+        function startQuiz() {
+            currentQ = 0;
+            score = 0;
+            showQuestion();
+        }
+
+        function showQuestion() {
+            clearTimeout(timer); // Reset any previous timer
+            const q = questions[currentQ];
+            let html = `<h5>Q${currentQ + 1}. ${q.q}</h5>
+                <div id="timer" style="color: var(--neon-orange); margin-bottom:10px;">Time Left: <span id="timeLeft">5</span>s</div>`;
+            q.options.forEach(opt => {
+                html += `<button class="chatbot-button" onclick="submitAnswer('${opt}')">${opt}</button><br>`;
+            });
+            document.getElementById("quizContainer").innerHTML = html;
+            startCountdown();
+        }
+
+        function submitAnswer(ans) {
+            if (ans === questions[currentQ].answer) score++;
+            nextQuestion();
+        }
+
+        function nextQuestion() {
+            clearTimeout(timer);
+            currentQ++;
+            if (currentQ < questions.length) showQuestion();
+            else showResult();
+        }
+
+        function showResult() {
+            const percent = Math.round((score / questions.length) * 100);
+            let game = percent >= 80 ? "🎮 Elden Ring – Challenge Master!" :
+                percent >= 50 ? "🚗 GTA 6 – Street Smart!" :
+                    "🔥 NFS Unbound – Speedster!";
+            let msg = `<h4>Your Score: ${percent}%</h4>
+               <p>You got ${score} out of ${questions.length} correct.</p>
+               <p><strong>Suggested Game:</strong> ${game}</p>
+               <button class="chatbot-button" onclick="startQuiz()">Try Again</button>`;
+            document.getElementById("quizContainer").innerHTML = msg;
+        }
+
+        function startCountdown() {
+            let time = 20;
+            const timerEl = document.getElementById("timeLeft");
+            timer = setInterval(() => {
+                time--;
+                if (timerEl) timerEl.textContent = time;
+                if (time <= 0) {
+                    clearInterval(timer);
+                    nextQuestion();
+                }
+            }, 1000);
+        }
+    </script>
+
+    <script>
+        function togglePassword(inputId, icon) {
+            const input = document.getElementById(inputId);
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            } else {
+                input.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            }
+        }
+    </script>
+    <script>
+        // ✅ Close Game Details Modal
+        window.closeGameDetails = function () {
+            document.getElementById('gameDetailsModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        };
+
+        // ✅ Example: Open Game Details (if you already have it)
+        window.openGameDetails = function (title, price, desc) {
+            document.getElementById('detailGameTitle').innerText = title;
+            document.getElementById('detailGamePrice').innerText = price;
+            document.getElementById('detailGameDesc').innerText = desc;
+
+            document.getElementById('gameDetailsModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        };
+    </script>
+</body>
+
+</html>

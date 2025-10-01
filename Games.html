@@ -1,0 +1,2072 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faux Fire Gaming - All Games</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      :root {
+    --neon-red: #ff0808;
+    --neon-orange: #ff6600;
+    --dark-bg: #0d0d0d;
+    --darker-bg: #050505;
+    --text-glow-red: 0 0 10px var(--neon-red), 0 0 20px rgba(255, 42, 42, 0.5);
+    --text-glow-orange: 0 0 10px var(--neon-orange), 0 0 20px rgba(255, 102, 0, 0.5);
+    --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+body {
+    background-color: var(--dark-bg);
+    color: white;
+    font-family: 'Rajdhani', 'Arial', sans-serif;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+/* Navbar */
+.navbar {
+    background-color: var(--darker-bg) !important;
+    border-bottom: 1px solid var(--neon-red);
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar-brand {
+    font-size: 2rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--neon-red) !important;
+    text-shadow: var(--text-glow-red);
+    animation: pulse 2s infinite;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand img {
+    height: 50px;
+    margin-right: 10px;
+}
+
+/* Navigation Menu Items */
+.nav-link {
+    position: relative;
+    display: inline-block;
+    padding: 12px 25px;
+    color: white !important;
+    text-transform: uppercase;
+    font-weight: 600;
+    background: #0d0d0d;
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
+    transition: var(--transition);
+    border: 1px solid #ff080833;
+    box-shadow: 0 0 8px #ff080844;
+    letter-spacing: 1px;
+    font-size: 1rem;
+    margin: 0 5px;
+}
+
+.nav-link:hover {
+    background: var(--neon-red);
+    color: black !important;
+    box-shadow: 0 0 20px var(--neon-orange);
+    font-weight: bold;
+}
+
+.nav-link.active {
+    background: var(--neon-red);
+    color: black !important;
+    box-shadow: 0 0 20px var(--neon-red);
+}
+
+/* Cart Icon */
+.cart-icon {
+    position: relative;
+    margin-left: 15px;
+    color: white;
+    font-size: 1.5rem;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.cart-icon:hover {
+    color: var(--neon-orange);
+}
+
+.cart-count {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: var(--neon-red);
+    color: black;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* Auth Button */
+.btn-auth {
+    position: relative;
+    display: inline-block;
+    padding: 12px 30px;
+    color: black !important;
+    text-transform: uppercase;
+    font-weight: 600;
+    background: var(--neon-red);
+    clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+    transition: var(--transition);
+    border: none;
+    box-shadow: 0 0 15px rgba(255, 8, 8, 0.5);
+    letter-spacing: 1px;
+    font-size: 1rem;
+    margin-left: 15px;
+}
+
+.btn-auth:hover {
+    background: var(--neon-orange);
+    color: black !important;
+    box-shadow: 0 0 25px var(--neon-orange);
+    transform: translateY(-2px);
+}
+
+/* User Icon */
+.user-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--neon-red);
+    color: black;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 15px;
+    position: relative;
+    transition: var(--transition);
+}
+
+.user-icon:hover {
+    background-color: var(--neon-orange);
+    transform: scale(1.1);
+}
+
+/* User Dropdown */
+.user-dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: 280px;
+    background-color: var(--darker-bg);
+    border: 2px solid var(--neon-red);
+    border-radius: 8px;
+    box-shadow: 0 5px 25px rgba(255, 8, 8, 0.4);
+    padding: 20px;
+    z-index: 1000;
+    display: none;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    clip-path: polygon(0 0, 100% 0, 100% 90%, 50% 100%, 0 90%);
+}
+
+.user-dropdown.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.user-info {
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 102, 0, 0.2);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid var(--neon-orange);
+    object-fit: cover;
+}
+
+.user-info-content h4 {
+    color: var(--neon-orange);
+    margin-bottom: 5px;
+    font-size: 1.1rem;
+    text-shadow: 0 0 8px rgba(255, 102, 0, 0.3);
+}
+
+.user-info-content p {
+    color: #aaa;
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.user-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.user-menu li {
+    margin-bottom: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.user-menu li::before {
+    content: '';
+    position: absolute;
+    left: -100%;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--neon-orange);
+    transition: all 0.3s ease;
+}
+
+.user-menu li:hover::before {
+    left: 0;
+}
+
+.user-menu a {
+    color: #ddd;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    padding: 8px 10px;
+    border-radius: 4px;
+    background: rgba(255, 8, 8, 0.05);
+}
+
+.user-menu a:hover {
+    color: white;
+    background: rgba(255, 8, 8, 0.15);
+    transform: translateX(5px);
+}
+
+.user-menu i {
+    width: 25px;
+    text-align: center;
+    margin-right: 10px;
+    color: var(--neon-orange);
+}
+
+.btn-logout {
+    background: linear-gradient(90deg, #ff0808 0%, #ff6600 100%);
+    color: black;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: var(--transition);
+    width: 100%;
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-logout:hover {
+    box-shadow: 0 0 15px rgba(255, 8, 8, 0.5);
+}
+
+/* Auth Modal Styles */
+.auth-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 9998;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.auth-modal-content {
+    background-color: var(--darker-bg);
+    max-width: 400px;
+    margin: 50px auto;
+    border: 2px solid var(--neon-red);
+    box-shadow: 0 0 30px rgba(255, 8, 8, 0.5);
+    position: relative;
+    clip-path: polygon(0 0, 95% 0, 100% 5%, 100% 95%, 95% 100%, 5% 100%, 0 95%, 0 5%);
+}
+
+.auth-modal-header {
+    padding: 15px 20px;
+    background: linear-gradient(90deg, #ff0808 0%, #ff6600 100%);
+    color: black;
+    text-transform: uppercase;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.auth-modal-header h3 {
+    margin: 0;
+    font-size: 1.3rem;
+}
+
+.close-auth {
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.close-auth:hover {
+    transform: rotate(90deg);
+}
+
+.auth-modal-body {
+    padding: 20px;
+}
+
+.auth-tabs {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+    border-bottom: 1px solid #333;
+}
+
+.auth-tabs li {
+    padding: 8px 15px;
+    cursor: pointer;
+    color: #aaa;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+    position: relative;
+    transition: all 0.3s;
+}
+
+.auth-tabs li.active {
+    color: var(--neon-red);
+}
+
+.auth-tabs li.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--neon-red);
+    box-shadow: var(--text-glow-red);
+}
+
+.auth-tab-content {
+    display: none;
+}
+
+.auth-tab-content.active {
+    display: block;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px 12px;
+    background-color: #111;
+    border: 1px solid #333;
+    color: white;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--neon-orange);
+    box-shadow: 0 0 10px rgba(255, 102, 0, 0.3);
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    font-size: 0.8rem;
+}
+
+.form-options a {
+    color: var(--neon-orange);
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.form-options a:hover {
+    color: var(--neon-red);
+}
+
+.form-check {
+    margin-bottom: 15px;
+    font-size: 0.8rem;
+}
+
+.form-check label {
+    margin-left: 5px;
+}
+
+.form-check a {
+    color: var(--neon-orange);
+    text-decoration: none;
+}
+
+.btn-auth-submit {
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(90deg, #ff0808 0%, #ff6600 100%);
+    color: white;
+    border: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 0.9rem;
+    clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+}
+
+.btn-auth-submit:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(255, 8, 8, 0.5);
+}
+
+.auth-divider {
+    position: relative;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.auth-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #333;
+    z-index: 1;
+}
+
+.auth-divider span {
+    position: relative;
+    display: inline-block;
+    padding: 0 10px;
+    background-color: var(--darker-bg);
+    color: #777;
+    z-index: 2;
+    font-size: 0.8rem;
+}
+
+.social-auth {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.btn-social {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    position: relative;
+}
+
+.btn-social::after {
+    content: attr(title);
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #111;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+
+.btn-social:hover::after {
+    opacity: 1;
+}
+
+.btn-social.google {
+    background-color: #4285F4;
+    color: white;
+}
+
+.btn-social.facebook {
+    background-color: #3b5998;
+    color: white;
+}
+
+.btn-social.discord {
+    background-color: #5865F2;
+    color: white;
+}
+
+.btn-social:hover {
+    transform: translateY(-3px) scale(1.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Search Box */
+.search-container {
+    max-width: 800px;
+    margin: 40px auto;
+}
+
+.search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-input {
+    width: 100%;
+    padding: 15px 50px 15px 20px;
+    background-color: #111;
+    border: 2px solid var(--neon-red);
+    color: white;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    box-shadow: 0 0 15px rgba(255, 8, 8, 0.3);
+    transition: var(--transition);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--neon-orange);
+    box-shadow: 0 0 25px var(--neon-orange);
+}
+
+.search-btn {
+    position: absolute;
+    right: 5px;
+    background: var(--neon-red);
+    color: black;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-btn:hover {
+    background: var(--neon-orange);
+    transform: scale(1.1);
+}
+
+/* Games Section */
+.games-container {
+    padding: 40px 0;
+}
+
+.game-card-container {
+    padding: 15px;
+}
+
+.game-card {
+    background-color: var(--darker-bg);
+    border: 1px solid #333;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: var(--transition);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    position: relative;
+    cursor: pointer;
+    height: 100%;
+}
+
+.game-card:hover {
+    transform: translateY(-15px);
+    box-shadow: 0 15px 30px rgba(255, 42, 42, 0.4);
+    border: 1px solid var(--neon-red);
+}
+
+.game-card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-bottom: 1px solid #333;
+    transition: var(--transition);
+}
+
+.game-card:hover img {
+    transform: scale(1.05);
+}
+
+.game-card h3 {
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+.game-card .game-info {
+    padding: 0 15px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.game-price {
+    background-color: var(--neon-red);
+    color: black;
+    padding: 5px 15px;
+    font-weight: bold;
+    border-radius: 4px;
+    font-size: 1rem;
+    box-shadow: 0 0 10px rgba(255, 8, 8, 0.7);
+}
+
+.game-free {
+    background-color: var(--neon-orange);
+}
+
+.game-rating {
+    color: #ffc107;
+    font-size: 0.9rem;
+}
+
+.game-rating i {
+    margin-right: 3px;
+}
+
+/* Cart Dropdown */
+.cart-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 350px;
+    background-color: var(--darker-bg);
+    border: 1px solid var(--neon-red);
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(255, 8, 8, 0.3);
+    padding: 15px;
+    z-index: 1000;
+    display: none;
+}
+
+.cart-dropdown.show {
+    display: block;
+}
+
+.cart-items {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #333;
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+.cart-item img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-right: 15px;
+}
+
+.cart-item-info {
+    flex: 1;
+}
+
+.cart-item-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: white;
+}
+
+.cart-item-price {
+    color: var(--neon-orange);
+}
+
+.remove-item {
+    color: #ff6b6b;
+    cursor: pointer;
+    transition: var(--transition);
+    padding: 5px;
+}
+
+.remove-item:hover {
+    color: var(--neon-red);
+}
+
+.cart-total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #333;
+    font-weight: bold;
+    color: white;
+}
+
+.cart-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.cart-btn {
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: var(--transition);
+    cursor: pointer;
+    border: none;
+}
+
+.cart-btn.view {
+    background-color: #333;
+    color: white;
+}
+
+.cart-btn.checkout {
+    background-color: var(--neon-red);
+    color: black;
+}
+
+.cart-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 8, 8, 0.3);
+}
+
+/* Empty Cart */
+.empty-cart {
+    text-align: center;
+    padding: 20px;
+    color: #aaa;
+}
+
+/* Cart Notification */
+.cart-notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--darker-bg);
+    border: 1px solid var(--neon-red);
+    border-radius: 8px;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 5px 15px rgba(255, 8, 8, 0.3);
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 9999;
+}
+
+.cart-notification.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.cart-notification i {
+    color: var(--neon-red);
+    margin-right: 10px;
+    font-size: 1.2rem;
+}
+
+/* Game Details Modal */
+.game-details-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    z-index: 9998;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.game-details-content {
+    background-color: var(--darker-bg);
+    max-width: 1000px;
+    margin: 50px auto;
+    border: 2px solid var(--neon-red);
+    box-shadow: 0 0 30px rgba(255, 8, 8, 0.5);
+    position: relative;
+}
+
+.game-details-header {
+    padding: 20px;
+    background: linear-gradient(90deg, #ff0808 0%, #ff6600 100%);
+    color: black;
+    text-transform: uppercase;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.close-details {
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.close-details:hover {
+    transform: rotate(90deg);
+}
+
+.game-details-body {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px;
+}
+
+.game-details-left {
+    flex: 1;
+    min-width: 300px;
+    padding: 10px;
+}
+
+.game-details-right {
+    flex: 1;
+    min-width: 300px;
+    padding: 10px;
+}
+
+/* Screenshot Gallery */
+.game-screenshots {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    overflow-x: auto;
+    padding-bottom: 15px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--neon-red) #333;
+}
+
+.game-screenshots::-webkit-scrollbar {
+    height: 6px;
+}
+
+.game-screenshots::-webkit-scrollbar-track {
+    background: #333;
+}
+
+.game-screenshots::-webkit-scrollbar-thumb {
+    background-color: var(--neon-red);
+    border-radius: 6px;
+}
+
+.screenshot-thumb {
+    width: 150px;
+    height: 100px;
+    object-fit: cover;
+    border: 1px solid #333;
+    cursor: pointer;
+    transition: var(--transition);
+    flex-shrink: 0;
+}
+
+.screenshot-thumb:hover {
+    transform: scale(1.05);
+    border-color: var(--neon-orange);
+}
+
+.screenshot-thumb.active {
+    border: 3px solid var(--neon-red);
+    box-shadow: 0 0 15px var(--neon-orange);
+}
+
+/* Game Info Items */
+.game-info-item {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #333;
+}
+
+.game-info-item h4 {
+    color: var(--neon-orange);
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+}
+
+.game-info-item p {
+    color: #ccc;
+    margin: 0;
+}
+
+.game-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.game-tag {
+    background-color: rgba(255, 8, 8, 0.2);
+    color: #ff8a8a;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+/* Download Button */
+.btn-download {
+    background: linear-gradient(90deg, #ff0808 0%, #ff6600 100%);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 20px;
+    transition: var(--transition);
+    width: 100%;
+    font-size: 1.1rem;
+}
+
+.btn-download:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(255, 8, 8, 0.5);
+}
+
+/* System Requirements */
+.system-reqs {
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.reqs-tabs {
+    display: flex;
+    border-bottom: 1px solid #333;
+    margin-bottom: 15px;
+}
+
+.reqs-tab {
+    padding: 8px 15px;
+    cursor: pointer;
+    color: #aaa;
+    font-weight: 600;
+    position: relative;
+}
+
+.reqs-tab.active {
+    color: var(--neon-orange);
+}
+
+.reqs-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--neon-orange);
+}
+
+.reqs-content {
+    display: none;
+}
+
+.reqs-content.active {
+    display: block;
+}
+
+.reqs-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.reqs-list li {
+    margin-bottom: 8px;
+    display: flex;
+}
+
+.reqs-list strong {
+    color: var(--neon-orange);
+    min-width: 120px;
+    display: inline-block;
+}
+
+/* No results message */
+.no-results {
+    text-align: center;
+    color: var(--neon-orange);
+    font-size: 1.5rem;
+    margin: 50px 0;
+    display: none;
+}
+
+/* Footer Section */
+.footer {
+    background-color: var(--darker-bg);
+    padding: 50px 0 20px;
+    border-top: 2px solid var(--neon-red);
+    position: relative;
+}
+
+.footer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('ULTRA BG.jpeg') center/cover;
+    opacity: 0.05;
+    z-index: 0;
+}
+
+.footer-content {
+    position: relative;
+    z-index: 1;
+}
+
+.footer-logo {
+    font-size: 2rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--neon-red);
+    text-shadow: var(--text-glow-red);
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
+.footer-links h4 {
+    color: var(--neon-orange);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+}
+
+.footer-links ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li {
+    margin-bottom: 10px;
+}
+
+.footer-links a {
+    color: #ccc;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.footer-links a:hover {
+    color: var(--neon-red);
+    text-shadow: var(--text-glow-red);
+}
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.social-icons a {
+    color: white;
+    font-size: 1.5rem;
+    transition: var(--transition);
+}
+
+.social-icons a:hover {
+    color: var(--neon-red);
+    transform: translateY(-3px);
+}
+
+.footer-bottom {
+    border-top: 1px solid #333;
+    padding-top: 20px;
+    margin-top: 30px;
+    text-align: center;
+    color: #777;
+    font-size: 0.9rem;
+}
+
+/* Animations */
+@keyframes pulse {
+    0% {
+        text-shadow: 0 0 10px var(--neon-red);
+    }
+    50% {
+        text-shadow: 0 0 20px var(--neon-red);
+    }
+    100% {
+        text-shadow: 0 0 10px var(--neon-red);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .navbar-nav {
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 15px;
+        align-items: flex-start;
+    }
+    
+    .nav-link {
+        width: 100%;
+        clip-path: none;
+        border-radius: 4px;
+    }
+    
+    .btn-auth {
+        margin-left: 0;
+        margin-top: 10px;
+        width: 100%;
+        clip-path: none;
+        border-radius: 4px;
+    }
+    
+    .game-screenshots {
+        gap: 5px;
+    }
+    
+    .screenshot-thumb {
+        width: 120px;
+        height: 80px;
+    }
+
+    .cart-dropdown {
+        width: 300px;
+        right: -50px;
+    }
+    
+    .user-dropdown {
+        width: 250px;
+        right: -30px;
+    }
+}
+ /* Dropdown menu styling */
+        .navbar .dropdown-menu {
+            background-color: var(--darker-bg);
+            border: 1px solid var(--neon-red);
+        }
+
+        .navbar .dropdown-item {
+            color: white;
+            transition: var(--transition);
+        }
+
+        .navbar .dropdown-item:hover {
+            background-color: var(--neon-red);
+            color: black;
+        }
+
+        .navbar .nav-link.dropdown-toggle {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="FF Gaming Final.html">
+                <img src="Faux Fire.png" alt="Faux Fire Logo">
+               FAUX FIRE
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                 <li class="nav-item">
+                        <a class="nav-link active" href="FF Gaming Final.html">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Game Zone
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="Games.html">Games</a></li>
+                            <li><a class="dropdown-item" href="Earn Page.html">Earn</a></li>
+
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Arena
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="Streams.html">Streams</a></li>
+                            <li><a class="dropdown-item" href="Tournaments.html">Tournament</a></li>
+
+                        </ul>
+                    </li>
+
+
+                    <!-- Add this to your navbar, after the existing navigation items -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Gaming Gear
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="pcgear.html">PC Gaming Gear</a></li>
+                            <li><a class="dropdown-item" href="Games Iteam.html">Games Iteam</a></li>
+                            <li><a class="dropdown-item" href="mobilegear.html">Mobile Gaming Gear</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Explore
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="News.html">News</a></li>
+                            <li><a class="dropdown-item" href="Comunity Page.html">Comunity</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn-auth" id="authButton" onclick="openAuthModal()">SIGN IN</button>
+                        <div class="user-icon" id="userIcon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="user-dropdown" id="userDropdown">
+                            <div class="user-info">
+                                <img src="Anonymus avatar 3.png" class="user-avatar" alt="User Avatar">
+                                <div class="user-info-content">
+                                    <h4 id="userName">Username</h4>
+                                    <p id="userEmail">user@example.com</p>
+                                </div>
+                            </div>
+                            <ul class="user-menu">
+                                <li><a href="Profile Page.html"><i class="fas fa-user-circle"></i> My Profile</a></li>
+                                <li><a href="UGC.html"><i class="fas fa-gamepad"></i>UGC</a></li>
+                                <li><a href="Wallet.html"><i class="fas fa-wallet"></i> My Wallet</a></li>
+                            </ul>
+                            <button class="btn-logout" onclick="logoutUser()">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </button>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="cart-icon" id="cartIcon">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-count" id="cartCount">0</span>
+                        </div>
+                        <!-- Cart Dropdown -->
+                        <div class="cart-dropdown" id="cartDropdown">
+                            <div class="cart-items" id="cartItems">
+                                <div class="empty-cart">Your cart is empty</div>
+                            </div>
+                            <div class="cart-total" id="cartTotal" style="display: none;">
+                                <span>Total:</span>
+                                <span id="totalAmount">$0.00</span>
+                            </div>
+                            <div class="cart-actions" id="cartActions" style="display: none;">
+                                <button class="cart-btn view" onclick="viewCart()">View Cart</button>
+                                <button class="cart-btn checkout" onclick="checkout()">Checkout</button>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="auth-modal">
+        <div class="auth-modal-content">
+            <div class="auth-modal-header">
+                <h3>Join the Gaming Community</h3>
+                <span class="close-auth" onclick="closeAuthModal()">&times;</span>
+            </div>
+            <div class="auth-modal-body">
+                <ul class="auth-tabs">
+                    <li class="active" data-tab="signin-tab">Sign In</li>
+                    <li data-tab="signup-tab">Sign Up</li>
+                </ul>
+
+                <div id="signin-tab" class="auth-tab-content active">
+                    <form id="signinForm">
+                        <div class="form-group">
+                            <input type="email" placeholder="Email" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" placeholder="Password" required>
+                        </div>
+                        <div class="form-options">
+                            <label>
+                                <input type="checkbox"> Remember me
+                            </label>
+                            <a href="#">Forgot password?</a>
+                        </div>
+                        <button type="submit" class="btn-auth-submit">SIGN IN</button>
+                    </form>
+                    <div class="auth-divider">
+                        <span>OR</span>
+                    </div>
+                    <div class="social-auth">
+                        <button class="btn-social google" title="Continue with Google">
+                            <i class="fab fa-google"></i>
+                        </button>
+                        <button class="btn-social facebook" title="Continue with Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </button>
+                        <button class="btn-social discord" title="Continue with Discord">
+                            <i class="fab fa-discord"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="signup-tab" class="auth-tab-content">
+                    <form id="signupForm">
+                        <div class="form-group">
+                            <input type="text" placeholder="Username" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" placeholder="Email" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" placeholder="Password" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" placeholder="Confirm Password" required>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="terms" required>
+                            <label for="terms">I agree to the <a href="#">Terms</a></label>
+                        </div>
+                        <button type="submit" class="btn-auth-submit">CREATE ACCOUNT</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Section -->
+    <div class="container search-container">
+        <div class="search-box">
+            <input type="text" class="search-input" id="searchInput" placeholder="Search for games...">
+            <button class="search-btn" onclick="searchGames()">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Games Section -->
+    <section class="games-container">
+        <div class="container">
+            <h2 class="section-title">All Games</h2>
+            
+            <div class="row" id="gamesGrid">
+                <!-- Game 1 -->
+                <div class="col-lg-3 col-md-4 col-sm-6 game-card-container" data-game-name="grand theft auto vi">
+                    <div class="game-card" onclick="openGameDetails('Grand Theft Auto VI', 'Gta 6.png', '$59.99', 'Action, Adventure, Open World', 'Rockstar Games', '2023', 'Experience the biggest, most immersive evolution of the Grand Theft Auto series to date. Explore a massive open world with unprecedented detail and freedom.')">
+                        <img src="Gta 6.png" alt="Grand Theft Auto VI">
+                        <h3>Grand Theft Auto VI</h3>
+                        <div class="game-info">
+                            <div class="game-price">$59.99</div>
+                            <div class="game-rating">
+                                <i class="fas fa-star"></i> 4.9
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game 2 -->
+                <div class="col-lg-3 col-md-4 col-sm-6 game-card-container" data-game-name="assassin's creed valhalla">
+                    <div class="game-card" onclick="openGameDetails('Assassin\'s Creed Valhalla', 'ASC3.jpeg', '$49.99', 'Action, RPG, Open World', 'Ubisoft', '2020', 'Become Eivor, a Viking raider raised to be a fearless warrior, and lead your clan from the harsh shores of Norway to a new home amid the lush farmlands of ninth-century England.')">
+                        <img src="ASC3.jpeg" alt="Assassin's Creed Valhalla">
+                        <h3>Assassin's Creed Valhalla</h3>
+                        <div class="game-info">
+                            <div class="game-price">$49.99</div>
+                            <div class="game-rating">
+                                <i class="fas fa-star"></i> 4.7
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game 3 -->
+                <div class="col-lg-3 col-md-4 col-sm-6 game-card-container" data-game-name="call of duty warzone">
+                    <div class="game-card" onclick="openGameDetails('Call of Duty: Warzone', 'cod1.jpeg', 'FREE', 'FPS, Battle Royale', 'Activision', '2020', 'Experience classic Call of Duty combat in a massive battle royale experience. Free to play with optional purchases.')">
+                        <img src="cod1.jpeg" alt="Call of Duty: Warzone">
+                        <h3>Call of Duty: Warzone</h3>
+                        <div class="game-info">
+                            <div class="game-price game-free">FREE</div>
+                            <div class="game-rating">
+                                <i class="fas fa-star"></i> 4.5
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game 4 -->
+                <div class="col-lg-3 col-md-4 col-sm-6 game-card-container" data-game-name="need for speed unbound">
+                    <div class="game-card" onclick="openGameDetails('Need For Speed Unbound', 'NFS1.jpeg', '$39.99', 'Racing, Open World', 'Electronic Arts', '2022', 'Outrun the cops, outsmart rivals, and outdrive your friends in the most thrilling street racing experience yet.')">
+                        <img src="NFS1.jpeg" alt="Need For Speed Unbound">
+                        <h3>Need For Speed Unbound</h3>
+                        <div class="game-info">
+                            <div class="game-price">$39.99</div>
+                            <div class="game-rating">
+                                <i class="fas fa-star"></i> 4.3
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game 5 -->
+                <div class="col-lg-3 col-md-4 col-sm-6 game-card-container" data-game-name="elden ring">
+                    <div class="game-card" onclick="openGameDetails('Elden Ring', 'ER1.jpeg', '$59.99', 'Action, RPG', 'FromSoftware', '2022', 'Rise, Tarnished, and be guided by grace to brandish the power of the Elden Ring and become an Elden Lord in the Lands Between.')">
+                        <img src="ER1.jpeg" alt="Elden Ring">
+                        <h3>Elden Ring</h3>
+                        <div class="game-info">
+                            <div class="game-price">$59.99</div>
+                            <div class="game-rating">
+                                <i class="fas fa-star"></i> 4.9
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game 6 -->
+                <div class="col-lg-3 col-md-4 col-sm-6 game-card-container" data-game-name="god of war ragnarok">
+                    <div class="game-card" onclick="openGameDetails('God of War: Ragnarök', 'GOD1.jpeg', '$69.99', 'Action, Adventure', 'Santa Monica Studio', '2022', 'Join Kratos and Atreus on a mythic journey for answers before Ragnarök arrives.')">
+                        <img src="GOD1.jpeg" alt="God of War: Ragnarök">
+                        <h3>God of War: Ragnarök</h3>
+                        <div class="game-info">
+                            <div class="game-price">$69.99</div>
+                            <div class="game-rating">
+                                <i class="fas fa-star"></i> 5.0
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game 7 -->
+                <div class="col-lg-3 col-md-4 col-sm-6 game-card-container" data-game-name="cyberpunk 2077">
+                    <div class="game-card" onclick="openGameDetails('Cyberpunk 2077', 'CYBER1.jpeg', '$49.99', 'RPG, Open World', 'CD Projekt Red', '2020', 'Become a cyberpunk, an urban mercenary equipped with cybernetic enhancements, and build your legend on the streets of Night City.')">
+                        <img src="CYBER1.jpeg" alt="Cyberpunk 2077">
+                        <h3>Cyberpunk 2077</h3>
+                        <div class="game-info">
+                            <div class="game-price">$49.99</div>
+                            <div class="game-rating">
+                                <i class="fas fa-star"></i> 4.6
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game 8 -->
+                <div class="col-lg-3 col-md-4 col-sm-6 game-card-container" data-game-name="the witcher 3 wild hunt">
+                    <div class="game-card" onclick="openGameDetails('The Witcher 3: Wild Hunt', 'WITCH1.jpeg', '$29.99', 'RPG, Open World', 'CD Projekt Red', '2015', 'As war rages on throughout the Northern Realms, take on the most important contract of your life - tracking down the Child of Prophecy, a living weapon that can alter the shape of the world.')">
+                        <img src="WITCH1.jpeg" alt="The Witcher 3: Wild Hunt">
+                        <h3>The Witcher 3: Wild Hunt</h3>
+                        <div class="game-info">
+                            <div class="game-price">$29.99</div>
+                            <div class="game-rating">
+                                <i class="fas fa-star"></i> 5.0
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- No results message -->
+            <div class="no-results" id="noResults">
+                <i class="fas fa-gamepad"></i>
+                <p>No games found matching your search</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Game Details Modal -->
+    <div id="gameDetailsModal" class="game-details-modal">
+        <div class="game-details-content">
+            <div class="game-details-header">
+                <h3 id="detailGameTitle">Game Title</h3>
+                <span class="close-details" onclick="closeGameDetails()">&times;</span>
+            </div>
+            <div class="game-details-body">
+                <div class="game-details-left">
+                    <img id="detailGameImage" src="Joystick.png" alt="Game" style="width:100%; max-height:300px; object-fit:cover;">
+                    <div class="game-screenshots">
+                        <img src="download.jpeg" alt="Screenshot 1" class="screenshot-thumb active" onclick="viewScreenshot(this, 'download.jpeg')">
+                        <img src="Gta6 ss.jpg" alt="Screenshot 2" class="screenshot-thumb" onclick="viewScreenshot(this, 'Gta6 ss.jpg')">
+                        <img src="Gta6 ss 2.jpg" alt="Screenshot 3" class="screenshot-thumb" onclick="viewScreenshot(this, 'Gta6 ss 2.jpg')">
+                        <img src="GOW2.jpeg" alt="Screenshot 4" class="screenshot-thumb" onclick="viewScreenshot(this, 'GOW2.jpeg')">
+                    </div>
+                    <div class="system-reqs">
+                        <div class="reqs-tabs">
+                            <div class="reqs-tab active" onclick="changeReqsTab('minimum')">Minimum</div>
+                            <div class="reqs-tab" onclick="changeReqsTab('recommended')">Recommended</div>
+                        </div>
+                        <div class="reqs-content active" id="minimum-reqs">
+                            <ul class="reqs-list">
+                                <li><strong>OS:</strong> Windows 10 64-bit</li>
+                                <li><strong>Processor:</strong> Intel Core i5-2500K / AMD FX-6300</li>
+                                <li><strong>Memory:</strong> 8 GB RAM</li>
+                                <li><strong>Graphics:</strong> NVIDIA GeForce GTX 770 / AMD Radeon R9 280</li>
+                                <li><strong>Storage:</strong> 70 GB available space</li>
+                            </ul>
+                        </div>
+                        <div class="reqs-content" id="recommended-reqs">
+                            <ul class="reqs-list">
+                                <li><strong>OS:</strong> Windows 10 64-bit</li>
+                                <li><strong>Processor:</strong> Intel Core i7-4770K / AMD Ryzen 5 1500X</li>
+                                <li><strong>Memory:</strong> 16 GB RAM</li>
+                                <li><strong>Graphics:</strong> NVIDIA GeForce GTX 1060 / AMD Radeon RX 580</li>
+                                <li><strong>Storage:</strong> 70 GB available space</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="game-details-right">
+                    <div class="game-info-item">
+                        <h4>Price</h4>
+                        <p id="detailGamePrice">$0.00</p>
+                    </div>
+                    <div class="game-info-item">
+                        <h4>Genre</h4>
+                        <p id="detailGameGenre">Action, Adventure</p>
+                        <div class="game-tags">
+                            <span class="game-tag">Open World</span>
+                            <span class="game-tag">Single Player</span>
+                            <span class="game-tag">Multiplayer</span>
+                        </div>
+                    </div>
+                    <div class="game-info-item">
+                        <h4>Developer</h4>
+                        <p id="detailGameDeveloper">Developer Name</p>
+                    </div>
+                    <div class="game-info-item">
+                        <h4>Release Date</h4>
+                        <p id="detailGameYear">2023</p>
+                    </div>
+                    <div class="game-info-item">
+                        <h4>Rating</h4>
+                        <p>
+                            <i class="fas fa-star" style="color: #ffc107;"></i>
+                            <i class="fas fa-star" style="color: #ffc107;"></i>
+                            <i class="fas fa-star" style="color: #ffc107;"></i>
+                            <i class="fas fa-star" style="color: #ffc107;"></i>
+                            <i class="fas fa-star-half-alt" style="color: #ffc107;"></i>
+                            <span style="margin-left: 5px;">4.7/5 (12,345 reviews)</span>
+                        </p>
+                    </div>
+                    <div class="game-info-item">
+                        <h4>Description</h4>
+                        <p id="detailGameDesc">Game description goes here...</p>
+                    </div>
+                    <button class="btn-download" onclick="addToCart()">
+                        <i class="fas fa-shopping-cart"></i> ADD TO CART
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer Section -->
+<footer class="footer">
+    <div class="container">
+        <div class="row footer-content">
+            <div class="col-lg-4 mb-5 mb-lg-0">
+                <a href="FF Gaming Final.html" class="footer-logo">Faux Fire Gaming</a>
+                <p style="color: #aaa; margin-bottom: 20px;">The ultimate destination for gamers worldwide. Join our community and experience gaming like never before.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-discord"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-twitch"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 mb-5 mb-md-0">
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="FF Gaming Final.html">Home</a></li>
+                        <li><a href="games.html">Games</a></li>
+                        <li><a href="tournaments.html">Tournaments</a></li>
+                        <li><a href="streams.html">Streams</a></li>
+                        <li><a href="news.html">News</a></li>
+                        <li><a href="#">Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 mb-5 mb-md-0">
+                <div class="footer-links">
+                    <h4>Games</h4>
+                    <ul>
+                        <li><a href="#">New Releases</a></li>
+                        <li><a href="#">Popular</a></li>
+                        <li><a href="#">Free to Play</a></li>
+                        <li><a href="#">Pre-Orders</a></li>
+                        <li><a href="#">On Sale</a></li>
+                        <li><a href="#">Coming Soon</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4">
+                <div class="footer-links">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Refund Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="footer-links">
+                    <h4>Account</h4>
+                    <ul>
+                        <li><a href="#">My Profile</a></li>
+                        <li><a href="#">My Library</a></li>
+                        <li><a href="#">Wishlist</a></li>
+                        <li><a href="#">Friends</a></li>
+                        <li><a href="#">Settings</a></li>
+                        <li><a href="#">Log Out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 Faux Fire Gaming. All rights reserved. All trademarks are property of their respective owners.</p>
+        </div>
+    </div>
+</footer>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Application state
+        let currentUser = null;
+        let cart = [];
+        
+        // Check if user is logged in from localStorage
+        function checkLoggedInUser() {
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                updateUserUI();
+            }
+        }
+        
+        // Initialize the application
+        function init() {
+            checkLoggedInUser();
+            setupEventListeners();
+        }
+        
+        // Setup event listeners
+        function setupEventListeners() {
+            // Auth modal tabs
+            document.querySelectorAll('.auth-tabs li').forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    const tabId = e.target.getAttribute('data-tab');
+                    switchAuthTab(tabId);
+                });
+            });
+
+            // Form submissions
+            document.getElementById('signinForm')?.addEventListener('submit', (e) => handleSignIn(e));
+            document.getElementById('signupForm')?.addEventListener('submit', (e) => handleSignUp(e));
+
+            // User dropdown
+            const userIcon = document.getElementById('userIcon');
+            if (userIcon) {
+                userIcon.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (currentUser) {
+                        toggleUserDropdown();
+                    } else {
+                        openAuthModal();
+                    }
+                });
+            }
+
+            // Logout button
+            document.querySelector('.btn-logout')?.addEventListener('click', () => logoutUser());
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', () => {
+                const dropdown = document.getElementById('userDropdown');
+                if (dropdown) dropdown.classList.remove('show');
+            });
+            
+            // Cart icon click
+            document.getElementById('cartIcon')?.addEventListener('click', function(e) {
+                e.stopPropagation();
+                document.getElementById('cartDropdown').classList.toggle('show');
+            });
+            
+            // Close cart dropdown when clicking outside
+            document.addEventListener('click', function() {
+                document.getElementById('cartDropdown').classList.remove('show');
+            });
+            
+            // Prevent dropdown from closing when clicking inside
+            document.getElementById('cartDropdown')?.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+            
+            // Search when pressing Enter
+            document.getElementById('searchInput')?.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchGames();
+                }
+            });
+        }
+        
+        // Toggle user dropdown
+        function toggleUserDropdown() {
+            const dropdown = document.getElementById('userDropdown');
+            if (dropdown) dropdown.classList.toggle('show');
+        }
+
+        // Update UI based on auth state
+        function updateUserUI() {
+            const authBtn = document.getElementById('authButton');
+            const userIcon = document.getElementById('userIcon');
+            const userName = document.getElementById('userName');
+            const userEmail = document.getElementById('userEmail');
+
+            if (currentUser) {
+                // User is logged in
+                if (authBtn) authBtn.style.display = 'none';
+                if (userIcon) {
+                    userIcon.style.display = 'flex';
+                    // Update user info in dropdown
+                    if (userName) userName.textContent = currentUser.displayName || currentUser.username || 'Player';
+                    if (userEmail) userEmail.textContent = currentUser.email || '';
+                }
+            } else {
+                // User is logged out
+                if (authBtn) authBtn.style.display = 'inline-block';
+                if (userIcon) userIcon.style.display = 'none';
+                // Hide dropdown if visible
+                const dropdown = document.getElementById('userDropdown');
+                if (dropdown) dropdown.classList.remove('show');
+            }
+        }
+        
+        // ========== AUTHENTICATION FUNCTIONS ==========
+        function openAuthModal() {
+            document.getElementById('authModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function switchAuthTab(tabId) {
+            document.querySelectorAll('.auth-tabs li').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-tab-content').forEach(c => c.classList.remove('active'));
+
+            document.querySelector(`.auth-tabs li[data-tab="${tabId}"]`).classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function handleSignIn(e) {
+            e.preventDefault();
+            const email = e.target.querySelector('input[type="email"]').value;
+            const password = e.target.querySelector('input[type="password"]').value;
+
+            if (email && password) {
+                const username = email.split('@')[0];
+                loginUser(username, email);
+            }
+        }
+
+        function handleSignUp(e) {
+            e.preventDefault();
+            const username = e.target.querySelector('input[type="text"]').value;
+            const email = e.target.querySelector('input[type="email"]').value;
+            const password = e.target.querySelector('input[type="password"]').value;
+            const confirmPassword = e.target.querySelectorAll('input[type="password"]')[1].value;
+
+            if (username && email && password && password === confirmPassword) {
+                loginUser(username, email);
+            }
+        }
+
+        function loginUser(username, email) {
+            currentUser = {
+                id: generateId(),
+                username: username.toLowerCase(),
+                displayName: username,
+                email: email || `${username.toLowerCase()}@example.com`,
+                avatar: 'Anonymus avatar 3.png',
+                joinDate: new Date().toISOString(),
+                cart: [],
+                wishlist: [],
+                stats: {
+                    hoursPlayed: 1256,
+                    gamesOwned: 87,
+                    tournaments: 23,
+                    wins: 12,
+                    followers: 5430,
+                    following: 256
+                }
+            };
+
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            updateUserUI();
+            closeAuthModal();
+            showNotification(`Welcome back, ${username}!`);
+        }
+
+        function logoutUser() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            updateUserUI();
+            showNotification('You have been logged out');
+        }
+        
+        // ========== GAME DETAILS FUNCTIONS ==========
+        function openGameDetails(title, image, price, genre, developer, year, description) {
+            const modal = document.getElementById('gameDetailsModal');
+            document.getElementById('detailGameTitle').textContent = title;
+            document.getElementById('detailGameImage').src = image;
+            document.getElementById('detailGamePrice').textContent = price;
+            document.getElementById('detailGameGenre').textContent = genre;
+            document.getElementById('detailGameDeveloper').textContent = developer;
+            document.getElementById('detailGameYear').textContent = year;
+            document.getElementById('detailGameDesc').textContent = description;
+            
+            // Update tags based on genre
+            const tagsContainer = document.querySelector('.game-tags');
+            tagsContainer.innerHTML = '';
+            genre.split(', ').forEach(tag => {
+                tagsContainer.innerHTML += `<span class="game-tag">${tag.trim()}</span>`;
+            });
+            
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeGameDetails() {
+            document.getElementById('gameDetailsModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function viewScreenshot(element, imageSrc) {
+            document.getElementById('detailGameImage').src = imageSrc;
+            
+            // Update active thumbnail
+            document.querySelectorAll('.screenshot-thumb').forEach(thumb => {
+                thumb.classList.remove('active');
+            });
+            element.classList.add('active');
+        }
+
+        function changeReqsTab(tab) {
+            document.querySelectorAll('.reqs-tab').forEach(tabElement => {
+                tabElement.classList.remove('active');
+            });
+            document.querySelectorAll('.reqs-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            document.querySelector(`.reqs-tab[onclick="changeReqsTab('${tab}')"]`).classList.add('active');
+            document.getElementById(`${tab}-reqs`).classList.add('active');
+        }
+        
+        // ========== CART FUNCTIONS ==========
+        function addToCart() {
+            if (!currentUser) {
+                showNotification('Please log in to add items to your cart');
+                openAuthModal();
+                return;
+            }
+
+            const title = document.getElementById('detailGameTitle').textContent;
+            const price = document.getElementById('detailGamePrice').textContent;
+            const image = document.getElementById('detailGameImage').src;
+            
+            // Check if game is already in cart
+            const existingItem = cart.find(item => item.title === title);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    title: title,
+                    price: price,
+                    image: image,
+                    quantity: 1
+                });
+            }
+            
+            updateCart();
+            showNotification(`${title} added to cart`);
+            closeGameDetails();
+        }
+        
+        // Update cart UI
+        function updateCart() {
+            const cartItemsContainer = document.getElementById('cartItems');
+            const cartCount = document.getElementById('cartCount');
+            const cartTotal = document.getElementById('cartTotal');
+            const cartActions = document.getElementById('cartActions');
+            
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
+                cartTotal.style.display = 'none';
+                cartActions.style.display = 'none';
+                cartCount.textContent = '0';
+                return;
+            }
+            
+            cartItemsContainer.innerHTML = '';
+            let total = 0;
+            
+            cart.forEach(item => {
+                const priceValue = parseFloat(item.price.replace('$', '')) || 0;
+                total += priceValue * item.quantity;
+                
+                const cartItem = document.createElement('div');
+                cartItem.className = 'cart-item';
+                cartItem.innerHTML = `
+                    <img src="${item.image}" alt="${item.title}">
+                    <div class="cart-item-info">
+                        <div class="cart-item-title">${item.title}</div>
+                        <div class="cart-item-price">${item.price} x ${item.quantity}</div>
+                    </div>
+                    <i class="fas fa-times remove-item" onclick="removeFromCart('${item.title}')"></i>
+                `;
+                cartItemsContainer.appendChild(cartItem);
+            });
+            
+            document.getElementById('totalAmount').textContent = `$${total.toFixed(2)}`;
+            cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartTotal.style.display = 'flex';
+            cartActions.style.display = 'flex';
+        }
+        
+        // Remove item from cart
+        function removeFromCart(title) {
+            cart = cart.filter(item => item.title !== title);
+            updateCart();
+            showNotification(`${title} removed from cart`);
+        }
+        
+        // Show notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'cart-notification';
+            notification.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 10);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+        
+        // View cart
+        function viewCart() {
+            // In a real implementation, this would redirect to a cart page
+            alert('View cart functionality would go here');
+        }
+        
+        // Checkout
+        function checkout() {
+            // In a real implementation, this would redirect to a checkout page
+            alert('Checkout functionality would go here');
+        }
+        
+        // Search games
+        function searchGames() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const gameCards = document.querySelectorAll('.game-card-container');
+            let hasResults = false;
+            
+            gameCards.forEach(card => {
+                const gameName = card.getAttribute('data-game-name');
+                if (gameName.includes(searchTerm)) {
+                    card.style.display = '';
+                    hasResults = true;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            document.getElementById('noResults').style.display = hasResults ? 'none' : 'block';
+        }
+        
+        // Utility function to generate ID
+        function generateId() {
+            return Math.random().toString(36).substr(2, 9);
+        }
+        
+        // Initialize the application when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
