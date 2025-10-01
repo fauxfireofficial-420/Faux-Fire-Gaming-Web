@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faux Fire Gaming - Community</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, setDoc, getDoc, getDocs, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
+
+        // Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyDM9zOfVMfqFFaODd7OZ-N2qC4ZuZhe10o",
+            authDomain: "fauxfireotp.firebaseapp.com",
+            projectId: "fauxfireotp",
+            storageBucket: "fauxfireotp.firebasestorage.app",
+            messagingSenderId: "254203897427",
+            appId: "1:254203897427:web:a786eb9cf8d7c3514208a6"
+        };
+
+        // Init Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        // Make them globally accessible
+        window.db = db;
+        window.storage = storage;
+        window.collection = collection;
+        window.addDoc = addDoc;
+        window.onSnapshot = onSnapshot;
+        window.query = query;
+        window.orderBy = orderBy;
+        window.serverTimestamp = serverTimestamp;
+        window.doc = doc;
+        window.setDoc = setDoc;
+        window.getDoc = getDoc;
+        window.getDocs = getDocs;
+        window.updateDoc = updateDoc;
+        window.arrayUnion = arrayUnion;
+        window.arrayRemove = arrayRemove;
+        window.ref = ref;
+        window.uploadBytes = uploadBytes;
+        window.getDownloadURL = getDownloadURL;
+
+        // Check if user is logged in
+        document.addEventListener("DOMContentLoaded", () => {
+            const currentUser = JSON.parse(localStorage.getItem("currentUser") || "null");
+            
+            if (!currentUser) {
+                alert("Please log in to access the community");
+                window.location.href = "FF Gaming Final.html";
+                return;
+            }
+            
+            window.currentUser = currentUser;
+            document.getElementById("userName").textContent = currentUser.name;
+            document.getElementById("userEmail").textContent = currentUser.email;
+            
+            // Load communities
+            loadCommunities();
+        });
+    </script>
+    <style>
+        :root {
+            --neon-red: #ff0808;
+            --neon-orange: #ff6600;
+            --dark-bg: #0d0d0d;
+            --darker-bg: #050505;
+            --admin-bg: #121212;
+            --admin-card: #1a1a1a;
+            --admin-text: #e0e0e0;
+            --admin-text-light: #f5f5f5;
+            --admin-primary: #4a6bff;
+            --admin-success: #28a745;
+            --admin-warning: #ffc107;
+            --admin-danger: #dc3545;
+            --admin-border: #2a2a2a;
+            --text-glow-red: 0 0 10px var(--neon-red), 0 0 20px rgba(255, 42, 42, 0.5);
+            --text-glow-orange: 0 0 10px var(--neon-orange), 0 0 20px rgba(255, 102, 0, 0.5);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        body {
+            background-color: var(--admin-bg);
+            color: var(--admin-text);
+            font-family: 'Rajdhani', 'Arial', sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: var(--darker-bg) !important;
+            border-bottom: 1px solid var(--neon-red);
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            font-size: 2rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--neon-red) !important;
+            text-shadow: var(--text-glow-red);
+            animation: pulse 2s infinite;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand img {
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .nav-link {
+            position: relative;
+            display: inline-block;
+            padding: 12px 25px;
+            color: white !important;
+            text-transform: uppercase;
+            font-weight: 600;
+            background: #0d0d0d;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
+            transition: var(--transition);
+            border: 1px solid #ff080833;
+            box-shadow: 0 0 8px #ff080844;
+            letter-spacing: 1px;
+            font-size: 1rem;
+            margin: 0 5px;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--neon-red);
+            color: black !important;
+            box-shadow: 0 0 20px var(--neon-orange);
+            font-weight: bold;
+        }
+
+        /* Community Container */
+        .community-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .community-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .community-title {
+            color: var(--neon-orange);
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-shadow: var(--text-glow-orange);
+        }
+
+        .community-subtitle {
+            color: #aaa;
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Community Cards */
+        .community-card {
+            background-color: var(--admin-card);
+            border-radius: 8px;
+            border: 1px solid var(--admin-border);
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .community-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 8, 8, 0.1);
+            border-color: var(--neon-orange);
+        }
+
+        .community-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--admin-border);
+        }
+
+        .community-card-title {
+            color: var(--admin-text-light);
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .community-card-members {
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        .community-card-description {
+            color: #aaa;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .community-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .community-card-topic {
+            background-color: rgba(255, 102, 0, 0.2);
+            color: var(--neon-orange);
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .btn-join {
+            background-color: var(--neon-red);
+            color: black;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-join:hover {
+            background-color: var(--neon-orange);
+            box-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
+        }
+
+        .btn-joined {
+            background-color: var(--admin-success);
+            color: white;
+        }
+
+        /* Chat Modal */
+        .chat-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .chat-modal-content {
+            background-color: var(--admin-card);
+            max-width: 1000px;
+            margin: 50px auto;
+            border: 2px solid var(--neon-red);
+            box-shadow: 0 0 30px rgba(255, 8, 8, 0.5);
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-modal-header {
+            padding: 15px 20px;
+            background: linear-gradient(90deg, #ff0808 0%, #ff6600 100%);
+            color: black;
+            text-transform: uppercase;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-modal-title {
+            margin: 0;
+            font-size: 1.3rem;
+        }
+
+        .close-chat {
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-chat:hover {
+            transform: rotate(90deg);
+        }
+
+        .chat-modal-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding-right: 10px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            max-width: 80%;
+            position: relative;
+        }
+
+        .message-incoming {
+            background-color: rgba(255, 8, 8, 0.1);
+            border: 1px solid rgba(255, 8, 8, 0.3);
+            align-self: flex-start;
+            margin-right: auto;
+        }
+
+        .message-outgoing {
+            background-color: rgba(255, 102, 0, 0.1);
+            border: 1px solid rgba(255, 102, 0, 0.3);
+            align-self: flex-end;
+            margin-left: auto;
+        }
+
+        .message-sender {
+            font-weight: bold;
+            color: var(--neon-orange);
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .message-text {
+            margin: 0;
+            word-break: break-word;
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            color: #777;
+            text-align: right;
+            margin-top: 5px;
+        }
+
+        .message-image {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .message-image:hover {
+            opacity: 0.8;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            background-color: var(--darker-bg);
+            border-top: 1px solid var(--admin-border);
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 10px 15px;
+            background-color: var(--admin-bg);
+            border: 1px solid var(--admin-border);
+            color: var(--admin-text);
+            border-radius: 4px;
+            resize: none;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--neon-orange);
+        }
+
+        .btn-send {
+            background-color: var(--neon-red);
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-send:hover {
+            background-color: var(--neon-orange);
+        }
+
+        .btn-upload {
+            background-color: var(--admin-primary);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-upload:hover {
+            background-color: #3a5bef;
+        }
+
+        .image-preview {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 4px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* Image Modal */
+        .image-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-modal-content {
+            max-width: 90%;
+            max-height: 90%;
+        }
+
+        .image-modal-img {
+            max-width: 100%;
+            max-height: 80vh;
+            border: 5px solid var(--neon-red);
+            box-shadow: 0 0 30px var(--neon-orange);
+        }
+
+        .image-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .image-modal-close:hover {
+            color: var(--neon-orange);
+        }
+
+        /* Create Community Modal */
+        .create-community-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .create-community-content {
+            background-color: var(--admin-card);
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            border: 2px solid var(--neon-orange);
+            box-shadow: 0 0 30px rgba(255, 102, 0, 0.3);
+        }
+
+        .create-community-header {
+            padding: 15px 20px;
+            background: linear-gradient(90deg, #ff0808 0%, #ff6600 100%);
+            color: black;
+            text-transform: uppercase;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .create-community-title {
+            margin: 0;
+            font-size: 1.3rem;
+        }
+
+        .create-community-close {
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .create-community-close:hover {
+            transform: rotate(90deg);
+        }
+
+        .create-community-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--admin-text-light);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            background-color: var(--admin-bg);
+            border: 1px solid var(--admin-border);
+            color: var(--admin-text);
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--neon-orange);
+            box-shadow: 0 0 10px rgba(255, 102, 0, 0.3);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 10px 12px;
+            background-color: var(--admin-bg);
+            border: 1px solid var(--admin-border);
+            color: var(--admin-text);
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .create-community-footer {
+            padding: 15px 20px;
+            border-top: 1px solid var(--admin-border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn-cancel {
+            background-color: var(--admin-danger);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-cancel:hover {
+            background-color: #c82333;
+        }
+
+        .btn-create {
+            background-color: var(--admin-success);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-create:hover {
+            background-color: #218838;
+        }
+
+        /* User Info */
+        .user-info-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            background-color: var(--admin-card);
+            padding: 10px 15px;
+            border-radius: 4px;
+            border: 1px solid var(--admin-border);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--neon-orange);
+            margin-right: 10px;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: bold;
+            color: var(--neon-orange);
+        }
+
+        .user-email {
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+        .btn-create-community {
+            background-color: var(--neon-red);
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-left: 15px;
+        }
+
+        .btn-create-community:hover {
+            background-color: var(--neon-orange);
+            box-shadow: 0 0 15px rgba(255, 102, 0, 0.5);
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0% {
+                text-shadow: 0 0 10px var(--neon-red);
+            }
+            50% {
+                text-shadow: 0 0 20px var(--neon-red);
+            }
+            100% {
+                text-shadow: 0 0 10px var(--neon-red);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .community-card-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .community-card-members {
+                margin-top: 5px;
+            }
+            
+            .community-card-footer {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .chat-input-container {
+                flex-direction: column;
+            }
+            
+            .user-info-container {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .btn-create-community {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+          /* Dropdown menu styling */
+        .navbar .dropdown-menu {
+            background-color: var(--darker-bg);
+            border: 1px solid var(--neon-red);
+        }
+
+        .navbar .dropdown-item {
+            color: white;
+            transition: var(--transition);
+        }
+
+        .navbar .dropdown-item:hover {
+            background-color: var(--neon-red);
+            color: black;
+        }
+
+        .navbar .nav-link.dropdown-toggle {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="FF Gaming Final.html">
+                <img src="Faux Fire.png" alt="Faux Fire Logo">
+                FAUX FIRE
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                   <li class="nav-item">
+                        <a class="nav-link active" href="FF Gaming Final.html">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Game Zone
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="Games.html">Games</a></li>
+                            <li><a class="dropdown-item" href="Earn Page.html">Earn</a></li>
+
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Arena
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="Streams.html">Streams</a></li>
+                            <li><a class="dropdown-item" href="Tournaments.html">Tournament</a></li>
+
+                        </ul>
+                    </li>
+
+
+                    <!-- Add this to your navbar, after the existing navigation items -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Gaming Gear
+                        </a>
+                         <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="pcgear.html">PC Gaming Gear</a></li>
+                            <li><a class="dropdown-item" href="Games Iteam.html">Games Iteam</a></li>
+                            <li><a class="dropdown-item" href="mobilegear.html">Mobile Gaming Gear</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamingGearDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Explore
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="gamingGearDropdown">
+                            <li><a class="dropdown-item" href="News.html">News</a></li>
+                            <li><a class="dropdown-item" href="Comunity Page.html">Comunity</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- User Info -->
+    <div class="container">
+        <div class="user-info-container">
+            <div class="user-info">
+                <img src="Anonymus avatar 3.png" class="user-avatar" alt="User Avatar">
+                <div class="user-details">
+                    <span class="user-name" id="userName">Username</span>
+                    <span class="user-email" id="userEmail">user@example.com</span>
+                </div>
+            </div>
+            <button class="btn-create-community" onclick="openCreateCommunityModal()">
+                <i class="fas fa-plus"></i> Create Community
+            </button>
+        </div>
+    </div>
+
+    <!-- Community Container -->
+    <div class="community-container">
+        <div class="community-header">
+            <h1 class="community-title">Gaming Communities</h1>
+            <p class="community-subtitle">Join communities, chat with fellow gamers, share screenshots, and stay updated with the latest gaming trends.</p>
+        </div>
+
+        <div id="communitiesList">
+            <!-- Communities will be loaded here dynamically -->
+            <div class="text-center">
+                <div class="loading-spinner"></div>
+                <p>Loading communities...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Modal -->
+    <div class="chat-modal" id="chatModal">
+        <div class="chat-modal-content">
+            <div class="chat-modal-header">
+                <h3 class="chat-modal-title" id="chatCommunityName">Community Name</h3>
+                <span class="close-chat" onclick="closeChatModal()">&times;</span>
+            </div>
+            <div class="chat-modal-body">
+                <div class="messages-container" id="messagesContainer">
+                    <!-- Messages will be loaded here -->
+                </div>
+                <div class="chat-input-container">
+                    <textarea class="chat-input" id="messageInput" placeholder="Type your message..." rows="1"></textarea>
+                    <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+                    <button class="btn-upload" onclick="document.getElementById('imageUpload').click()">
+                        <i class="fas fa-image"></i>
+                    </button>
+                    <button class="btn-send" onclick="sendMessage()">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <img id="imagePreview" class="image-preview">
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div class="image-modal" id="imageModal" onclick="closeImageModal()">
+        <span class="image-modal-close">&times;</span>
+        <div class="image-modal-content">
+            <img src="" class="image-modal-img" id="modalImage">
+        </div>
+    </div>
+
+    <!-- Create Community Modal -->
+    <div class="create-community-modal" id="createCommunityModal">
+        <div class="create-community-content">
+            <div class="create-community-header">
+                <h3 class="create-community-title">Create New Community</h3>
+                <span class="create-community-close" onclick="closeCreateCommunityModal()">&times;</span>
+            </div>
+            <div class="create-community-body">
+                <div class="form-group">
+                    <label class="form-label">Community Name</label>
+                    <input type="text" class="form-control" id="communityName" placeholder="Enter community name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" id="communityDescription" rows="3" placeholder="Enter community description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Topic</label>
+                    <select class="form-select" id="communityTopic">
+                        <option value="General">General Gaming</option>
+                        <option value="FPS">First Person Shooters</option>
+                        <option value="RPG">Role Playing Games</option>
+                        <option value="Racing">Racing Games</option>
+                        <option value="Sports">Sports Games</option>
+                        <option value="Strategy">Strategy Games</option>
+                        <option value="Indie">Indie Games</option>
+                        <option value="Esports">Esports</option>
+                    </select>
+                </div>
+            </div>
+            <div class="create-community-footer">
+                <button class="btn-cancel" onclick="closeCreateCommunityModal()">Cancel</button>
+                <button class="btn-create" onclick="createCommunity()">Create</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentCommunityId = null;
+        let unsubscribeMessages = null;
+        let selectedImage = null;
+
+        // Load communities from Firestore
+        async function loadCommunities() {
+            const communitiesList = document.getElementById('communitiesList');
+            communitiesList.innerHTML = '<div class="text-center"><div class="loading-spinner"></div><p>Loading communities...</p></div>';
+            
+            try {
+                const communitiesRef = collection(window.db, "communities");
+                const querySnapshot = await getDocs(communitiesRef);
+                
+                if (querySnapshot.empty) {
+                    // Create default communities if none exist
+                    await createDefaultCommunities();
+                    loadCommunities(); // Reload after creating defaults
+                    return;
+                }
+                
+                communitiesList.innerHTML = '';
+                
+                querySnapshot.forEach((doc) => {
+                    const community = doc.data();
+                    const communityId = doc.id;
+                    
+                    const isMember = community.members && community.members.includes(window.currentUser.email);
+                    
+                    const communityCard = document.createElement('div');
+                    communityCard.className = 'community-card';
+                    communityCard.innerHTML = `
+                        <div class="community-card-header">
+                            <h3 class="community-card-title">${community.name}</h3>
+                            <span class="community-card-members">${community.members ? community.members.length : 0} members</span>
+                        </div>
+                        <p class="community-card-description">${community.description}</p>
+                        <div class="community-card-footer">
+                            <span class="community-card-topic">${community.topic}</span>
+                            <button class="btn-join ${isMember ? 'btn-joined' : ''}" onclick="toggleCommunityMembership('${communityId}', ${isMember})">
+                                ${isMember ? 'Joined' : 'Join Now'}
+                            </button>
+                        </div>
+                    `;
+                    
+                    communityCard.addEventListener('click', (e) => {
+                        if (e.target.tagName !== 'BUTTON') {
+                            openChatModal(communityId, community.name);
+                        }
+                    });
+                    
+                    communitiesList.appendChild(communityCard);
+                });
+            } catch (error) {
+                console.error("Error loading communities:", error);
+                communitiesList.innerHTML = '<div class="text-center"><p>Error loading communities. Please try again later.</p></div>';
+            }
+        }
+
+        // Create default communities
+        async function createDefaultCommunities() {
+            const defaultCommunities = [
+                {
+                    name: "GTA VI Fans",
+                    description: "Discuss everything about Grand Theft Auto VI, share tips, and organize multiplayer sessions.",
+                    topic: "Action",
+                    createdBy: "system",
+                    members: []
+                },
+                {
+                    name: "Call of Duty Warriors",
+                    description: "For all Call of Duty enthusiasts. Share strategies, clips, and find squad members.",
+                    topic: "FPS",
+                    createdBy: "system",
+                    members: []
+                },
+                {
+                    name: "Racing Legends",
+                    description: "Everything about racing games - from Need for Speed to Forza. Share your best lap times!",
+                    topic: "Racing",
+                    createdBy: "system",
+                    members: []
+                },
+                {
+                    name: "Esports Competitors",
+                    description: "For competitive gamers. Discuss tournaments, strategies, and join competitive teams.",
+                    topic: "Esports",
+                    createdBy: "system",
+                    members: []
+                }
+            ];
+            
+            try {
+                for (const community of defaultCommunities) {
+                    await addDoc(collection(window.db, "communities"), community);
+                }
+            } catch (error) {
+                console.error("Error creating default communities:", error);
+            }
+        }
+
+        // Toggle community membership
+        async function toggleCommunityMembership(communityId, isCurrentlyMember) {
+            try {
+                const communityRef = doc(window.db, "communities", communityId);
+                
+                if (isCurrentlyMember) {
+                    // Leave community
+                    await updateDoc(communityRef, {
+                        members: arrayRemove(window.currentUser.email)
+                    });
+                } else {
+                    // Join community
+                    await updateDoc(communityRef, {
+                        members: arrayUnion(window.currentUser.email)
+                    });
+                }
+                
+                // Reload communities to update UI
+                loadCommunities();
+            } catch (error) {
+                console.error("Error toggling community membership:", error);
+                alert("Failed to update community membership. Please try again.");
+            }
+        }
+
+        // Open chat modal
+        function openChatModal(communityId, communityName) {
+            currentCommunityId = communityId;
+            document.getElementById('chatCommunityName').textContent = communityName;
+            document.getElementById('chatModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            
+            // Load messages
+            loadMessages(communityId);
+            
+            // Set up enter key to send message
+            document.getElementById('messageInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+            
+            // Set up image upload
+            document.getElementById('imageUpload').addEventListener('change', handleImageUpload);
+        }
+
+        // Close chat modal
+        function closeChatModal() {
+            document.getElementById('chatModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            
+            // Unsubscribe from messages
+            if (unsubscribeMessages) {
+                unsubscribeMessages();
+                unsubscribeMessages = null;
+            }
+            
+            // Reset message input and image preview
+            document.getElementById('messageInput').value = '';
+            document.getElementById('imagePreview').style.display = 'none';
+            selectedImage = null;
+            currentCommunityId = null;
+        }
+
+        // Load messages for a community
+        function loadMessages(communityId) {
+            const messagesContainer = document.getElementById('messagesContainer');
+            messagesContainer.innerHTML = '<div class="text-center"><div class="loading-spinner"></div><p>Loading messages...</p></div>';
+            
+            // Set up real-time listener for messages
+            const messagesRef = collection(window.db, "communities", communityId, "messages");
+            const q = query(messagesRef, orderBy("timestamp", "asc"));
+            
+            unsubscribeMessages = onSnapshot(q, (querySnapshot) => {
+                messagesContainer.innerHTML = '';
+                
+                querySnapshot.forEach((doc) => {
+                    const message = doc.data();
+                    displayMessage(message);
+                });
+                
+                // Scroll to bottom
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, (error) => {
+                console.error("Error loading messages:", error);
+                messagesContainer.innerHTML = '<div class="text-center"><p>Error loading messages. Please try again.</p></div>';
+            });
+        }
+
+        // Display a message in the chat
+        function displayMessage(message) {
+            const messagesContainer = document.getElementById('messagesContainer');
+            const isCurrentUser = message.senderEmail === window.currentUser.email;
+            
+            const messageElement = document.createElement('div');
+            messageElement.className = `message ${isCurrentUser ? 'message-outgoing' : 'message-incoming'}`;
+            
+            let messageContent = `
+                <div class="message-sender">${message.senderName}</div>
+                <p class="message-text">${message.text}</p>
+            `;
+            
+            if (message.imageUrl) {
+                messageContent += `
+                    <img src="${message.imageUrl}" class="message-image" onclick="openImageModal('${message.imageUrl}')">
+                `;
+            }
+            
+            messageContent += `
+                <div class="message-time">${formatTime(message.timestamp?.toDate())}</div>
+            `;
+            
+            messageElement.innerHTML = messageContent;
+            messagesContainer.appendChild(messageElement);
+        }
+
+        // Send a message
+        async function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const text = messageInput.value.trim();
+            
+            if (!text && !selectedImage) {
+                return; // Don't send empty messages
+            }
+            
+            try {
+                let imageUrl = null;
+                
+                // Upload image if selected
+                if (selectedImage) {
+                    const storageRef = ref(window.storage, `community-images/${Date.now()}-${selectedImage.name}`);
+                    await uploadBytes(storageRef, selectedImage);
+                    imageUrl = await getDownloadURL(storageRef);
+                }
+                
+                // Add message to Firestore
+                await addDoc(collection(window.db, "communities", currentCommunityId, "messages"), {
+                    text: text,
+                    imageUrl: imageUrl,
+                    senderName: window.currentUser.name,
+                    senderEmail: window.currentUser.email,
+                    timestamp: serverTimestamp()
+                });
+                
+                // Clear input and reset image
+                messageInput.value = '';
+                document.getElementById('imagePreview').style.display = 'none';
+                selectedImage = null;
+                
+            } catch (error) {
+                console.error("Error sending message:", error);
+                alert("Failed to send message. Please try again.");
+            }
+        }
+
+        // Handle image upload
+        function handleImageUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            // Check if file is an image
+            if (!file.type.match('image.*')) {
+                alert('Please select an image file');
+                return;
+            }
+            
+            // Check file size (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('Please select an image smaller than 5MB');
+                return;
+            }
+            
+            selectedImage = file;
+            
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('imagePreview');
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Open image modal
+        function openImageModal(imageUrl) {
+            document.getElementById('modalImage').src = imageUrl;
+            document.getElementById('imageModal').style.display = 'flex';
+        }
+
+        // Close image modal
+        function closeImageModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+
+        // Format time for display
+        function formatTime(date) {
+            if (!date) return '';
+            
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+
+        // Open create community modal
+        function openCreateCommunityModal() {
+            document.getElementById('createCommunityModal').style.display = 'flex';
+        }
+
+        // Close create community modal
+        function closeCreateCommunityModal() {
+            document.getElementById('createCommunityModal').style.display = 'none';
+            document.getElementById('communityName').value = '';
+            document.getElementById('communityDescription').value = '';
+            document.getElementById('communityTopic').value = 'General';
+        }
+
+        // Create a new community
+        async function createCommunity() {
+            const name = document.getElementById('communityName').value.trim();
+            const description = document.getElementById('communityDescription').value.trim();
+            const topic = document.getElementById('communityTopic').value;
+            
+            if (!name) {
+                alert('Please enter a community name');
+                return;
+            }
+            
+            if (!description) {
+                alert('Please enter a community description');
+                return;
+            }
+            
+            try {
+                // Add community to Firestore
+                await addDoc(collection(window.db, "communities"), {
+                    name: name,
+                    description: description,
+                    topic: topic,
+                    createdBy: window.currentUser.email,
+                    members: [window.currentUser.email],
+                    createdAt: serverTimestamp()
+                });
+                
+                closeCreateCommunityModal();
+                loadCommunities(); // Reload communities list
+                
+            } catch (error) {
+                console.error("Error creating community:", error);
+                alert("Failed to create community. Please try again.");
+            }
+        }
+
+        // Close modals when clicking outside
+        window.addEventListener('click', function(event) {
+            const chatModal = document.getElementById('chatModal');
+            if (event.target === chatModal) {
+                closeChatModal();
+            }
+            
+            const createModal = document.getElementById('createCommunityModal');
+            if (event.target === createModal) {
+                closeCreateCommunityModal();
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-resize textarea
+            const messageInput = document.getElementById('messageInput');
+            messageInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+        });
+    </script>
+</body>
+
+</html>
